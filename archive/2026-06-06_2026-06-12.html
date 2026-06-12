@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>РНП · Оцифровка WB · AquaBlast · 6–12 июня 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f7f7f4;
+  --panel: #ffffff;
+  --text: #1f2328;
+  --muted: #687076;
+  --accent: #2563eb;
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --ok: #15803d;
+  --border: #d9dee3;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 32px 16px; background: var(--bg); color: var(--text);
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.wrap { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 0 0 12px; }
+.sub { color: var(--muted); }
+.small { font-size: 12px; color: var(--muted); }
+
+.cabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.cabs button {
+  font: inherit; padding: 7px 16px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--panel); cursor: pointer; color: var(--text);
+}
+.cabs button.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.stat { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.stat .v { font-size: 21px; font-weight: 600; }
+.stat .v.warn { color: var(--warn); }
+.stat .v.ok { color: var(--ok); }
+.stat .v.bad { color: var(--danger); }
+.stat .l { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.profit-pos { color: var(--ok); font-weight: 600; }
+.profit-neg { color: var(--danger); font-weight: 600; }
+
+.callout { background: #fffbeb; border: 1px solid #f3d9a4; border-radius: 8px; padding: 14px 16px; }
+.callout b.t { color: var(--warn); display: block; margin-bottom: 6px; }
+.callout li { margin: 4px 0; }
+
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
+.chart-box { position: relative; height: 300px; }
+.chart-box.tall { height: 340px; }
+.chart-box.short { height: 240px; }
+
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+th, td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { background: #f0f1ee; font-size: 12px; color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: #fafaf8; }
+td .nm { color: var(--muted); font-size: 12px; }
+
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.pill.ok { background: #e7f5ec; color: var(--ok); }
+.pill.warn { background: #fdf3e1; color: var(--warn); }
+.pill.bad { background: #fdeaea; color: var(--danger); }
+.cabtag { display: inline-block; padding: 0 6px; border-radius: 4px; font-size: 11px; font-weight: 600; border: 1px solid var(--border); color: var(--muted); }
+.cabtag.c1 { border-color: #b9cdf5; color: #1d4ed8; background: #eef3fe; }
+.cabtag.c2 { border-color: #d8c6ee; color: #7c3aed; background: #f5f0fc; }
+
+select { font: inherit; font-size: 15px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); max-width: 100%; width: 100%; }
+.sku-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+#skuTable tbody tr { cursor: pointer; }
+#skuTable tbody tr:hover { background: #eef3fe; }
+.rowhint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+details { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
+summary { cursor: pointer; font-weight: 600; }
+summary .small { font-weight: 400; margin-left: 8px; }
+details table { margin-top: 12px; border: none; }
+
+@media (max-width: 720px) {
+  .stats, .sku-stats { grid-template-columns: repeat(2, 1fr); }
+  body { padding: 16px 8px; }
+  h1 { font-size: 20px; }
+  th, td { padding: 7px 8px; font-size: 13px; }
+  .stat .v { font-size: 18px; }
+  .chart-box, .chart-box.tall { height: 240px; }
+  .chart-box.short { height: 200px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>РНП · Оцифровка WB · AquaBlast</h1>
+    <div class="sub">Оба кабинета · выручка, реклама, DRR и прибыль по каждому артикулу · 6–12 июня 2026 · источник: WB Seller API · собрано 13.06.2026 00:52</div>
+  </header>
+
+  <nav class="cabs" id="cabs">
+    <button data-cab="all" class="active">Сводно</button>
+    <button data-cab="1">ИП Олейников И.И.</button>
+    <button data-cab="2">ИП Олейникова А.А.</button>
+  </nav>
+
+  <section class="stats" id="totals"></section>
+
+  <section class="callout">
+    <b class="t">Алерты (автоматика: выручка −20% к среднему, DRR +5 п.п., минусовая прибыль)</b>
+    <ul><li>всего: выручка 12 июн (пт) 2 357 780 ₽ — -24% к среднему за предыдущие дни (3 104 318 ₽/день)</li><li>триммер черный 2 акб (1015736036): выручка 12 июн (пт) 732 260 ₽ — -34% к среднему за предыдущие дни (1 101 367 ₽/день)</li><li>красный красный триммер (1095867819): выручка 12 июн (пт) 605 000 ₽ — -25% к среднему за предыдущие дни (809 168 ₽/день)</li><li>красный красный триммер (1095867819): прибыль по заказам 12 июн (пт) отрицательная: -13 063 ₽</li><li>синий триммер дубль 2 (1067802763): выручка 12 июн (пт) 314 070 ₽ — -24% к среднему за предыдущие дни (411 429 ₽/день)</li><li>триммер красный 2 акб (1015705041): выручка 12 июн (пт) 52 535 ₽ — -65% к среднему за предыдущие дни (148 850 ₽/день)</li><li>триммер зеленый 2 акб (1015705042): выручка 12 июн (пт) 66 690 ₽ — -52% к среднему за предыдущие дни (138 368 ₽/день)</li><li>синий триммер 2 акб (991707178): выручка 12 июн (пт) 35 275 ₽ — -47% к среднему за предыдущие дни (66 413 ₽/день)</li><li>красный триммер (399180086): выручка 14 400 ₽ за период, но маржи нет в margins.json — прибыль не посчитана</li></ul>
+  </section>
+
+  <section class="panel">
+    <h2>Выручка и реклама по дням, тыс ₽</h2>
+    <div class="chart-box tall"><canvas id="dailyChart"></canvas></div>
+    <div class="small">Источник: WB Seller API · все артикулы · 6–12 июня 2026 · столбцы складываются по кабинетам</div>
+  </section>
+
+  <section class="panel">
+    <h2>DRR по дням, %</h2>
+    <div class="chart-box short"><canvas id="drrChart"></canvas></div>
+    <div class="small">DRR = расходы на рекламу / выручка по заказам</div>
+  </section>
+
+  <section class="panel">
+    <h2>Прибыль по дням, тыс ₽</h2>
+    <div class="chart-box short"><canvas id="profitChart"></canvas></div>
+    <div class="small">Прибыль = маржа до ДРР × заказы − реклама · основные артикулы · раздачи не учитываются</div>
+  </section>
+
+  <section>
+    <h2>Артикулы за период: выручка, реклама, DRR, прибыль</h2>
+    <div class="tablewrap"><table id="skuTable">
+      <thead><tr><th>Артикул</th><th>Выручка (заказы)</th><th>Заказы, шт</th><th>Реклама</th><th>DRR</th><th>Маржа/ед</th><th>Прибыль</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="rowhint">👆 Тапни строку артикула — откроется его динамика по дням</div>
+    <div class="small" style="margin-top:6px">Источник: WB Seller API · 6–12 июня 2026 · без учёта раздач (вынесены вниз) · прибыль = маржа до ДРР × заказы − реклама</div>
+  </section>
+
+  <section class="panel" id="skuPanel">
+    <h2>Динамика по артикулу</h2>
+    <select id="skuSelect"></select>
+    <div class="sku-stats" id="skuStats"></div>
+    <div class="chart-box"><canvas id="skuChart"></canvas></div>
+    <div class="small" style="margin:10px 0 4px"><b>ДРР и маржинальность с ДРР по дням, %</b></div>
+    <div class="chart-box short"><canvas id="skuPctChart"></canvas></div>
+    <div class="tablewrap" style="margin-top:14px"><table id="skuDays">
+      <thead><tr><th>День</th><th>Заказы, шт</th><th>Выручка</th><th>Ср. цена</th><th>Реклама</th><th>DRR</th><th>Прибыль</th><th>Марж. с ДРР</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="small" id="skuCaption" style="margin-top:6px"></div>
+  </section>
+
+  <details>
+    <summary>Раздачи и прочие артикулы (без маржи в margins.json) <span class="small" id="extraSummary"></span></summary>
+    <div class="tablewrap" style="margin-top:12px"><table id="extraTable">
+      <thead><tr><th>Артикул</th><th>Заказы, шт</th><th>Выручка (заказы)</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="small" style="margin-top:6px">Технические SKU (дбс/раздачи) и артикулы без маржи · 6–12 июня 2026</div>
+  </details>
+
+</div>
+
+<script>
+// [дата, заказы, выручка ₽, реклама ₽, выкупы ₽]; cab: 1 = ИП Олейников И.И., 2 = ИП Олейникова А.А.
+const PRODUCTS = [
+  {"id": 1015736036, "cab": 2, "name": "триммер черный 2 акб", "days": [["2026-06-06", 172, 1535961, 309964.0, 1143040], ["2026-06-07", 157, 1402010, 237894.0, 893000], ["2026-06-08", 118, 1053740, 181282.0, 660820], ["2026-06-09", 119, 1062670, 156500.0, 509010], ["2026-06-10", 92, 821560, 171351.0, 258970], ["2026-06-11", 82, 732260, 122736.0, 26790], ["2026-06-12", 82, 732260, 85791.0, 0]]},
+  {"id": 1095867819, "cab": 1, "name": "красный красный триммер", "days": [["2026-06-06", 120, 600000, 287017.0, 390000], ["2026-06-07", 223, 1115003, 357711.0, 750003], ["2026-06-08", 199, 995003, 240340.0, 370000], ["2026-06-09", 165, 825000, 165479.0, 340000], ["2026-06-10", 153, 765000, 157687.0, 210000], ["2026-06-11", 111, 555002, 113275.0, 10000], ["2026-06-12", 121, 605000, 170363.0, 0]]},
+  {"id": 1067802763, "cab": 1, "name": "синий триммер дубль 2", "days": [["2026-06-06", 52, 484120, 179826.0, 297920], ["2026-06-07", 50, 465500, 211442.0, 260680], ["2026-06-08", 54, 469300, 113965.0, 251180], ["2026-06-09", 52, 429780, 93072.0, 256215], ["2026-06-10", 37, 305805, 75974.0, 82650], ["2026-06-11", 38, 314070, 69134.0, 41325], ["2026-06-12", 38, 314070, 82794.0, 0]]},
+  {"id": 1067802762, "cab": 1, "name": "черный триммер дубль 2", "days": [["2026-06-06", 33, 307230, 150605.0, 176890], ["2026-06-07", 19, 176890, 67481.0, 111720], ["2026-06-08", 34, 291460, 62460.0, 228380], ["2026-06-09", 49, 404985, 68346.0, 214890], ["2026-06-10", 25, 206625, 50174.0, 49590], ["2026-06-11", 35, 289275, 50739.0, 8265], ["2026-06-12", 48, 396720, 123918.0, 0]]},
+  {"id": 1015705041, "cab": 1, "name": "триммер красный 2 акб", "days": [["2026-06-06", 26, 195130, 26542.0, 165110], ["2026-06-07", 26, 195130, 30161.0, 142595], ["2026-06-08", 21, 157605, 25330.0, 97565], ["2026-06-09", 15, 112575, 24536.0, 67545], ["2026-06-10", 19, 142595, 16644.0, 37525], ["2026-06-11", 12, 90062, 6925.0, 15010], ["2026-06-12", 7, 52535, 4974.0, 0]]},
+  {"id": 976216541, "cab": 1, "name": "черный триммер 2 акб", "days": [["2026-06-06", 30, 211650, 23881.0, 141100], ["2026-06-07", 25, 176383, 26383.0, 119937], ["2026-06-08", 22, 155210, 22365.0, 70550], ["2026-06-09", 13, 91715, 19917.0, 28220], ["2026-06-10", 15, 105825, 16347.0, 42330], ["2026-06-11", 8, 56440, 15029.0, 7055], ["2026-06-12", 20, 141100, 15781.0, 0]]},
+  {"id": 1015705042, "cab": 1, "name": "триммер зеленый 2 акб", "days": [["2026-06-06", 33, 247665, 10670.0, 142595], ["2026-06-07", 9, 67545, 980.0, 45030], ["2026-06-08", 12, 90060, 10384.0, 37525], ["2026-06-09", 26, 195130, 570.0, 90060], ["2026-06-10", 20, 148295, 0, 29735], ["2026-06-11", 11, 81510, 0, 0], ["2026-06-12", 9, 66690, 0, 0]]},
+  {"id": 991707178, "cab": 1, "name": "синий триммер 2 акб", "days": [["2026-06-06", 11, 80665, 22289.0, 66215], ["2026-06-07", 11, 77945, 16263.0, 63835], ["2026-06-08", 12, 84660, 15202.0, 35275], ["2026-06-09", 8, 56440, 5843.0, 42330], ["2026-06-10", 7, 49385, 3831.0, 7055], ["2026-06-11", 7, 49385, 3214.0, 0], ["2026-06-12", 5, 35275, 2813.0, 0]]}
+];
+const EXTRA = [
+  {"id": 399180086, "cab": 1, "name": "красный триммер", "days": [["2026-06-06", 1, 3600, 0, 0], ["2026-06-07", 1, 3600, 0, 3600], ["2026-06-08", 1, 3600, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 1, 3600, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 432910520, "cab": 2, "name": "красный триммер-1", "days": [["2026-06-06", 1, 4500, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 1, 4500, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 464951244, "cab": 2, "name": "триммер садовый новый", "days": [["2026-06-06", 1, 4500, 0, 4500], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 1, 4500, 0, 4500], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1114801359, "cab": 1, "name": "дбс-6", "days": [["2026-06-06", 24, 6000, 0, 6000], ["2026-06-07", 3, 750, 0, 750], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1100090320, "cab": 1, "name": "Трим-дбс14", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 27, 6750, 0, 6750], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1114801363, "cab": 1, "name": "дбс-10", "days": [["2026-06-06", 25, 6250, 0, 6250], ["2026-06-07", 2, 500, 0, 500], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1114801362, "cab": 1, "name": "дбс-9", "days": [["2026-06-06", 26, 6500, 0, 6500], ["2026-06-07", 1, 250, 0, 250], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1100090319, "cab": 1, "name": "Трим-дбс13", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 25, 6250, 0, 6250], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1114801361, "cab": 1, "name": "дбс-8", "days": [["2026-06-06", 24, 6000, 0, 6000], ["2026-06-07", 1, 250, 0, 250], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1114801360, "cab": 1, "name": "дбс-7", "days": [["2026-06-06", 25, 6250, 0, 6250], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 438649193, "cab": 2, "name": "триммер зеленый -1", "days": [["2026-06-06", 1, 6000, 0, 6000], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 575411368, "cab": 2, "name": "Пароочиститель черн", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 1, 4950, 0, 0]]},
+  {"id": 881937580, "cab": 2, "name": "черный триммер 2026", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 1, 4733, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 778031320, "cab": 1, "name": "красный триммер 2026", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 1, 4680, 0, 0]]},
+  {"id": 402656953, "cab": 2, "name": "триммер аккумуляторный черный", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 1, 4500, 0, 0]]},
+  {"id": 923870910, "cab": 1, "name": "черный с 3 акб", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 1, 4320, 0, 4320], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 1100090317, "cab": 1, "name": "Трим-дбс11", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 13, 3250, 0, 3250], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 0, 0, 0, 0], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]},
+  {"id": 290278388, "cab": 1, "name": "3 лопата -снег", "days": [["2026-06-06", 0, 0, 0, 0], ["2026-06-07", 0, 0, 0, 0], ["2026-06-08", 0, 0, 0, 0], ["2026-06-09", 0, 0, 0, 0], ["2026-06-10", 1, 2201, 0, 2201], ["2026-06-11", 0, 0, 0, 0], ["2026-06-12", 0, 0, 0, 0]]}
+];
+const DAY_LABELS = ["6 июн (сб)", "7 июн (вс)", "8 июн (пн)", "9 июн (вт)", "10 июн (ср)", "11 июн (чт)", "12 июн (пт)"];
+const CAB_NAMES = { 1: "ИП Олейников И.И.", 2: "ИП Олейникова А.А." };
+const PERIOD_HUMAN = "6–12 июня 2026";
+
+// Маржа до ДРР за 1 ед, руб (margins.json)
+const MARGIN = {"991707178": 2300, "976216541": 2100, "1015705041": 2500, "1015705042": 2500, "1067802762": 3400, "1067802763": 3400, "1095867819": 1300, "1015736036": 3800};
+
+const fmt = n => Math.round(n).toLocaleString("ru-RU");
+const fmtRub = n => fmt(n) + " ₽";
+const sum = xs => xs.reduce((a,b) => a+b, 0);
+const totals = p => ({
+  orders: sum(p.days.map(d => d[1])),
+  revenue: sum(p.days.map(d => d[2])),
+  ad: sum(p.days.map(d => d[3])),
+});
+const drr = (ad, rev) => rev > 0 ? ad/rev*100 : 0;
+const drrPill = v => {
+  const cls = v >= 35 ? "bad" : v >= 25 ? "warn" : "ok";
+  return `<span class="pill ${cls}">${v.toFixed(1)}%</span>`;
+};
+const cabTag = c => `<span class="cabtag c${c}">${c === 1 ? "Олейников" : "Олейникова"}</span>`;
+const dayProfit = (p, d) => (MARGIN[p.id] || 0) * d[1] - d[3];
+const weekProfit = p => sum(p.days.map(d => dayProfit(p, d)));
+const fmtSigned = n => (n > 0 ? "+" : "") + fmt(n) + " ₽";
+const profitCell = n => `<span class="${n >= 0 ? "profit-pos" : "profit-neg"}">${fmtSigned(n)}</span>`;
+
+const byCab = (list, cab) => cab === "all" ? list : list.filter(p => String(p.cab) === cab);
+
+let charts = {};
+function makeChart(key, cfg) {
+  if (charts[key]) charts[key].destroy();
+  charts[key] = new Chart(document.getElementById(key), cfg);
+}
+
+function render(cab) {
+  const prods = byCab(PRODUCTS, cab);
+  const extra = byCab(EXTRA, cab);
+  const all = [...prods, ...extra];
+
+  // ── Итоги ──
+  const totRev = sum(all.map(p => totals(p).revenue));
+  const totAd = sum(all.map(p => totals(p).ad));
+  const totOrders = sum(all.map(p => totals(p).orders));
+  const totProfit = sum(prods.map(weekProfit));
+  document.getElementById("totals").innerHTML = `
+    <div class="stat"><div class="v">${(totRev/1e6).toFixed(2)} млн ₽</div><div class="l">Выручка по заказам за период</div></div>
+    <div class="stat"><div class="v warn">${(totAd/1e6).toFixed(2)} млн ₽</div><div class="l">Расходы на рекламу</div></div>
+    <div class="stat"><div class="v ${totProfit >= 0 ? "ok" : "bad"}">${totProfit >= 0 ? "+" : ""}${(totProfit/1e6).toFixed(2)} млн ₽</div><div class="l">Прибыль по заказам (маржа − реклама)</div></div>
+    <div class="stat"><div class="v">${drr(totAd, totRev).toFixed(1)}%</div><div class="l">DRR (реклама / выручка)</div></div>
+    <div class="stat"><div class="v">${fmt(totOrders)}</div><div class="l">Заказов, шт</div></div>`;
+
+  // ── Выручка и реклама по дням (стеки по кабинетам) ──
+  const cabsToShow = cab === "all" ? [1, 2] : [Number(cab)];
+  const revSets = cabsToShow.map((c, i) => ({
+    label: `Выручка · ${CAB_NAMES[c].split(" ")[1]}`,
+    data: DAY_LABELS.map((_, di) => Math.round(sum(byCab([...PRODUCTS, ...EXTRA], String(c)).map(p => p.days[di][2]))/1000)),
+    backgroundColor: i === 0 ? "#2563eb" : "#7c3aed", stack: "rev",
+  }));
+  const adSets = cabsToShow.map((c, i) => ({
+    label: `Реклама · ${CAB_NAMES[c].split(" ")[1]}`,
+    data: DAY_LABELS.map((_, di) => Math.round(sum(byCab([...PRODUCTS, ...EXTRA], String(c)).map(p => p.days[di][3]))/1000)),
+    backgroundColor: i === 0 ? "#f59e0b" : "#fbbf24", stack: "ad",
+  }));
+  makeChart("dailyChart", {
+    type: "bar",
+    data: { labels: DAY_LABELS, datasets: [...revSets, ...adSets] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmt(c.raw)} тыс ₽` } } },
+      scales: { x: { stacked: true }, y: { stacked: true, title: { display: true, text: "тыс ₽" } } },
+    },
+  });
+
+  // ── DRR по дням ──
+  const drrLine = (list, label, color) => ({
+    label,
+    data: DAY_LABELS.map((_, i) => {
+      const r = sum(list.map(p => p.days[i][2])), a = sum(list.map(p => p.days[i][3]));
+      return +drr(a, r).toFixed(1);
+    }),
+    borderColor: color, backgroundColor: "transparent", tension: .2,
+  });
+  const drrSets = cab === "all"
+    ? [drrLine([...PRODUCTS, ...EXTRA], "Сводно", "#1f2328"),
+       drrLine(byCab([...PRODUCTS, ...EXTRA], "1"), "Олейников", "#2563eb"),
+       drrLine(byCab([...PRODUCTS, ...EXTRA], "2"), "Олейникова", "#7c3aed")]
+    : [drrLine(all, "DRR", "#2563eb")];
+  makeChart("drrChart", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: drrSets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: cab === "all" }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { y: { title: { display: true, text: "%" }, ticks: { callback: v => v + "%" } } },
+    },
+  });
+
+  // ── Прибыль по дням ──
+  const profitByDay = DAY_LABELS.map((_, i) => sum(prods.map(p => dayProfit(p, p.days[i]))));
+  makeChart("profitChart", {
+    type: "bar",
+    data: {
+      labels: DAY_LABELS,
+      datasets: [{
+        label: "Прибыль",
+        data: profitByDay.map(v => Math.round(v/1000)),
+        backgroundColor: profitByDay.map(v => v >= 0 ? "#16a34a" : "#dc2626"),
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Прибыль: ${fmt(c.raw)} тыс ₽` } } },
+      scales: { y: { title: { display: true, text: "тыс ₽" } } },
+    },
+  });
+
+  // ── Таблица по артикулам ──
+  const sorted = [...prods].sort((a, b) => totals(b).revenue - totals(a).revenue);
+  document.querySelector("#skuTable tbody").innerHTML = sorted.map(p => {
+    const t = totals(p);
+    return `<tr data-id="${p.id}">
+      <td><b>${p.name}</b> ${cab === "all" ? cabTag(p.cab) : ""}<br><span class="nm">${p.id}</span></td>
+      <td>${fmtRub(t.revenue)}</td><td>${fmt(t.orders)}</td><td>${fmtRub(t.ad)}</td>
+      <td>${drrPill(drr(t.ad, t.revenue))}</td>
+      <td>${fmtRub(MARGIN[p.id] || 0)}</td>
+      <td>${profitCell(weekProfit(p))}</td></tr>`;
+  }).join("");
+
+  // ── Динамика по артикулу ──
+  const sel = document.getElementById("skuSelect");
+  sel.innerHTML = sorted.map(p => `<option value="${p.id}">${p.name} (${CAB_NAMES[p.cab].split(" ")[1]}) · ${p.id}</option>`).join("");
+  sel.onchange = e => renderSku(e.target.value);
+  if (sorted.length) renderSku(sorted[0].id);
+
+  // клик по строке таблицы → динамика этого артикула
+  document.querySelectorAll("#skuTable tbody tr").forEach(tr => tr.onclick = () => {
+    sel.value = tr.dataset.id;
+    renderSku(tr.dataset.id);
+    document.getElementById("skuPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // ── Раздачи ──
+  const extraRev = sum(extra.map(p => totals(p).revenue));
+  document.getElementById("extraSummary").textContent = `${extra.length} SKU · ${fmtRub(extraRev)}`;
+  document.querySelector("#extraTable tbody").innerHTML = extra.map(p => {
+    const t = totals(p);
+    return `<tr><td>${p.name} ${cab === "all" ? cabTag(p.cab) : ""} · <span class="nm">${p.id}</span></td><td>${fmt(t.orders)}</td><td>${fmtRub(t.revenue)}</td></tr>`;
+  }).join("");
+}
+
+function renderSku(id) {
+  const p = PRODUCTS.find(x => String(x.id) === String(id)) || PRODUCTS[0];
+  const t = totals(p);
+  const wd = drr(t.ad, t.revenue);
+  const wp = weekProfit(p);
+  document.getElementById("skuStats").innerHTML = `
+    <div class="stat"><div class="v">${fmtRub(t.revenue)}</div><div class="l">Выручка за период</div></div>
+    <div class="stat"><div class="v warn">${fmtRub(t.ad)}</div><div class="l">Реклама за период</div></div>
+    <div class="stat"><div class="v" ${wd >= 35 ? 'style="color:var(--danger)"' : ""}>${wd.toFixed(1)}%</div><div class="l">DRR за период</div></div>
+    <div class="stat"><div class="v ${wp >= 0 ? "ok" : "bad"}">${fmtSigned(wp)}</div><div class="l">Прибыль за период (маржа ${fmt(MARGIN[p.id] || 0)} ₽/ед)</div></div>`;
+  document.querySelector("#skuDays tbody").innerHTML = p.days.map((d, i) => {
+    const pr = dayProfit(p, d);
+    const marg = d[2] > 0 ? pr / d[2] * 100 : null;
+    return `<tr>
+    <td>${DAY_LABELS[i]}</td><td>${fmt(d[1])}</td><td>${fmtRub(d[2])}</td>
+    <td>${d[1] > 0 ? fmtRub(d[2] / d[1]) : "—"}</td><td>${fmtRub(d[3])}</td>
+    <td>${d[2] > 0 ? drr(d[3], d[2]).toFixed(1) + "%" : "—"}</td>
+    <td>${profitCell(pr)}</td>
+    <td>${marg !== null ? `<span class="${marg >= 5 ? "profit-pos" : "profit-neg"}">${marg.toFixed(1)}%</span>` : "—"}</td></tr>`;
+  }).join("");
+  document.getElementById("skuCaption").textContent = `${p.name} · артикул ${p.id} · кабинет ${CAB_NAMES[p.cab]} · WB Seller API · ${PERIOD_HUMAN}`;
+
+  const datasets = [
+    { label: "Выручка, тыс ₽", data: p.days.map(d => Math.round(d[2]/1000)), borderColor: "#2563eb", backgroundColor: "rgba(37,99,235,.10)", fill: true, tension: .2 },
+    { label: "Реклама, тыс ₽", data: p.days.map(d => Math.round(d[3]/1000)), borderColor: "#f59e0b", backgroundColor: "rgba(245,158,11,.10)", fill: true, tension: .2 },
+    { label: "Прибыль, тыс ₽", data: p.days.map(d => Math.round(dayProfit(p, d)/1000)), borderColor: "#16a34a", backgroundColor: "rgba(22,163,74,.10)", fill: true, tension: .2 },
+  ];
+  makeChart("skuChart", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label.split(",")[0]}: ${fmt(c.raw)} тыс ₽` } } },
+      scales: { y: { title: { display: true, text: "тыс ₽" } } },
+    },
+  });
+
+  makeChart("skuPctChart", {
+    type: "line",
+    data: {
+      labels: DAY_LABELS,
+      datasets: [
+        { label: "ДРР %", data: p.days.map(d => d[2] > 0 ? +drr(d[3], d[2]).toFixed(1) : null),
+          borderColor: "#b45309", backgroundColor: "rgba(180,83,9,.08)", fill: true, tension: .25, spanGaps: true },
+        { label: "Маржинальность с ДРР %", data: p.days.map(d => d[2] > 0 ? +(dayProfit(p, d) / d[2] * 100).toFixed(1) : null),
+          borderColor: "#15803d", backgroundColor: "rgba(21,128,61,.08)", fill: true, tension: .25, spanGaps: true },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { y: { ticks: { callback: v => v + "%" } } },
+    },
+  });
+}
+
+// ── Переключатель кабинетов ──
+document.getElementById("cabs").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  document.querySelectorAll("#cabs button").forEach(b => b.classList.toggle("active", b === btn));
+  render(btn.dataset.cab);
+});
+
+render("all");
+</script>
+</body>
+</html>
