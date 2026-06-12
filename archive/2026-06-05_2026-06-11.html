@@ -51,7 +51,9 @@ h2 { font-size: 17px; margin: 0 0 12px; }
 .callout li { margin: 4px 0; }
 
 .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px; }
-.chart-box { position: relative; }
+.chart-box { position: relative; height: 300px; }
+.chart-box.tall { height: 340px; }
+.chart-box.short { height: 240px; }
 
 .tablewrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
@@ -87,7 +89,8 @@ details table { margin-top: 12px; border: none; }
   h1 { font-size: 20px; }
   th, td { padding: 7px 8px; font-size: 13px; }
   .stat .v { font-size: 18px; }
-  .chart-box { min-height: 220px; }
+  .chart-box, .chart-box.tall { height: 240px; }
+  .chart-box.short { height: 200px; }
 }
 </style>
 </head>
@@ -96,7 +99,7 @@ details table { margin-top: 12px; border: none; }
 
   <header>
     <h1>РНП · Оцифровка WB · AquaBlast</h1>
-    <div class="sub">Оба кабинета · выручка, реклама, DRR и прибыль по каждому артикулу · 5–11 июня 2026 · источник: WB Seller API · собрано 12.06.2026 18:59</div>
+    <div class="sub">Оба кабинета · выручка, реклама, DRR и прибыль по каждому артикулу · 5–11 июня 2026 · источник: WB Seller API · собрано 12.06.2026 19:02</div>
   </header>
 
   <nav class="cabs" id="cabs">
@@ -114,19 +117,19 @@ details table { margin-top: 12px; border: none; }
 
   <section class="panel">
     <h2>Выручка и реклама по дням, тыс ₽</h2>
-    <div class="chart-box"><canvas id="dailyChart" height="110"></canvas></div>
+    <div class="chart-box tall"><canvas id="dailyChart"></canvas></div>
     <div class="small">Источник: WB Seller API · все артикулы · 5–11 июня 2026 · столбцы складываются по кабинетам</div>
   </section>
 
   <section class="panel">
     <h2>DRR по дням, %</h2>
-    <div class="chart-box"><canvas id="drrChart" height="80"></canvas></div>
+    <div class="chart-box short"><canvas id="drrChart"></canvas></div>
     <div class="small">DRR = расходы на рекламу / выручка по заказам</div>
   </section>
 
   <section class="panel">
     <h2>Прибыль по дням, тыс ₽</h2>
-    <div class="chart-box"><canvas id="profitChart" height="80"></canvas></div>
+    <div class="chart-box short"><canvas id="profitChart"></canvas></div>
     <div class="small">Прибыль = маржа до ДРР × заказы − реклама · основные артикулы · раздачи не учитываются</div>
   </section>
 
@@ -144,9 +147,9 @@ details table { margin-top: 12px; border: none; }
     <h2>Динамика по артикулу</h2>
     <select id="skuSelect"></select>
     <div class="sku-stats" id="skuStats"></div>
-    <div class="chart-box"><canvas id="skuChart" height="100"></canvas></div>
+    <div class="chart-box"><canvas id="skuChart"></canvas></div>
     <div class="small" style="margin:10px 0 4px"><b>ДРР и маржинальность с ДРР по дням, %</b></div>
-    <div class="chart-box"><canvas id="skuPctChart" height="70"></canvas></div>
+    <div class="chart-box short"><canvas id="skuPctChart"></canvas></div>
     <div class="tablewrap" style="margin-top:14px"><table id="skuDays">
       <thead><tr><th>День</th><th>Заказы, шт</th><th>Выручка</th><th>Ср. цена</th><th>Реклама</th><th>DRR</th><th>Прибыль</th><th>Марж. с ДРР</th></tr></thead>
       <tbody></tbody>
@@ -264,6 +267,7 @@ function render(cab) {
     data: { labels: DAY_LABELS, datasets: [...revSets, ...adSets] },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmt(c.raw)} тыс ₽` } } },
       scales: { x: { stacked: true }, y: { stacked: true, title: { display: true, text: "тыс ₽" } } },
     },
@@ -288,6 +292,7 @@ function render(cab) {
     data: { labels: DAY_LABELS, datasets: drrSets },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: cab === "all" }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
       scales: { y: { title: { display: true, text: "%" }, ticks: { callback: v => v + "%" } } },
     },
@@ -307,6 +312,7 @@ function render(cab) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Прибыль: ${fmt(c.raw)} тыс ₽` } } },
       scales: { y: { title: { display: true, text: "тыс ₽" } } },
     },
@@ -378,6 +384,7 @@ function renderSku(id) {
     data: { labels: DAY_LABELS, datasets },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label.split(",")[0]}: ${fmt(c.raw)} тыс ₽` } } },
       scales: { y: { title: { display: true, text: "тыс ₽" } } },
     },
@@ -396,6 +403,7 @@ function renderSku(id) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
       scales: { y: { ticks: { callback: v => v + "%" } } },
     },
