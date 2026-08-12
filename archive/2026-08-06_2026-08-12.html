@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#070c11">
+<title>РНП · 6–12 августа 2026 · AquaBlast control room</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&family=Unbounded:wght@800&display=swap');
+
+/* ═══════════════ ТОКЕНЫ ═══════════════
+   Палитра валидирована scripts/validate_palette.js (dataviz):
+   категориальная c1/c2/c3 — PASS все 6 проверок на поверхности #0d151d;
+   воронка f1→f3 — ординальный ramp PASS; статусные ≥3:1. */
+:root {
+  color-scheme: dark;
+  --bg: #070c11;
+  --panel: #0d151d;
+  --panel-2: #111b25;
+  --ink: #f2f6f9;
+  --muted: #8fa1b3;
+  --dim: #5c6b7a;
+  --line: rgba(255,255,255,.08);
+  --hairline: rgba(255,255,255,.055);
+
+  --c1: #0f9ccf;   /* Олейников  · cyan    */
+  --c2: #d55181;   /* Олейникова · magenta */
+  --c3: #9085e9;   /* Чебан      · violet  */
+  --ad: #77879b;   /* реклама — один приглушённый тон, не палитра */
+
+  --good: #4fd376;
+  --warn: #ffb547;
+  --bad:  #ff6877;
+
+  --f1: #a5e6fb;   /* воронка: открытия */
+  --f2: #5fcef7;   /* воронка: корзины  */
+  --f3: #22a7dd;   /* воронка: заказы   */
+
+  --accent: #38c6f4;          /* хром UI, не данные */
+  --accent-soft: rgba(56,198,244,.10);
+  --r-lg: 22px; --r-md: 16px; --r-sm: 10px;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); scroll-behavior: smooth; }
+body {
+  margin: 0; min-height: 100dvh; color: var(--ink);
+  padding: 0 0 80px;
+  font: 14px/1.55 "Golos Text", "Helvetica Neue", sans-serif;
+  background:
+    radial-gradient(1100px 480px at 12% -6%, rgba(15,156,207,.14), transparent 60%),
+    radial-gradient(900px 420px at 96% 4%, rgba(144,133,233,.10), transparent 55%),
+    linear-gradient(180deg, #0a121b 0%, var(--bg) 34%, #05080c 100%);
+}
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .5; z-index: 0;
+  background-image: linear-gradient(var(--hairline) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 62%);
+}
+::selection { background: rgba(56,198,244,.28); }
+
+/* ═══════════════ ТИПОГРАФИКА ═══════════════ */
+.mono, .mlabel { font-family: "IBM Plex Mono", monospace; }
+.mlabel { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.mlabel.dim { color: var(--dim); }
+h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; margin-bottom: 16px; }
+.sec-head .mlabel { color: var(--accent); }
+.note { font-size: 11.5px; color: var(--dim); margin-top: 10px; line-height: 1.5; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ═══════════════ ШАПКА ═══════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  padding: calc(10px + env(safe-area-inset-top)) 18px 10px;
+  display: flex; align-items: center; gap: 16px;
+  background: rgba(7,12,17,.78); backdrop-filter: blur(20px) saturate(1.4); -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.wordmark {
+  font: 800 19px/1 "Unbounded", sans-serif; letter-spacing: .01em;
+  background: linear-gradient(100deg, #4ecdf6 10%, #9085e9 90%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.brand .period { font: 600 12px/1.2 "IBM Plex Mono", monospace; color: var(--muted); white-space: nowrap; }
+.cabs { display: flex; gap: 4px; margin-left: auto; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: rgba(13,21,29,.6); overflow-x: auto; scrollbar-width: none; max-width: 70vw; }
+.cabs::-webkit-scrollbar { display: none; }
+.cabs button {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px;
+  font: 600 12.5px/1 "Golos Text", sans-serif; padding: 9px 14px; border: 0; border-radius: 9px;
+  background: transparent; cursor: pointer; color: var(--muted); transition: color .18s, background .18s;
+  min-height: 34px;
+}
+.cabs button:hover { color: var(--ink); background: rgba(255,255,255,.05); }
+.cabs button.active { background: var(--ink); color: #0a1017; }
+.cabs .cdot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.cabs .tab-badge { font: 600 10px/1 "IBM Plex Mono", monospace; background: rgba(255,104,119,.16); color: var(--bad); border-radius: 99px; padding: 3px 6px; }
+.cabs button.active .tab-badge { background: rgba(190,30,45,.18); color: #b3242f; }
+
+/* ═══════════════ ВЫБОР ПЕРИОДА ═══════════════ */
+.rangebar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 14px 16px; background: rgba(13,21,29,.78); border: 1px solid var(--line);
+  border-radius: var(--r-md); box-shadow: 0 12px 36px rgba(0,0,0,.16);
+}
+.range-presets { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(255,255,255,.035); overflow-x: auto; scrollbar-width: none; }
+.range-presets::-webkit-scrollbar { display: none; }
+.range-presets button, .date-nav button {
+  min-height: 40px; border: 0; border-radius: 9px; padding: 8px 13px; cursor: pointer;
+  color: var(--muted); background: transparent; font: 600 12.5px/1 "Golos Text", sans-serif;
+  white-space: nowrap;
+}
+.range-presets button:hover, .date-nav button:hover { color: var(--ink); background: rgba(255,255,255,.055); }
+.range-presets button.active { color: #071018; background: var(--ink); }
+.date-nav { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+.date-nav button { width: 40px; padding: 0; font-size: 20px; }
+.date-nav button:disabled { opacity: .3; cursor: default; }
+.date-field { display: flex; align-items: center; gap: 8px; }
+.date-field label { white-space: nowrap; }
+.date-field input {
+  min-height: 40px; min-width: 148px; border: 1px solid var(--line); border-radius: 9px;
+  padding: 8px 10px; color: var(--ink); background: #0b131b; color-scheme: dark;
+  font: 600 12px/1 "IBM Plex Mono", monospace; outline: none;
+}
+.date-field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.range-status { flex: 1 1 100%; min-height: 18px; color: var(--dim); font-size: 11.5px; }
+.range-status.warn { color: var(--warn); }
+
+/* ═══════════════ КАРКАС ═══════════════ */
+.wrap { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 26px 18px 0; display: flex; flex-direction: column; gap: 18px; }
+.wrap > * { animation: rise .5s both; }
+.wrap > *:nth-child(1) { animation-delay: .02s; } .wrap > *:nth-child(2) { animation-delay: .06s; }
+.wrap > *:nth-child(3) { animation-delay: .10s; } .wrap > *:nth-child(4) { animation-delay: .14s; }
+.wrap > *:nth-child(5) { animation-delay: .18s; }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.panel {
+  background: linear-gradient(160deg, rgba(17,27,37,.94), rgba(10,17,24,.97));
+  border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.22);
+}
+
+/* ═══════════════ ВЧЕРА (герой) ═══════════════ */
+.hero-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 18px; }
+.hero-grid { display: grid; grid-template-columns: minmax(250px, 1.15fr) 2fr; gap: 22px; align-items: stretch; }
+.hero-main { display: flex; flex-direction: column; gap: 8px; padding-right: 22px; border-right: 1px solid var(--line); }
+.hero-num {
+  font-size: clamp(42px, 5.4vw, 66px); font-weight: 800; line-height: 1.02; letter-spacing: -.045em;
+  font-variant-numeric: normal;
+}
+.hero-num.pos { color: var(--good); } .hero-num.neg { color: var(--bad); }
+.hero-sub { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hero-spark { margin-top: auto; padding-top: 12px; }
+.hero-spark svg { width: 100%; max-width: 280px; height: 44px; display: block; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 999px;
+  font: 600 11.5px/1 "IBM Plex Mono", monospace; border: 1px solid transparent; white-space: nowrap;
+}
+.chip.up   { color: var(--good); background: rgba(79,211,118,.09); border-color: rgba(79,211,118,.2); }
+.chip.down { color: var(--bad);  background: rgba(255,104,119,.09); border-color: rgba(255,104,119,.2); }
+.chip.flat { color: var(--muted); background: rgba(255,255,255,.05); border-color: var(--line); }
+
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.tile { background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.tile .tv { font-size: 23px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; white-space: nowrap; }
+.tile .trow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tile .tspark svg { width: 100%; height: 26px; display: block; }
+.tile .tbase { font-size: 10.5px; color: var(--dim); }
+
+.hero-funnel { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.hf-stage { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.hf-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.hf-top b { font-size: 17px; font-weight: 700; }
+.hf-cr { font: 600 11px/1 "IBM Plex Mono", monospace; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+/* ═══════════════ АЛЕРТЫ ═══════════════ */
+.alerts { border-radius: var(--r-lg); overflow: hidden; }
+.alerts.calm { background: rgba(79,211,118,.045); border: 1px solid rgba(79,211,118,.16); padding: 14px 22px; display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+.alerts.info { background: rgba(56,198,244,.045); border: 1px solid rgba(56,198,244,.16); padding: 14px 22px; color: var(--muted); font-size: 13px; }
+.alerts.hot { background: linear-gradient(135deg, rgba(255,181,71,.08), rgba(255,104,119,.05)); border: 1px solid rgba(255,181,71,.25); padding: 18px 22px; }
+.alerts .a-title { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; color: var(--warn); font: 600 11px/1.3 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.alerts ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.alerts li { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; color: #e9eef2; }
+.alerts li .ic { flex: 0 0 auto; font-size: 12px; }
+
+/* ═══════════════ СТРИП ИТОГОВ ═══════════════ */
+.strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+.s-cell { background: linear-gradient(160deg, rgba(17,27,37,.9), rgba(10,17,24,.95)); border: 1px solid var(--line); border-radius: var(--r-md); padding: 13px 15px; min-width: 0; }
+.s-cell .sv { font-size: 19px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
+.s-cell .sv.warn { color: var(--warn); } .s-cell .sv.pos { color: var(--good); } .s-cell .sv.neg { color: var(--bad); }
+.s-cell .mlabel { display: block; margin-top: 4px; font-size: 9px; }
+
+/* ═══════════════ ГРАФИКИ ═══════════════ */
+.chart-box { position: relative; height: 340px; }
+.chart-box.mid { height: 280px; }
+.chart-box.short { height: 230px; }
+.legend-note { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; }
+.lk { display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--muted); }
+.lk i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.no-charts .chart-box { display: none; }
+.no-charts .charts-fallback { display: block; }
+.charts-fallback { display: none; padding: 14px; border: 1px dashed var(--line); border-radius: var(--r-md); color: var(--muted); font-size: 12.5px; }
+
+/* ═══════════════ КАБИНЕТЫ РЯДОМ ═══════════════ */
+.cab-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.cab-card { position: relative; overflow: hidden; text-align: left; background: linear-gradient(165deg, rgba(17,27,37,.95), rgba(10,17,24,.97)); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px 14px; cursor: pointer; transition: transform .18s, border-color .18s; color: var(--ink); font: inherit; display: flex; flex-direction: column; gap: 10px; }
+.cab-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cc); }
+.cab-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.18); }
+.cab-card .cname { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
+.cab-card .cname-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cc); }
+.cab-card .crow { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--muted); }
+.cab-card .crow b { color: var(--ink); font-size: 14px; font-weight: 700; }
+.cab-card .cspark svg { width: 100%; height: 30px; display: block; }
+.share-bar { display: flex; height: 6px; border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.05); }
+.share-bar i { height: 100%; border-right: 2px solid var(--panel); }
+.share-bar i:last-child { border-right: 0; }
+
+/* ═══════════════ ПУЛЬС (хитмап) ═══════════════ */
+.heat-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 3px; }
+.heat-grid { --day-count: 7; }
+.heat { display: grid; gap: 5px; }
+.heat-row { display: grid; grid-template-columns: 96px repeat(var(--day-count), minmax(40px, 1fr)); gap: 5px; align-items: stretch; }
+.heat-label { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; }
+.heat-label em { font-style: normal; overflow: hidden; text-overflow: ellipsis; }
+.heat-label i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.heat-cell { border-radius: 8px; min-height: 40px; display: flex; align-items: center; justify-content: center; font: 600 11.5px/1 "IBM Plex Mono", monospace; color: var(--ink); border: 1px solid rgba(255,255,255,.04); }
+.heat-cell.null { color: var(--dim); }
+.heat-days { display: grid; grid-template-columns: 96px repeat(var(--day-count), minmax(40px, 1fr)); gap: 5px; margin-top: 2px; }
+.heat-days span { text-align: center; font: 600 9.5px/1.3 "IBM Plex Mono", monospace; color: var(--dim); text-transform: uppercase; letter-spacing: .04em; }
+
+/* ═══════════════ ВОРОНКА ═══════════════ */
+.funnel-grid { display: grid; grid-template-columns: minmax(280px, 1fr) 1.3fr; gap: 26px; align-items: start; }
+.f-stages { display: flex; flex-direction: column; gap: 4px; }
+.f-stage { display: flex; flex-direction: column; gap: 7px; padding: 12px 0; }
+.f-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.f-top .fn { font-size: 13px; font-weight: 600; color: var(--muted); }
+.f-top .fv { font: 600 20px/1 "IBM Plex Mono", monospace; letter-spacing: -.03em; }
+.f-track { height: 16px; border-radius: 8px; background: rgba(255,255,255,.05); overflow: hidden; }
+.f-fill { height: 100%; border-radius: 8px; min-width: 3px; transition: width .6s cubic-bezier(.2,.8,.2,1); }
+.f-conv { display: flex; align-items: center; gap: 10px; padding: 2px 0 2px 12px; }
+.f-conv .arr { color: var(--dim); font-size: 12px; }
+.f-conv b { font: 600 15px/1 "IBM Plex Mono", monospace; color: var(--ink); }
+.f-conv span { font-size: 11px; color: var(--dim); }
+.f-buyout { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r-sm); background: rgba(255,255,255,.02); font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.f-buyout b { color: var(--ink); }
+.f-charts { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* ═══════════════ ТАБЛИЦЫ ═══════════════ */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; background: rgba(6,11,16,.3); font-variant-numeric: tabular-nums; }
+th, td { padding: 11px 13px; text-align: right; border-bottom: 1px solid rgba(255,255,255,.06); white-space: nowrap; font-size: 13px; }
+th:first-child, td:first-child { text-align: left; }
+th { position: sticky; top: 0; z-index: 2; background: #131f2a; font: 600 9.5px/1.3 "IBM Plex Mono", monospace; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(255,255,255,.015); }
+tbody tr:hover { background: rgba(56,198,244,.06); }
+td .nm { color: var(--dim); font: 500 11px/1.4 "IBM Plex Mono", monospace; }
+#leader table th { cursor: pointer; user-select: none; }
+#leader table th:hover { color: var(--ink); }
+#leader table th .sort { color: var(--accent); margin-left: 3px; }
+#leader tbody tr { cursor: pointer; }
+#leader th:first-child, #leader td:first-child { position: sticky; left: 0; z-index: 1; background: #0e1822; max-width: 210px; overflow: hidden; text-overflow: ellipsis; }
+#leader th:first-child { z-index: 3; }
+#leader tbody tr:hover td:first-child { background: #12202c; }
+.cellbar { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+.cellbar .bt { width: 92px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.06); overflow: hidden; }
+.cellbar .bf { height: 100%; border-radius: 3px; }
+.rowspark svg { width: 96px; height: 26px; display: block; margin-left: auto; }
+.pill { display: inline-block; padding: 3px 9px; border: 1px solid transparent; border-radius: 999px; font: 600 11px/1.3 "IBM Plex Mono", monospace; }
+.pill.ok   { background: rgba(79,211,118,.08); border-color: rgba(79,211,118,.18); color: var(--good); }
+.pill.warn { background: rgba(255,181,71,.08); border-color: rgba(255,181,71,.18); color: var(--warn); }
+.pill.bad  { background: rgba(255,104,119,.08); border-color: rgba(255,104,119,.18); color: var(--bad); }
+.cabtag { display: inline-block; padding: 2px 7px; margin-left: 6px; border-radius: 5px; font: 600 9px/1.35 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .04em; border: 1px solid var(--line); color: var(--muted); vertical-align: 1px; }
+.cabtag.c1 { border-color: rgba(15,156,207,.35);  color: #4dc3ec; background: rgba(15,156,207,.08); }
+.cabtag.c2 { border-color: rgba(213,81,129,.35);  color: #e783a6; background: rgba(213,81,129,.08); }
+.cabtag.c3 { border-color: rgba(144,133,233,.35); color: #aca3f0; background: rgba(144,133,233,.08); }
+.pos { color: var(--good); font-weight: 600; } .neg { color: var(--bad); font-weight: 600; }
+.rowhint { font-size: 11.5px; color: var(--dim); margin-top: 8px; }
+
+/* ═══════════════ SKU DRILL-DOWN ═══════════════ */
+select { font: 500 14px/1.3 "Golos Text", sans-serif; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #0b131b; color: var(--ink); width: 100%; outline: none; appearance: none; }
+select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sku-tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 16px 0; }
+.sku-tiles .tile .tv { font-size: 18px; }
+.sku-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.sku-chart-cell { min-width: 0; }
+.sku-chart-cell .mlabel { display: block; margin-bottom: 8px; }
+
+/* ═══════════════ ПРОЧЕЕ ═══════════════ */
+details { background: rgba(13,21,29,.7); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 20px; }
+summary { cursor: pointer; font-weight: 600; color: #d8e0e6; font-size: 13.5px; }
+summary .small { font-weight: 400; margin-left: 8px; font-size: 12px; color: var(--muted); }
+details .tablewrap { margin-top: 12px; }
+footer { margin-top: 8px; text-align: center; font: 500 10.5px/1.8 "IBM Plex Mono", monospace; color: var(--dim); letter-spacing: .04em; }
+footer b { color: var(--muted); }
+
+/* ═══════════════ АДАПТИВ ═══════════════ */
+@media (max-width: 1020px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-main { padding-right: 0; padding-bottom: 18px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .strip { grid-template-columns: repeat(3, 1fr); }
+  .cab-cards { grid-template-columns: 1fr; }
+  .funnel-grid { grid-template-columns: 1fr; }
+  .sku-tiles { grid-template-columns: repeat(3, 1fr); }
+  .sku-charts { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 16px 10px 0; gap: 12px; }
+  .panel { padding: 17px 14px; border-radius: 18px; }
+  .topbar { gap: 10px; padding-left: 12px; padding-right: 12px; flex-wrap: wrap; }
+  .brand .period { display: none; }
+  .cabs { max-width: 100%; margin-left: 0; flex: 1 1 100%; }
+  .cabs button { padding: 10px 9px; font-size: 11.5px; min-height: 40px; gap: 5px; }
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .tile { padding: 11px 12px; } .tile .tv { font-size: 19px; }
+  .hero-num { font-size: 46px; }
+  .hero-funnel { grid-template-columns: 1fr; gap: 10px; }
+  .strip { grid-template-columns: repeat(2, 1fr); }
+  .s-cell .sv { font-size: 16px; }
+  .chart-box { height: 250px; } .chart-box.mid { height: 220px; } .chart-box.short { height: 190px; }
+  .rangebar { gap: 8px; padding: 10px; }
+  .range-presets { width: 100%; }
+  .range-presets button { flex: 1 0 auto; min-height: 44px; }
+  .date-nav { width: 100%; margin-left: 0; }
+  .date-nav button { min-height: 44px; }
+  .date-field { flex: 1; }
+  .date-field input { width: 100%; min-height: 44px; }
+  .heat-row, .heat-days { grid-template-columns: 76px repeat(var(--day-count), minmax(38px, 1fr)); gap: 3px; }
+  .heat-cell { min-height: 34px; font-size: 9.5px; border-radius: 6px; }
+  .heat-label { font-size: 10px; }
+  th, td { padding: 8px 9px; font-size: 12px; }
+  .cellbar .bt { width: 56px; }
+  .rowspark svg { width: 64px; }
+  .sku-tiles { grid-template-columns: repeat(2, 1fr); }
+  .f-top .fv { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<noscript>РНП-отчёт требует JavaScript. Данные периода: 6–12 августа 2026, собрано 13.08.2026 00:14.</noscript>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="wordmark">РНП</span>
+    <span class="period" id="brandPeriod">6–12 августа 2026</span>
+  </div>
+  <nav class="cabs" id="cabs" aria-label="Кабинеты"></nav>
+</header>
+
+<main class="wrap" id="app">
+
+  <section class="rangebar" aria-label="Выбор периода">
+    <div class="range-presets" id="rangePresets" role="group" aria-label="Длина периода">
+      <button type="button" data-period="day" aria-pressed="false">День</button>
+      <button type="button" data-period="week" aria-pressed="true">7 дней</button>
+      <button type="button" data-period="month" aria-pressed="false">30 дней</button>
+    </div>
+    <div class="date-nav">
+      <button type="button" id="datePrev" aria-label="Предыдущая дата">‹</button>
+      <div class="date-field">
+        <label class="mlabel" for="rangeDate">Дата</label>
+        <input type="date" id="rangeDate">
+      </div>
+      <button type="button" id="dateNext" aria-label="Следующая дата">›</button>
+    </div>
+    <div class="range-status" id="rangeStatus" role="status" aria-live="polite"></div>
+  </section>
+
+  <!-- ВЫБРАННЫЙ ДЕНЬ -->
+  <section class="panel" id="secHero">
+    <div class="hero-head">
+      <div>
+        <span class="mlabel" style="color:var(--accent)">Выбранный день · <span id="heroDate"></span></span>
+      </div>
+      <span class="mlabel dim" id="heroBaseNote"></span>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-main">
+        <span class="mlabel">Прибыль за день</span>
+        <div class="hero-num" id="heroProfit"></div>
+        <div class="hero-sub" id="heroChip"></div>
+        <div class="hero-spark" id="heroSpark"></div>
+      </div>
+      <div class="tiles" id="heroTiles"></div>
+      <div class="hero-funnel" id="heroFunnel"></div>
+    </div>
+  </section>
+
+  <!-- АЛЕРТЫ -->
+  <section class="alerts" id="secAlerts"></section>
+
+  <!-- ИТОГИ ПЕРИОДА -->
+  <section>
+    <div class="sec-head" style="margin-bottom:10px">
+      <span class="mlabel" style="color:var(--accent)">Период</span>
+      <h2 style="font-size:15px">Итоги · <span id="stripPeriod"></span></h2>
+    </div>
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <!-- ДЕНЬГИ ПО ДНЯМ -->
+  <section class="panel">
+    <div class="sec-head">
+      <span class="mlabel">Период</span>
+      <h2>Деньги по дням</h2>
+    </div>
+    <div class="chart-box" id="moneyBox"><canvas id="moneyChart"></canvas></div>
+    <div class="charts-fallback">Графики не загрузились (нет сети до CDN) — все цифры в таблице «По дням» ниже.</div>
+    <div class="legend-note" id="moneyLegend"></div>
+    <div class="note">Выручка по заказам складывается по кабинетам; реклама — единым тоном (разрез по кабинетам в подсказке). тыс ₽.</div>
+  </section>
+
+  <!-- КАБИНЕТЫ РЯДОМ -->
+  <section id="secCabs">
+    <div class="sec-head" style="margin-bottom:12px">
+      <span class="mlabel" style="color:var(--accent)">Кабинеты</span>
+      <h2 style="font-size:15px">Кто тащит, кто сливает</h2>
+    </div>
+    <div class="cab-cards" id="cabCards"></div>
+  </section>
+
+  <!-- ПРИБЫЛЬ + ПУЛЬС -->
+  <section class="panel">
+    <div class="sec-head">
+      <span class="mlabel">Прогноз прибыли</span>
+      <h2>Прибыль по дням</h2>
+    </div>
+    <div class="chart-box mid"><canvas id="profitChart"></canvas></div>
+    <div class="charts-fallback">График прибыли недоступен без CDN — см. таблицу «По дням».</div>
+    <div class="note">Оценка по калькулятору WB = заказная выручка − комиссия WB − допопции 3,5% − НДС/УСН с настроенной базы после СПП − логистика и хранение WB − ФФ/прочие расходы 120 ₽/заказ − себестоимость − реклама. Точный факт сверяется после закрытия периода.</div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head">
+      <span class="mlabel">Пульс</span>
+      <h2>Маржинальность с ДРР по дням, %</h2>
+    </div>
+    <div class="heat-scroll">
+      <div class="heat-grid" id="heatGrid">
+        <div class="heat" id="heatmap"></div>
+        <div class="heat-days" id="heatDays"></div>
+      </div>
+    </div>
+    <div class="note">Хитмап: холодный синий — маржа в плюсе (насыщеннее = выше), красный — день в минусе, серый — около нуля. Значение в ячейке — %.</div>
+  </section>
+
+  <section class="panel">
+    <div class="sec-head">
+      <span class="mlabel">Реклама</span>
+      <h2>DRR по дням, %</h2>
+    </div>
+    <div class="chart-box mid"><canvas id="drrChart"></canvas></div>
+    <div class="charts-fallback">График DRR недоступен без CDN — см. таблицу «По дням».</div>
+    <div class="note" id="drrNote">DRR = реклама / выручка по заказам. Пунктир — порог 25%.</div>
+  </section>
+
+  <!-- ТАБЛИЦА ПО ДНЯМ -->
+  <details>
+    <summary>Таблица по дням <span class="small" id="daysSummary"></span></summary>
+    <div class="tablewrap"><table id="daysTable">
+      <thead><tr><th>День</th><th>Выручка</th><th>Реклама</th><th>DRR</th><th>Заказы</th><th>Прогноз прибыли</th><th>Марж. с ДРР</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </details>
+
+  <!-- ВОРОНКА -->
+  <section class="panel">
+    <div class="sec-head">
+      <span class="mlabel">Воронка</span>
+      <h2>Открытия → корзины → заказы</h2>
+      <span class="mlabel dim">за период · все артикулы</span>
+    </div>
+    <div class="funnel-grid">
+      <div>
+        <div class="f-stages" id="fStages"></div>
+        <div class="f-buyout" id="fBuyout"></div>
+      </div>
+      <div class="f-charts">
+        <div class="sku-chart-cell">
+          <span class="mlabel">Конверсии по дням, %</span>
+          <div class="chart-box short"><canvas id="crChart"></canvas></div>
+        </div>
+        <div class="sku-chart-cell">
+          <span class="mlabel">Трафик: открытия карточек по дням</span>
+          <div class="chart-box short"><canvas id="trafficChart"></canvas></div>
+        </div>
+        <div class="charts-fallback">Графики воронки недоступны без CDN — см. таблицу ниже.</div>
+      </div>
+    </div>
+    <details style="margin-top:16px">
+      <summary>Воронка по дням — таблица</summary>
+      <div class="tablewrap"><table id="funnelTable">
+        <thead><tr><th>День</th><th>Открытия</th><th>Корзины</th><th>CR в корзину</th><th>Заказы</th><th>CR в заказ</th><th>Выкупы, шт</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </details>
+  </section>
+
+  <!-- ЛИДЕРБОРД -->
+  <section class="panel" id="leader">
+    <div class="sec-head">
+      <span class="mlabel">Артикулы</span>
+      <h2>Лидерборд за период</h2>
+      <span class="mlabel dim">тап по заголовку — сортировка · тап по строке — динамика</span>
+    </div>
+    <div class="tablewrap"><table id="skuTable">
+      <thead></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="rowhint" id="leaderHint"></div>
+  </section>
+
+  <!-- DRILL-DOWN -->
+  <section class="panel" id="skuPanel">
+    <div class="sec-head">
+      <span class="mlabel">Динамика</span>
+      <h2>Разбор артикула</h2>
+    </div>
+    <select id="skuSelect" aria-label="Выбор артикула"></select>
+    <div class="sku-tiles" id="skuTiles"></div>
+    <div class="sku-charts">
+      <div class="sku-chart-cell">
+        <span class="mlabel">Деньги по дням, тыс ₽</span>
+        <div class="chart-box short"><canvas id="skuMoney"></canvas></div>
+      </div>
+      <div class="sku-chart-cell">
+        <span class="mlabel">ДРР и маржинальность, %</span>
+        <div class="chart-box short"><canvas id="skuPct"></canvas></div>
+      </div>
+      <div class="sku-chart-cell">
+        <span class="mlabel">Трафик: открытия и корзины</span>
+        <div class="chart-box short"><canvas id="skuTraffic"></canvas></div>
+      </div>
+      <div class="sku-chart-cell">
+        <span class="mlabel">Конверсии, %</span>
+        <div class="chart-box short"><canvas id="skuCr"></canvas></div>
+      </div>
+      <div class="charts-fallback">Графики артикула недоступны без CDN — см. таблицу дней ниже.</div>
+    </div>
+    <div class="tablewrap" style="margin-top:14px"><table id="skuDays">
+      <thead><tr><th>День</th><th>Открытия</th><th>Корзины</th><th>CR₁</th><th>Заказы</th><th>CR₂</th><th>Выручка</th><th>Реклама</th><th>DRR</th><th>Прогноз прибыли</th><th>Марж</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="note" id="skuCaption"></div>
+  </section>
+
+  <!-- РАЗДАЧИ -->
+  <details id="secExtra">
+    <summary>Раздачи и прочие артикулы (без подтверждённой модели расходов) <span class="small" id="extraSummary"></span></summary>
+    <div class="tablewrap"><table id="extraTable">
+      <thead><tr><th>Артикул</th><th>Заказы, шт</th><th>Выручка</th><th>Открытия</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </details>
+
+  <footer>
+    <b>РНП · рука на пульсе</b> · WB Seller API · собрано 13.08.2026 00:14<br>
+    прибыль — оценка по подтверждённым параметрам калькулятора WB, налоговой базе после СПП, себестоимости и рекламе · точный факт — после отчёта реализации
+  </footer>
+
+</main>
+
+<script>
+const DATA = {"meta": {"start": "2026-08-06", "end": "2026-08-12", "periodHuman": "6–12 августа 2026", "generated": "13.08.2026 00:14", "targetDate": "2026-08-12", "targetLabel": "12 авг (ср)", "history": {"maxDays": 90, "completeDays": 7, "start": "2026-08-06", "end": "2026-08-12", "warnings": []}}, "dates": ["2026-08-06", "2026-08-07", "2026-08-08", "2026-08-09", "2026-08-10", "2026-08-11", "2026-08-12"], "dayLabels": ["6 авг (чт)", "7 авг (пт)", "8 авг (сб)", "9 авг (вс)", "10 авг (пн)", "11 авг (вт)", "12 авг (ср)"], "cabs": {"names": {"1": "ИП Олейников И.И.", "2": "ИП Олейникова А.А.", "3": "ИП Чебан П.В."}, "short": {"1": "Олейников", "2": "Олейникова", "3": "Чебан"}}, "products": [{"id": 1238901861, "cab": 3, "name": "красный триммер", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 25, "r": 184975, "ad": 29392.0, "bs": 66591, "bq": 9, "op": 2163, "ct": 218, "pr": 33337.78999999999, "uc": 2509.19}, {"d": "2026-08-07", "o": 12, "r": 88788, "ad": 26190.0, "bs": 59192, "bq": 8, "op": 2122, "ct": 261, "pr": 3920.299199999994, "uc": 2509.19}, {"d": "2026-08-08", "o": 10, "r": 73990, "ad": 27576.0, "bs": 29596, "bq": 4, "op": 1774, "ct": 125, "pr": -2484.0840000000026, "uc": 2509.19}, {"d": "2026-08-09", "o": 31, "r": 203313, "ad": 29396.0, "bs": 56006, "bq": 9, "op": 2086, "ct": 199, "pr": 33318.1492, "uc": 2023.04}, {"d": "2026-08-10", "o": 51, "r": 286480, "ad": 35941.0, "bs": 16940, "bq": 3, "op": 2558, "ct": 281, "pr": 39469.14199999999, "uc": 1478.63}, {"d": "2026-08-11", "o": 48, "r": 267840, "ad": 30992.0, "bs": 5580, "bq": 1, "op": 2038, "ct": 267, "pr": 38947.936000000016, "uc": 1457.08}, {"d": "2026-08-12", "o": 62, "r": 345960, "ad": 29131.0, "bs": 0, "bq": 0, "op": 2042, "ct": 247, "pr": 61208.08399999997, "uc": 1457.08}]}, {"id": 1251445137, "cab": 1, "name": "культиватор синий", "method": "legacy_margin", "days": [{"d": "2026-08-06", "o": 16, "r": 211664, "ad": 17223.0, "bs": 132290, "bq": 10, "op": 1236, "ct": 133, "pr": 45209.0, "uc": 3902.0}, {"d": "2026-08-07", "o": 15, "r": 198435, "ad": 14036.0, "bs": 79374, "bq": 6, "op": 1154, "ct": 94, "pr": 44494.0, "uc": 3902.0}, {"d": "2026-08-08", "o": 3, "r": 39687, "ad": 12276.0, "bs": 13229, "bq": 1, "op": 1239, "ct": 131, "pr": -570.0, "uc": 3902.0}, {"d": "2026-08-09", "o": 6, "r": 79374, "ad": 16301.0, "bs": 0, "bq": 0, "op": 1463, "ct": 128, "pr": 7111.0, "uc": 3902.0}, {"d": "2026-08-10", "o": 12, "r": 158748, "ad": 17538.0, "bs": 0, "bq": 0, "op": 1515, "ct": 152, "pr": 29286.0, "uc": 3902.0}, {"d": "2026-08-11", "o": 10, "r": 132290, "ad": 17356.0, "bs": 0, "bq": 0, "op": 1469, "ct": 176, "pr": 21664.0, "uc": 3902.0}, {"d": "2026-08-12", "o": 12, "r": 158748, "ad": 16690.0, "bs": 0, "bq": 0, "op": 1301, "ct": 149, "pr": 30134.0, "uc": 3902.0}]}, {"id": 1201452891, "cab": 2, "name": "трим синий", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 37, "r": 275650, "ad": 44605.0, "bs": 126650, "bq": 17, "op": 3034, "ct": 248, "pr": 50622.48142857145, "uc": 2573.72}, {"d": "2026-08-07", "o": 14, "r": 104300, "ad": 31239.0, "bs": 59600, "bq": 8, "op": 2273, "ct": 185, "pr": 4793.020000000004, "uc": 2573.72}, {"d": "2026-08-08", "o": 14, "r": 104300, "ad": 23589.0, "bs": 22350, "bq": 3, "op": 1849, "ct": 143, "pr": 12443.020000000004, "uc": 2573.72}, {"d": "2026-08-09", "o": 16, "r": 108402, "ad": 26592.0, "bs": 21000, "bq": 3, "op": 2624, "ct": 203, "pr": 7991.415999999983, "uc": 2161.46}, {"d": "2026-08-10", "o": 13, "r": 79300, "ad": 10919.0, "bs": 6100, "bq": 1, "op": 1255, "ct": 110, "pr": 11818.76142857143, "uc": 1749.06}, {"d": "2026-08-11", "o": 3, "r": 18300, "ad": 5395.0, "bs": 0, "bq": 0, "op": 719, "ct": 46, "pr": -147.824285714285, "uc": 1749.06}, {"d": "2026-08-12", "o": 4, "r": 24400, "ad": 581.0, "bs": 0, "bq": 0, "op": 426, "ct": 32, "pr": 6415.234285714285, "uc": 1749.06}]}, {"id": 1207629815, "cab": 1, "name": "черный черный триммер", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 4, "r": 29200, "ad": 12138.0, "bs": 7300, "bq": 1, "op": 1169, "ct": 85, "pr": -2458.76, "uc": 2419.81}, {"d": "2026-08-07", "o": 5, "r": 36500, "ad": 627.0, "bs": 14600, "bq": 2, "op": 696, "ct": 34, "pr": 11472.05, "uc": 2419.81}, {"d": "2026-08-08", "o": 2, "r": 14600, "ad": 346.0, "bs": 0, "bq": 0, "op": 532, "ct": 28, "pr": 4493.62, "uc": 2419.81}, {"d": "2026-08-09", "o": 3, "r": 21900, "ad": 0, "bs": 0, "bq": 0, "op": 560, "ct": 45, "pr": 7259.4299999999985, "uc": 2419.81}, {"d": "2026-08-10", "o": 2, "r": 13800, "ad": 0, "bs": 0, "bq": 0, "op": 520, "ct": 35, "pr": 4380.42, "uc": 2190.21}, {"d": "2026-08-11", "o": 1, "r": 6500, "ad": 0, "bs": 0, "bq": 0, "op": 453, "ct": 25, "pr": 1960.6100000000001, "uc": 1960.61}, {"d": "2026-08-12", "o": 2, "r": 13000, "ad": 0, "bs": 0, "bq": 0, "op": 364, "ct": 19, "pr": 3921.2200000000003, "uc": 1960.61}]}, {"id": 1095867819, "cab": 1, "name": "красный красный триммер", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 1, "r": 5880, "ad": 3358.0, "bs": 0, "bq": 0, "op": 242, "ct": 20, "pr": -1753.270000000001, "uc": 1604.73}, {"d": "2026-08-07", "o": 6, "r": 35280, "ad": 14356.0, "bs": 11760, "bq": 2, "op": 718, "ct": 75, "pr": -4727.619999999999, "uc": 1604.73}, {"d": "2026-08-08", "o": 1, "r": 5880, "ad": 99.0, "bs": 0, "bq": 0, "op": 39, "ct": 3, "pr": 1505.729999999999, "uc": 1604.73}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 13, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 25, "ct": 1, "pr": 0.0, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 14, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 25.0, "bs": 0, "bq": 0, "op": 13, "ct": 0, "pr": -25.0, "uc": null}]}, {"id": 1067802762, "cab": 1, "name": "черный триммер дубль 2", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 1, "r": 7410, "ad": 0, "bs": 7410, "bq": 1, "op": 25, "ct": 0, "pr": 2482.9499999999994, "uc": 2482.95}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 34, "ct": 2, "pr": 0.0, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 17, "ct": 5, "pr": 0.0, "uc": null}, {"d": "2026-08-09", "o": 2, "r": 14820, "ad": 0, "bs": 14820, "bq": 2, "op": 27, "ct": 3, "pr": 4965.899999999999, "uc": 2482.95}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 30, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 24, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-12", "o": 2, "r": 12200, "ad": 3489.0, "bs": 0, "bq": 0, "op": 255, "ct": 20, "pr": -26.980000000000473, "uc": 1731.01}]}, {"id": 976216541, "cab": 1, "name": "черный триммер 2 акб", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 47, "ct": 1, "pr": 0.0, "uc": null}, {"d": "2026-08-07", "o": 1, "r": 6035, "ad": 0, "bs": 0, "bq": 0, "op": 48, "ct": 2, "pr": 1693.6999999999998, "uc": 1693.7}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 57, "ct": 1, "pr": 0.0, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 53, "ct": 1, "pr": 0.0, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 54, "ct": 3, "pr": 0.0, "uc": null}, {"d": "2026-08-11", "o": 1, "r": 6035, "ad": 0, "bs": 0, "bq": 0, "op": 127, "ct": 4, "pr": 1693.6999999999998, "uc": 1693.7}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 1.0, "bs": 0, "bq": 0, "op": 42, "ct": 2, "pr": -1.0, "uc": null}]}, {"id": 1015705042, "cab": 1, "name": "триммер зеленый 2 акб", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 17, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 30, "ct": 2, "pr": 0.0, "uc": null}, {"d": "2026-08-08", "o": 1, "r": 6460, "ad": 0, "bs": 0, "bq": 0, "op": 27, "ct": 1, "pr": 1937.6499999999992, "uc": 1937.65}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 34, "ct": 4, "pr": 0.0, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 31, "ct": 1, "pr": 0.0, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 20, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 25, "ct": 3, "pr": 0.0, "uc": null}]}, {"id": 1015736036, "cab": 2, "name": "триммер черный 2 акб", "method": "wb_profit_calculator", "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 33, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 32, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 29, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 33, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-10", "o": 1, "r": 6000, "ad": 0, "bs": 6000, "bq": 1, "op": 49, "ct": 4, "pr": 1687.9728571428568, "uc": 1687.97}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 26, "ct": 0, "pr": 0.0, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 39, "ct": 0, "pr": 0.0, "uc": null}]}], "extra": [{"id": 1345115826, "cab": 1, "name": "триммер синий август", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 6, "r": 54000, "ad": 1000.0, "bs": 9000, "bq": 1, "op": 110, "ct": 30, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 11, "r": 99000, "ad": 4017.0, "bs": 9000, "bq": 1, "op": 332, "ct": 57, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 7, "r": 63000, "ad": 2912.0, "bs": 0, "bq": 0, "op": 187, "ct": 23, "pr": null, "uc": null}]}, {"id": 575411368, "cab": 2, "name": "Пароочиститель черн", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 5, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 1, "r": 4950, "ad": 0, "bs": 0, "bq": 0, "op": 9, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 2, "r": 9900, "ad": 0, "bs": 0, "bq": 0, "op": 10, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 8, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 5, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591163, "cab": 3, "name": "едбс-культиватор-4", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 29, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 24, "r": 6000, "ad": 0, "bs": 6000, "bq": 24, "op": 26, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 2, "r": 500, "ad": 0, "bs": 250, "bq": 1, "op": 2, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591165, "cab": 3, "name": "едбс-культиватор-6", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 27, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 23, "r": 5750, "ad": 0, "bs": 5750, "bq": 23, "op": 25, "ct": 23, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 3, "r": 750, "ad": 0, "bs": 500, "bq": 2, "op": 5, "ct": 3, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591167, "cab": 3, "name": "едбс-культиватор-8", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 28, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 24, "r": 6000, "ad": 0, "bs": 6000, "bq": 24, "op": 24, "ct": 24, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 2, "r": 500, "ad": 0, "bs": 250, "bq": 1, "op": 2, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591162, "cab": 3, "name": "едбс-культиватор-3", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 27, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 22, "r": 5500, "ad": 0, "bs": 5500, "bq": 22, "op": 26, "ct": 22, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 3, "r": 750, "ad": 0, "bs": 750, "bq": 3, "op": 9, "ct": 5, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591164, "cab": 3, "name": "едбс-культиватор-5", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 28, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 24, "r": 6000, "ad": 0, "bs": 6000, "bq": 24, "op": 25, "ct": 24, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 1, "r": 250, "ad": 0, "bs": 250, "bq": 1, "op": 2, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591166, "cab": 3, "name": "едбс-культиватор-7", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 29, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 22, "r": 5500, "ad": 0, "bs": 5500, "bq": 22, "op": 24, "ct": 22, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 3, "r": 750, "ad": 0, "bs": 750, "bq": 3, "op": 9, "ct": 4, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591168, "cab": 3, "name": "едбс-культиватор-9", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 29, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 25, "ct": 25, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591169, "cab": 3, "name": "едбс-культиватор-10", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 28, "ct": 26, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 21, "r": 5250, "ad": 0, "bs": 5250, "bq": 21, "op": 25, "ct": 21, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 4, "r": 1000, "ad": 0, "bs": 1000, "bq": 4, "op": 9, "ct": 6, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1347591160, "cab": 3, "name": "едбс-культиватор-1", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 29, "ct": 24, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 24, "r": 6000, "ad": 0, "bs": 6000, "bq": 24, "op": 27, "ct": 23, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 6, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 11, "ct": 1, "pr": null, "uc": null}]}, {"id": 1347591161, "cab": 3, "name": "едбс-культиватор-2", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 25, "r": 6250, "ad": 0, "bs": 6250, "bq": 25, "op": 32, "ct": 28, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 24, "r": 6000, "ad": 0, "bs": 6000, "bq": 24, "op": 26, "ct": 24, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 4, "ct": 1, "pr": null, "uc": null}]}, {"id": 673547638, "cab": 1, "name": "снегоуборщик новый", "method": null, "days": [{"d": "2026-08-06", "o": 1, "r": 6000, "ad": 0, "bs": 6000, "bq": 1, "op": 29, "ct": 3, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 13, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 35, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 1, "r": 6000, "ad": 0, "bs": 0, "bq": 0, "op": 40, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}]}, {"id": 1352014354, "cab": 1, "name": "дбс-триммер-тим1", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 13, "r": 3250, "ad": 0, "bs": 3250, "bq": 13, "op": 18, "ct": 13, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1352078247, "cab": 1, "name": "дбс-триммеры-тим3", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 10, "r": 2500, "ad": 0, "bs": 2500, "bq": 10, "op": 10, "ct": 10, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 3, "r": 750, "ad": 0, "bs": 750, "bq": 3, "op": 5, "ct": 4, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1352109116, "cab": 1, "name": "дбс-триммер-тим4", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 8, "r": 2000, "ad": 0, "bs": 2000, "bq": 8, "op": 12, "ct": 9, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 5, "r": 1250, "ad": 0, "bs": 1250, "bq": 5, "op": 7, "ct": 5, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 1, "pr": null, "uc": null}]}, {"id": 434680080, "cab": 1, "name": "синий триммер-2", "method": null, "days": [{"d": "2026-08-06", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 4, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 10, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 1, "r": 2790, "ad": 0, "bs": 0, "bq": 0, "op": 9, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285379417, "cab": 2, "name": "триммер-дбс-тим6", "method": null, "days": [{"d": "2026-08-06", "o": 5, "r": 1225, "ad": 0, "bs": 1225, "bq": 5, "op": 32, "ct": 8, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 1, "r": 245, "ad": 0, "bs": 0, "bq": 0, "op": 6, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 9, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 43, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 11, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}]}, {"id": 1289586491, "cab": 2, "name": "триммер-дбс-тим8", "method": null, "days": [{"d": "2026-08-06", "o": 6, "r": 1470, "ad": 0, "bs": 1470, "bq": 6, "op": 11, "ct": 6, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 6, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 5, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285360828, "cab": 2, "name": "триммер-дбс-тим1", "method": null, "days": [{"d": "2026-08-06", "o": 5, "r": 1225, "ad": 0, "bs": 1225, "bq": 5, "op": 9, "ct": 5, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 9, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 5, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285369185, "cab": 2, "name": "триммера-дбс-тим3", "method": null, "days": [{"d": "2026-08-06", "o": 3, "r": 735, "ad": 0, "bs": 735, "bq": 3, "op": 14, "ct": 7, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 6, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 9, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285363681, "cab": 2, "name": "триммера-дбс-тим2", "method": null, "days": [{"d": "2026-08-06", "o": 2, "r": 490, "ad": 0, "bs": 490, "bq": 2, "op": 3, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 10, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 4, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285372938, "cab": 2, "name": "триммер-дбс-тим4", "method": null, "days": [{"d": "2026-08-06", "o": 2, "r": 490, "ad": 0, "bs": 490, "bq": 2, "op": 4, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 6, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 11, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 7, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285377596, "cab": 2, "name": "триммер-дбс-тим5", "method": null, "days": [{"d": "2026-08-06", "o": 2, "r": 490, "ad": 0, "bs": 490, "bq": 2, "op": 3, "ct": 2, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 7, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}, {"id": 1285383129, "cab": 2, "name": "триммер-дбс-тим7", "method": null, "days": [{"d": "2026-08-06", "o": 1, "r": 245, "ad": 0, "bs": 245, "bq": 1, "op": 2, "ct": 1, "pr": null, "uc": null}, {"d": "2026-08-07", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 2, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-08", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-09", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 10, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-10", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 3, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-11", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 0, "ct": 0, "pr": null, "uc": null}, {"d": "2026-08-12", "o": 0, "r": 0, "ad": 0, "bs": 0, "bq": 0, "op": 1, "ct": 0, "pr": null, "uc": null}]}], "summary": {"period": {"start": "2026-08-06", "end": "2026-08-12"}, "target_date": "2026-08-12", "totals": {"all": {"revenue": 3773699, "adSpend": 505326.0, "orders": 1047, "drr": 13.4, "opens": 44750, "carts": 4668, "buyouts": 658, "buyoutSum": 921008, "cr_cart": 10.43, "cr_order": 22.43, "buyout_rate": 62.8, "profit": 519443.75, "marginality": 15.3}, "cab1": {"revenue": 1454986, "adSpend": 153788.0, "orders": 175, "drr": 10.6, "opens": 16592, "carts": 1548, "buyouts": 67, "buyoutSum": 314533, "cr_cart": 9.33, "cr_order": 11.3, "buyout_rate": 38.3, "profit": 216102.35, "marginality": 17.8}, "cab2": {"revenue": 742117, "adSpend": 142920.0, "orders": 132, "drr": 19.3, "opens": 12755, "carts": 1009, "buyouts": 59, "buyoutSum": 248070, "cr_cart": 7.91, "cr_order": 13.08, "buyout_rate": 44.7, "profit": 95624.08, "marginality": 13.3}, "cab3": {"revenue": 1576596, "adSpend": 208618.0, "orders": 740, "drr": 13.2, "opens": 15403, "carts": 2111, "buyouts": 532, "buyoutSum": 358405, "cr_cart": 13.71, "cr_order": 35.05, "buyout_rate": 71.9, "profit": 207717.32, "marginality": 14.3}}, "yesterday": {"revenue": 617308, "adSpend": 52829.0, "orders": 89, "drr": 8.6, "profit": 101625.56, "marginality": 18.3, "opens": 4735, "carts": 498, "buyouts": 0, "buyoutSum": 0, "cr_cart": 10.52, "cr_order": 17.87, "marginality_cabs": {"all": 18.3, "cab1": 18.5, "cab2": 26.3, "cab3": 17.7}, "baseline": {"revenue": 526065.17, "adSpend": 75416.17, "orders": 159.7, "profit": 69636.37, "drr": 14.3, "marginality": 14.8, "opens": 6669.2, "carts": 695.0, "cr_cart": 10.42, "cr_order": 22.97}, "revenue_delta_pct": 17.3}, "days": [{"date": "2026-08-06", "revenue": 727149, "adSpend": 106716.0, "orders": 111, "drr": 14.7, "profit": 127440.19, "marginality": 17.8, "opens": 8082, "carts": 742, "buyouts": 65, "buyoutSum": 352611, "cr_cart": 9.18, "cr_order": 14.96, "marginality_cabs": {"cab1": 17.1, "cab2": 18.4, "cab3": 18.0}}, {"date": "2026-08-07", "revenue": 532083, "adSpend": 86448.0, "orders": 304, "drr": 16.2, "profit": 61645.45, "marginality": 13.1, "opens": 7440, "carts": 912, "buyouts": 276, "buyoutSum": 287026, "cr_cart": 12.26, "cr_order": 33.33, "marginality_cabs": {"cab1": 19.2, "cab2": 4.6, "cab3": 4.4}}, {"date": "2026-08-08", "revenue": 303167, "adSpend": 63886.0, "orders": 264, "drr": 21.1, "profit": 17325.94, "marginality": 7.1, "opens": 5879, "carts": 671, "buyouts": 241, "buyoutSum": 123425, "cr_cart": 11.41, "cr_order": 39.34, "marginality_cabs": {"cab1": 11.1, "cab2": 11.9, "cab3": -3.4}}, {"date": "2026-08-09", "revenue": 446049, "adSpend": 72289.0, "orders": 79, "drr": 16.2, "profit": 60645.9, "marginality": 14.2, "opens": 7096, "carts": 610, "buyouts": 29, "buyoutSum": 95576, "cr_cart": 8.6, "cr_order": 12.95, "marginality_cabs": {"cab1": 16.7, "cab2": 7.4, "cab3": 16.4}}, {"date": "2026-08-10", "revenue": 612728, "adSpend": 65398.0, "orders": 105, "drr": 10.7, "profit": 86642.3, "marginality": 15.9, "opens": 6228, "carts": 637, "buyouts": 24, "buyoutSum": 42540, "cr_cart": 10.23, "cr_order": 16.48, "marginality_cabs": {"cab1": 19.5, "cab2": 15.8, "cab3": 13.8}}, {"date": "2026-08-11", "revenue": 535215, "adSpend": 57760.0, "orders": 95, "drr": 10.8, "profit": 64118.42, "marginality": 14.9, "opens": 5290, "carts": 598, "buyouts": 23, "buyoutSum": 19830, "cr_cart": 11.3, "cr_order": 15.89, "marginality_cabs": {"cab1": 17.5, "cab2": -0.8, "cab3": 14.5}}, {"date": "2026-08-12", "revenue": 617308, "adSpend": 52829.0, "orders": 89, "drr": 8.6, "profit": 101625.56, "marginality": 18.3, "opens": 4735, "carts": 498, "buyouts": 0, "buyoutSum": 0, "cr_cart": 10.52, "cr_order": 17.87, "marginality_cabs": {"cab1": 18.5, "cab2": 26.3, "cab3": 17.7}}], "sku_yesterday": [{"nmId": 1238901861, "name": "красный триммер", "cab": 3, "revenue": 345960, "orders": 62, "avg_price": 5580.0, "adSpend": 29131.0, "drr": 8.42, "unit_contribution": 1457.08, "profit": 61208.08, "costs": {"commission": 120048.12, "additionalOptions": 12108.6, "vat": 0.0, "usn": 13700.02, "tax": 13700.02, "logistics": 31024.18, "storage": 0.0, "fulfillment": 7440.0, "cogs": 71300.0, "adSpend": 29131.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": 26.1, "marginality_post": 17.7, "opens": 2042, "carts": 247, "buyouts": 0, "cr_cart": 12.1, "cr_order": 25.1}, {"nmId": 1251445137, "name": "культиватор синий", "cab": 1, "revenue": 158748, "orders": 12, "avg_price": 13229.0, "adSpend": 16690.0, "drr": 10.51, "unit_contribution": 3902.0, "profit": 30134.0, "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 16690.0}, "calculation_method": "legacy_margin", "marginality_pre": 29.5, "marginality_post": 19.0, "opens": 1301, "carts": 149, "buyouts": 0, "cr_cart": 11.45, "cr_order": 8.05}, {"nmId": 1201452891, "name": "трим синий", "cab": 2, "revenue": 24400, "orders": 4, "avg_price": 6100.0, "adSpend": 581.0, "drr": 2.38, "unit_contribution": 1749.06, "profit": 6415.23, "costs": {"commission": 6954.0, "additionalOptions": 854.0, "vat": 766.86, "usn": 920.23, "tax": 1687.09, "logistics": 2706.6, "storage": 122.08, "fulfillment": 480.0, "cogs": 4600.0, "adSpend": 581.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": 28.7, "marginality_post": 26.3, "opens": 426, "carts": 32, "buyouts": 0, "cr_cart": 7.51, "cr_order": 12.5}, {"nmId": 1207629815, "name": "черный черный триммер", "cab": 1, "revenue": 13000, "orders": 2, "avg_price": 6500.0, "adSpend": 0, "drr": 0.0, "unit_contribution": 1960.61, "profit": 3921.22, "costs": {"commission": 4511.0, "additionalOptions": 455.0, "vat": 408.57, "usn": 163.43, "tax": 572.0, "logistics": 1000.78, "storage": 0.0, "fulfillment": 240.0, "cogs": 2300.0, "adSpend": 0.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": 30.2, "marginality_post": 30.2, "opens": 364, "carts": 19, "buyouts": 0, "cr_cart": 5.22, "cr_order": 10.53}, {"nmId": 1067802762, "name": "черный триммер дубль 2", "cab": 1, "revenue": 12200, "orders": 2, "avg_price": 6100.0, "adSpend": 3489.0, "drr": 28.6, "unit_contribution": 1731.01, "profit": -26.98, "costs": {"commission": 4233.4, "additionalOptions": 427.0, "vat": 383.43, "usn": 153.37, "tax": 536.8, "logistics": 1000.78, "storage": 0.0, "fulfillment": 240.0, "cogs": 2300.0, "adSpend": 3489.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": 28.4, "marginality_post": -0.2, "opens": 255, "carts": 20, "buyouts": 0, "cr_cart": 7.84, "cr_order": 10.0}, {"nmId": 1095867819, "name": "красный красный триммер", "cab": 1, "revenue": 0, "orders": 0, "avg_price": 0, "adSpend": 25.0, "drr": 0.0, "unit_contribution": 0, "profit": -25.0, "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 25.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": null, "marginality_post": null, "opens": 13, "carts": 0, "buyouts": 0, "cr_cart": 0.0, "cr_order": null}, {"nmId": 976216541, "name": "черный триммер 2 акб", "cab": 1, "revenue": 0, "orders": 0, "avg_price": 0, "adSpend": 1.0, "drr": 0.0, "unit_contribution": 0, "profit": -1.0, "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 1.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": null, "marginality_post": null, "opens": 42, "carts": 2, "buyouts": 0, "cr_cart": 4.76, "cr_order": 0.0}, {"nmId": 1015705042, "name": "триммер зеленый 2 акб", "cab": 1, "revenue": 0, "orders": 0, "avg_price": 0, "adSpend": 0, "drr": 0.0, "unit_contribution": 0, "profit": 0.0, "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 0.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": null, "marginality_post": null, "opens": 25, "carts": 3, "buyouts": 0, "cr_cart": 12.0, "cr_order": 0.0}, {"nmId": 1015736036, "name": "триммер черный 2 акб", "cab": 2, "revenue": 0, "orders": 0, "avg_price": 0, "adSpend": 0, "drr": 0.0, "unit_contribution": 0, "profit": 0.0, "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 0.0}, "calculation_method": "wb_profit_calculator", "marginality_pre": null, "marginality_post": null, "opens": 39, "carts": 0, "buyouts": 0, "cr_cart": 0.0, "cr_order": null}], "alerts": [{"scope": "трим синий (1201452891)", "name": "трим синий", "metric": "revenue", "value": 24400, "baseline": 115042.0, "delta_pct": -78.8, "message": "трим синий (1201452891): выручка 12 авг (ср) 24 400 ₽ — -79% к среднему за предыдущие дни (115 042 ₽/день)"}, {"scope": "черный черный триммер (1207629815)", "name": "черный черный триммер", "metric": "revenue", "value": 13000, "baseline": 20416.67, "delta_pct": -36.3, "message": "черный черный триммер (1207629815): выручка 12 авг (ср) 13 000 ₽ — -36% к среднему за предыдущие дни (20 417 ₽/день)"}, {"scope": "красный красный триммер (1095867819)", "name": "красный красный триммер", "metric": "profit", "value": -25.0, "message": "красный красный триммер (1095867819): прогноз прибыли по заказам 12 авг (ср) отрицательный: -25 ₽"}, {"scope": "черный триммер дубль 2 (1067802762)", "name": "черный триммер дубль 2", "metric": "profit", "value": -26.98, "message": "черный триммер дубль 2 (1067802762): прогноз прибыли по заказам 12 авг (ср) отрицательный: -27 ₽"}, {"scope": "черный триммер 2 акб (976216541)", "name": "черный триммер 2 акб", "metric": "profit", "value": -1.0, "message": "черный триммер 2 акб (976216541): прогноз прибыли по заказам 12 авг (ср) отрицательный: -1 ₽"}, {"scope": "триммер синий август (1345115826)", "name": "триммер синий август", "metric": "no_margin", "value": 216000, "message": "триммер синий август (1345115826): выручка 216 000 ₽ за период, но расходы ещё не переданы — прибыль не посчитана"}, {"scope": "Пароочиститель черн (575411368)", "name": "Пароочиститель черн", "metric": "no_margin", "value": 14850, "message": "Пароочиститель черн (575411368): выручка 14 850 ₽ за период, но расходы ещё не переданы — прибыль не посчитана"}, {"scope": "снегоуборщик новый (673547638)", "name": "снегоуборщик новый", "metric": "no_margin", "value": 12000, "message": "снегоуборщик новый (673547638): выручка 12 000 ₽ за период, но расходы ещё не переданы — прибыль не посчитана"}], "sku_week": [{"nmId": 1238901861, "name": "красный триммер", "cab": 3, "revenue": 1451346, "orders": 239, "adSpend": 208618.0, "drr": 14.4, "unit_contribution": 1741.99, "calculation_method": "wb_profit_calculator", "costs": {"commission": 503617.06, "additionalOptions": 50797.11, "vat": 0.0, "usn": 57473.3, "tax": 57473.3, "logistics": 119593.21, "storage": 0.0, "fulfillment": 28680.0, "cogs": 274850.0, "adSpend": 208618.0}, "profit": 207717.32, "marginality": 14.3, "opens": 14783, "carts": 1598, "buyouts": 34, "buyoutSum": 233905, "cr_cart": 10.81, "cr_order": 14.96, "days": [{"date": "2026-08-06", "orders": 25, "revenue": 184975, "adSpend": 29392.0, "drr": 15.89, "profit": 33337.79, "opens": 2163, "carts": 218, "buyouts": 9}, {"date": "2026-08-07", "orders": 12, "revenue": 88788, "adSpend": 26190.0, "drr": 29.5, "profit": 3920.3, "opens": 2122, "carts": 261, "buyouts": 8}, {"date": "2026-08-08", "orders": 10, "revenue": 73990, "adSpend": 27576.0, "drr": 37.27, "profit": -2484.08, "opens": 1774, "carts": 125, "buyouts": 4}, {"date": "2026-08-09", "orders": 31, "revenue": 203313, "adSpend": 29396.0, "drr": 14.46, "profit": 33318.15, "opens": 2086, "carts": 199, "buyouts": 9}, {"date": "2026-08-10", "orders": 51, "revenue": 286480, "adSpend": 35941.0, "drr": 12.55, "profit": 39469.14, "opens": 2558, "carts": 281, "buyouts": 3}, {"date": "2026-08-11", "orders": 48, "revenue": 267840, "adSpend": 30992.0, "drr": 11.57, "profit": 38947.94, "opens": 2038, "carts": 267, "buyouts": 1}, {"date": "2026-08-12", "orders": 62, "revenue": 345960, "adSpend": 29131.0, "drr": 8.42, "profit": 61208.08, "opens": 2042, "carts": 247, "buyouts": 0}]}, {"nmId": 1251445137, "name": "культиватор синий", "cab": 1, "revenue": 978946, "orders": 74, "adSpend": 111420.0, "drr": 11.4, "unit_contribution": 3902.0, "calculation_method": "legacy_margin", "costs": {"commission": 0.0, "additionalOptions": 0.0, "vat": 0.0, "usn": 0.0, "tax": 0.0, "logistics": 0.0, "storage": 0.0, "fulfillment": 0.0, "cogs": 0.0, "adSpend": 111420.0}, "profit": 177328.0, "marginality": 18.1, "opens": 9377, "carts": 963, "buyouts": 17, "buyoutSum": 224893, "cr_cart": 10.27, "cr_order": 7.68, "days": [{"date": "2026-08-06", "orders": 16, "revenue": 211664, "adSpend": 17223.0, "drr": 8.14, "profit": 45209.0, "opens": 1236, "carts": 133, "buyouts": 10}, {"date": "2026-08-07", "orders": 15, "revenue": 198435, "adSpend": 14036.0, "drr": 7.07, "profit": 44494.0, "opens": 1154, "carts": 94, "buyouts": 6}, {"date": "2026-08-08", "orders": 3, "revenue": 39687, "adSpend": 12276.0, "drr": 30.93, "profit": -570.0, "opens": 1239, "carts": 131, "buyouts": 1}, {"date": "2026-08-09", "orders": 6, "revenue": 79374, "adSpend": 16301.0, "drr": 20.54, "profit": 7111.0, "opens": 1463, "carts": 128, "buyouts": 0}, {"date": "2026-08-10", "orders": 12, "revenue": 158748, "adSpend": 17538.0, "drr": 11.05, "profit": 29286.0, "opens": 1515, "carts": 152, "buyouts": 0}, {"date": "2026-08-11", "orders": 10, "revenue": 132290, "adSpend": 17356.0, "drr": 13.12, "profit": 21664.0, "opens": 1469, "carts": 176, "buyouts": 0}, {"date": "2026-08-12", "orders": 12, "revenue": 158748, "adSpend": 16690.0, "drr": 10.51, "profit": 30134.0, "opens": 1301, "carts": 149, "buyouts": 0}]}, {"nmId": 1201452891, "name": "трим синий", "cab": 2, "revenue": 714652, "orders": 101, "adSpend": 142920.0, "drr": 20.0, "unit_contribution": 2345.11, "calculation_method": "wb_profit_calculator", "costs": {"commission": 203675.82, "additionalOptions": 25012.82, "vat": 22460.49, "usn": 26952.59, "tax": 49413.08, "logistics": 68341.65, "storage": 3082.52, "fulfillment": 12120.0, "cogs": 116150.0, "adSpend": 142920.0}, "profit": 93936.11, "marginality": 13.1, "opens": 12180, "carts": 967, "buyouts": 32, "buyoutSum": 235700, "cr_cart": 7.94, "cr_order": 10.44, "days": [{"date": "2026-08-06", "orders": 37, "revenue": 275650, "adSpend": 44605.0, "drr": 16.18, "profit": 50622.48, "opens": 3034, "carts": 248, "buyouts": 17}, {"date": "2026-08-07", "orders": 14, "revenue": 104300, "adSpend": 31239.0, "drr": 29.95, "profit": 4793.02, "opens": 2273, "carts": 185, "buyouts": 8}, {"date": "2026-08-08", "orders": 14, "revenue": 104300, "adSpend": 23589.0, "drr": 22.62, "profit": 12443.02, "opens": 1849, "carts": 143, "buyouts": 3}, {"date": "2026-08-09", "orders": 16, "revenue": 108402, "adSpend": 26592.0, "drr": 24.53, "profit": 7991.42, "opens": 2624, "carts": 203, "buyouts": 3}, {"date": "2026-08-10", "orders": 13, "revenue": 79300, "adSpend": 10919.0, "drr": 13.77, "profit": 11818.76, "opens": 1255, "carts": 110, "buyouts": 1}, {"date": "2026-08-11", "orders": 3, "revenue": 18300, "adSpend": 5395.0, "drr": 29.48, "profit": -147.82, "opens": 719, "carts": 46, "buyouts": 0}, {"date": "2026-08-12", "orders": 4, "revenue": 24400, "adSpend": 581.0, "drr": 2.38, "profit": 6415.23, "opens": 426, "carts": 32, "buyouts": 0}]}, {"nmId": 1207629815, "name": "черный черный триммер", "cab": 1, "revenue": 135500, "orders": 19, "adSpend": 13111.0, "drr": 9.7, "unit_contribution": 2323.14, "calculation_method": "wb_profit_calculator", "costs": {"commission": 47018.5, "additionalOptions": 4742.5, "vat": 4258.57, "usn": 1703.43, "tax": 5962.0, "logistics": 9507.41, "storage": 0.0, "fulfillment": 2280.0, "cogs": 21850.0, "adSpend": 13111.0}, "profit": 31028.59, "marginality": 22.9, "opens": 4294, "carts": 271, "buyouts": 3, "buyoutSum": 21900, "cr_cart": 6.31, "cr_order": 7.01, "days": [{"date": "2026-08-06", "orders": 4, "revenue": 29200, "adSpend": 12138.0, "drr": 41.57, "profit": -2458.76, "opens": 1169, "carts": 85, "buyouts": 1}, {"date": "2026-08-07", "orders": 5, "revenue": 36500, "adSpend": 627.0, "drr": 1.72, "profit": 11472.05, "opens": 696, "carts": 34, "buyouts": 2}, {"date": "2026-08-08", "orders": 2, "revenue": 14600, "adSpend": 346.0, "drr": 2.37, "profit": 4493.62, "opens": 532, "carts": 28, "buyouts": 0}, {"date": "2026-08-09", "orders": 3, "revenue": 21900, "adSpend": 0, "drr": 0.0, "profit": 7259.43, "opens": 560, "carts": 45, "buyouts": 0}, {"date": "2026-08-10", "orders": 2, "revenue": 13800, "adSpend": 0, "drr": 0.0, "profit": 4380.42, "opens": 520, "carts": 35, "buyouts": 0}, {"date": "2026-08-11", "orders": 1, "revenue": 6500, "adSpend": 0, "drr": 0.0, "profit": 1960.61, "opens": 453, "carts": 25, "buyouts": 0}, {"date": "2026-08-12", "orders": 2, "revenue": 13000, "adSpend": 0, "drr": 0.0, "profit": 3921.22, "opens": 364, "carts": 19, "buyouts": 0}]}, {"nmId": 1095867819, "name": "красный красный триммер", "cab": 1, "revenue": 47040, "orders": 8, "adSpend": 17838.0, "drr": 37.9, "unit_contribution": 1604.73, "calculation_method": "wb_profit_calculator", "costs": {"commission": 16322.88, "additionalOptions": 1646.4, "vat": 1478.4, "usn": 591.36, "tax": 2069.76, "logistics": 4003.12, "storage": 0.0, "fulfillment": 960.0, "cogs": 9200.0, "adSpend": 17838.0}, "profit": -5000.16, "marginality": -10.6, "opens": 1064, "carts": 99, "buyouts": 2, "buyoutSum": 11760, "cr_cart": 9.3, "cr_order": 8.08, "days": [{"date": "2026-08-06", "orders": 1, "revenue": 5880, "adSpend": 3358.0, "drr": 57.11, "profit": -1753.27, "opens": 242, "carts": 20, "buyouts": 0}, {"date": "2026-08-07", "orders": 6, "revenue": 35280, "adSpend": 14356.0, "drr": 40.69, "profit": -4727.62, "opens": 718, "carts": 75, "buyouts": 2}, {"date": "2026-08-08", "orders": 1, "revenue": 5880, "adSpend": 99.0, "drr": 1.68, "profit": 1505.73, "opens": 39, "carts": 3, "buyouts": 0}, {"date": "2026-08-09", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 13, "carts": 0, "buyouts": 0}, {"date": "2026-08-10", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 25, "carts": 1, "buyouts": 0}, {"date": "2026-08-11", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 14, "carts": 0, "buyouts": 0}, {"date": "2026-08-12", "orders": 0, "revenue": 0, "adSpend": 25.0, "drr": 0.0, "profit": -25.0, "opens": 13, "carts": 0, "buyouts": 0}]}, {"nmId": 1067802762, "name": "черный триммер дубль 2", "cab": 1, "revenue": 34430, "orders": 5, "adSpend": 3489.0, "drr": 10.1, "unit_contribution": 2182.17, "calculation_method": "wb_profit_calculator", "costs": {"commission": 11947.21, "additionalOptions": 1205.05, "vat": 1082.09, "usn": 432.83, "tax": 1514.92, "logistics": 2501.95, "storage": 0.0, "fulfillment": 600.0, "cogs": 5750.0, "adSpend": 3489.0}, "profit": 7421.87, "marginality": 21.6, "opens": 412, "carts": 30, "buyouts": 3, "buyoutSum": 22230, "cr_cart": 7.28, "cr_order": 16.67, "days": [{"date": "2026-08-06", "orders": 1, "revenue": 7410, "adSpend": 0, "drr": 0.0, "profit": 2482.95, "opens": 25, "carts": 0, "buyouts": 1}, {"date": "2026-08-07", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 34, "carts": 2, "buyouts": 0}, {"date": "2026-08-08", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 17, "carts": 5, "buyouts": 0}, {"date": "2026-08-09", "orders": 2, "revenue": 14820, "adSpend": 0, "drr": 0.0, "profit": 4965.9, "opens": 27, "carts": 3, "buyouts": 2}, {"date": "2026-08-10", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 30, "carts": 0, "buyouts": 0}, {"date": "2026-08-11", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 24, "carts": 0, "buyouts": 0}, {"date": "2026-08-12", "orders": 2, "revenue": 12200, "adSpend": 3489.0, "drr": 28.6, "profit": -26.98, "opens": 255, "carts": 20, "buyouts": 0}]}, {"nmId": 976216541, "name": "черный триммер 2 акб", "cab": 1, "revenue": 12070, "orders": 2, "adSpend": 1.0, "drr": 0.0, "unit_contribution": 1693.7, "calculation_method": "wb_profit_calculator", "costs": {"commission": 4188.29, "additionalOptions": 422.45, "vat": 379.34, "usn": 151.74, "tax": 531.08, "logistics": 1000.78, "storage": 0.0, "fulfillment": 240.0, "cogs": 2300.0, "adSpend": 1.0}, "profit": 3386.4, "marginality": 28.1, "opens": 428, "carts": 14, "buyouts": 0, "buyoutSum": 0, "cr_cart": 3.27, "cr_order": 14.29, "days": [{"date": "2026-08-06", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 47, "carts": 1, "buyouts": 0}, {"date": "2026-08-07", "orders": 1, "revenue": 6035, "adSpend": 0, "drr": 0.0, "profit": 1693.7, "opens": 48, "carts": 2, "buyouts": 0}, {"date": "2026-08-08", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 57, "carts": 1, "buyouts": 0}, {"date": "2026-08-09", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 53, "carts": 1, "buyouts": 0}, {"date": "2026-08-10", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 54, "carts": 3, "buyouts": 0}, {"date": "2026-08-11", "orders": 1, "revenue": 6035, "adSpend": 0, "drr": 0.0, "profit": 1693.7, "opens": 127, "carts": 4, "buyouts": 0}, {"date": "2026-08-12", "orders": 0, "revenue": 0, "adSpend": 1.0, "drr": 0.0, "profit": -1.0, "opens": 42, "carts": 2, "buyouts": 0}]}, {"nmId": 1015705042, "name": "триммер зеленый 2 акб", "cab": 1, "revenue": 6460, "orders": 1, "adSpend": 0, "drr": 0.0, "unit_contribution": 1937.65, "calculation_method": "wb_profit_calculator", "costs": {"commission": 2241.62, "additionalOptions": 226.1, "vat": 203.03, "usn": 81.21, "tax": 284.24, "logistics": 500.39, "storage": 0.0, "fulfillment": 120.0, "cogs": 1150.0, "adSpend": 0.0}, "profit": 1937.65, "marginality": 30.0, "opens": 184, "carts": 11, "buyouts": 0, "buyoutSum": 0, "cr_cart": 5.98, "cr_order": 9.09, "days": [{"date": "2026-08-06", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 17, "carts": 0, "buyouts": 0}, {"date": "2026-08-07", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 30, "carts": 2, "buyouts": 0}, {"date": "2026-08-08", "orders": 1, "revenue": 6460, "adSpend": 0, "drr": 0.0, "profit": 1937.65, "opens": 27, "carts": 1, "buyouts": 0}, {"date": "2026-08-09", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 34, "carts": 4, "buyouts": 0}, {"date": "2026-08-10", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 31, "carts": 1, "buyouts": 0}, {"date": "2026-08-11", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 20, "carts": 0, "buyouts": 0}, {"date": "2026-08-12", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 25, "carts": 3, "buyouts": 0}]}, {"nmId": 1015736036, "name": "триммер черный 2 акб", "cab": 2, "revenue": 6000, "orders": 1, "adSpend": 0, "drr": 0.0, "unit_contribution": 1687.97, "calculation_method": "wb_profit_calculator", "costs": {"commission": 1710.0, "additionalOptions": 210.0, "vat": 188.57, "usn": 226.29, "tax": 414.86, "logistics": 676.65, "storage": 30.52, "fulfillment": 120.0, "cogs": 1150.0, "adSpend": 0.0}, "profit": 1687.97, "marginality": 28.1, "opens": 241, "carts": 4, "buyouts": 1, "buyoutSum": 6000, "cr_cart": 1.66, "cr_order": 25.0, "days": [{"date": "2026-08-06", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 33, "carts": 0, "buyouts": 0}, {"date": "2026-08-07", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 32, "carts": 0, "buyouts": 0}, {"date": "2026-08-08", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 29, "carts": 0, "buyouts": 0}, {"date": "2026-08-09", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 33, "carts": 0, "buyouts": 0}, {"date": "2026-08-10", "orders": 1, "revenue": 6000, "adSpend": 0, "drr": 0.0, "profit": 1687.97, "opens": 49, "carts": 4, "buyouts": 1}, {"date": "2026-08-11", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 26, "carts": 0, "buyouts": 0}, {"date": "2026-08-12", "orders": 0, "revenue": 0, "adSpend": 0, "drr": 0.0, "profit": 0.0, "opens": 39, "carts": 0, "buyouts": 0}]}], "no_margin_with_orders": [{"nmId": 1345115826, "name": "триммер синий август", "cab": 1, "revenue": 216000, "orders": 24, "reason": "расходы ещё не переданы"}, {"nmId": 575411368, "name": "Пароочиститель черн", "cab": 2, "revenue": 14850, "orders": 3, "reason": "расходы ещё не переданы"}, {"nmId": 673547638, "name": "снегоуборщик новый", "cab": 1, "revenue": 12000, "orders": 2, "reason": "расходы ещё не переданы"}], "no_cost_model_with_orders": [{"nmId": 1345115826, "name": "триммер синий август", "cab": 1, "revenue": 216000, "orders": 24, "reason": "расходы ещё не переданы"}, {"nmId": 575411368, "name": "Пароочиститель черн", "cab": 2, "revenue": 14850, "orders": 3, "reason": "расходы ещё не переданы"}, {"nmId": 673547638, "name": "снегоуборщик новый", "cab": 1, "revenue": 12000, "orders": 2, "reason": "расходы ещё не переданы"}], "extra": {"count": 25, "revenue": 387255, "orders": 597}, "unmappedAdSpend": {"cab1": 0.0, "cab2": 0.0, "cab3": 0.0}, "calculation": {"type": "wb_profit_calculator_estimate", "formula": "ordered revenue − WB calculator commission − additional options − VAT/USN taxes on the configured post-SPP base − WB logistics − storage − fulfillment/other costs − COGS − advertising", "economics": {"file": "economics_2026-08-13.json", "effectiveDate": "2026-08-13", "ageDays": 0}, "warnings": ["Это управленческий расчёт по подтверждённым параметрам калькулятора WB, а не закрытый отчёт реализации.", "Для прибыли используются закреплённые профили FBS/FBW; показатели публичных WB API сохраняются в wbApiDiagnostics только для сверки.", "Допопции 3,5% учтены отдельно от базовой комиссии WB.", "Фулфилмент/прочие расходы 120 ₽ применены к каждой заказанной единице.", "Налоговая база составляет 66% заказной выручки после СПП 34%; точный налоговый факт нужно сверять с бухучётом.", "Публичная диагностика WB пропущена в ежедневном режиме, чтобы не расходовать лимит API перед сбором заказов."], "legacySkuCount": 1}}};
+const P = DATA.products, X = DATA.extra, S = DATA.summary;
+const ALL_P = DATA.products.map(p => ({ ...p, days: p.days.slice() }));
+const ALL_X = DATA.extra.map(p => ({ ...p, days: p.days.slice() }));
+const ALL_DATES = DATA.dates.slice(), ALL_LABELS = DATA.dayLabels.slice();
+let DATES = ALL_DATES.slice(), DAY_LABELS = ALL_LABELS.slice();
+let N = DATES.length, TI = N - 1;
+let RANGE_MODE = "week", SELECTED_INDEX = Math.max(0, ALL_DATES.length - 1), ACTIVE_START_INDEX = 0;
+const CAB_NAMES = DATA.cabs.names, CAB_SHORT = DATA.cabs.short;
+const CAB_COLORS = { 1: "#0f9ccf", 2: "#d55181", 3: "#9085e9" };
+const COL = { ad: "#77879b", good: "#4fd376", warn: "#ffb547", bad: "#ff6877",
+              f1: "#a5e6fb", f2: "#5fcef7", f3: "#22a7dd", f3line: "#0e7ba8",
+              ink: "#f2f6f9", muted: "#8fa1b3", dim: "#5c6b7a", panel: "#0d151d" };
+const HAS_CHARTS = typeof Chart !== "undefined";
+if (!HAS_CHARTS) document.getElementById("app").classList.add("no-charts");
+
+/* ── форматтеры ── */
+const NB = " ";
+const fmt = n => Math.round(n).toLocaleString("ru-RU");
+const fmtRub = n => fmt(n) + NB + "₽";
+const fmtSigned = n => (n > 0 ? "+" : "") + fmt(n) + NB + "₽";
+const fmtMln = n => (n / 1e6).toFixed(2).replace(".", ",") + NB + "млн" + NB + "₽";
+const fmtCompact = n => Math.abs(n) >= 1e6 ? fmtMln(n) : fmtRub(n);
+const pct = (v, d = 1) => v === null || v === undefined ? "—" : v.toFixed(d).replace(".", ",") + "%";
+const isoDate = iso => new Date(`${iso}T12:00:00Z`);
+const fullDate = iso => new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(isoDate(iso));
+function periodHuman(start, end) {
+  if (start === end) return fullDate(start);
+  return `${fullDate(start)} — ${fullDate(end)}`;
+}
+
+/* ── агрегация ── */
+const filt = (list, cab) => cab === "all" ? list : list.filter(p => String(p.cab) === cab);
+const dprofit = (p, d) => d.pr ?? 0;
+const weekOf = p => p.days.reduce((a, d) => ({ o: a.o + d.o, r: a.r + d.r, ad: a.ad + d.ad, bs: a.bs + d.bs, bq: a.bq + d.bq, op: a.op + d.op, ct: a.ct + d.ct }), { o: 0, r: 0, ad: 0, bs: 0, bq: 0, op: 0, ct: 0 });
+const weekProfit = p => p.days.reduce((a, d) => a + dprofit(p, d), 0);
+const drrOf = (ad, r) => r > 0 ? ad / r * 100 : 0;
+
+function dayFullFrom(cab, i, mainProducts, extraProducts) {
+  const main = filt(mainProducts, cab), all = [...main, ...filt(extraProducts, cab)];
+  const a = { o: 0, r: 0, ad: 0, bs: 0, bq: 0, op: 0, ct: 0 };
+  for (const p of all) { const d = p.days[i]; if (!d) continue; a.o += d.o; a.r += d.r; a.ad += d.ad; a.bs += d.bs; a.bq += d.bq; a.op += d.op; a.ct += d.ct; }
+  let profit = 0, mainRev = 0;
+  for (const p of main) { const d = p.days[i]; if (!d) continue; profit += dprofit(p, d); mainRev += d.r; }
+  return { ...a, profit, mainRev,
+    drr: drrOf(a.ad, a.r),
+    marg: mainRev > 0 ? profit / mainRev * 100 : null,
+    cr1: a.op > 0 ? a.ct / a.op * 100 : null,
+    cr2: a.ct > 0 ? a.o / a.ct * 100 : null };
+}
+const dayFull = (cab, i) => dayFullFrom(cab, i, P, X);
+
+function heroView(cab) {
+  const first = Math.max(0, SELECTED_INDEX - 6);
+  const days = [];
+  for (let i = first; i <= SELECTED_INDEX; i++) days.push(dayFullFrom(cab, i, ALL_P, ALL_X));
+  const y = days[days.length - 1], base = days.slice(0, -1), n = base.length;
+  const bsum = k => base.reduce((a, d) => a + d[k], 0);
+  const avg = k => n ? bsum(k) / n : null;
+  const baseline = {
+    r: avg("r"), ad: avg("ad"), o: avg("o"), profit: avg("profit"),
+    op: avg("op"), ct: avg("ct"),
+    drr: n && bsum("r") > 0 ? drrOf(bsum("ad"), bsum("r")) : null,
+    marg: n && bsum("mainRev") > 0 ? bsum("profit") / bsum("mainRev") * 100 : null,
+    cr1: n && bsum("op") > 0 ? bsum("ct") / bsum("op") * 100 : null,
+    cr2: n && bsum("ct") > 0 ? bsum("o") / bsum("ct") * 100 : null,
+  };
+  return { y, baseline, days, baseCount: n };
+}
+
+const VIEWS = {};
+function view(cab) {
+  if (VIEWS[cab]) return VIEWS[cab];
+  const days = DATES.map((_, i) => dayFull(cab, i));
+  const y = days[TI], base = days.slice(0, TI), n = base.length;
+  const bsum = k => base.reduce((a, d) => a + d[k], 0);
+  const baseline = {
+    r: n ? bsum("r") / n : null, ad: n ? bsum("ad") / n : null,
+    o: n ? bsum("o") / n : null, profit: n ? bsum("profit") / n : null,
+    op: n ? bsum("op") / n : null, ct: n ? bsum("ct") / n : null,
+    drr: n && bsum("r") > 0 ? drrOf(bsum("ad"), bsum("r")) : null,
+    marg: n && bsum("mainRev") > 0 ? bsum("profit") / bsum("mainRev") * 100 : null,
+    cr1: n && bsum("op") > 0 ? bsum("ct") / bsum("op") * 100 : null,
+    cr2: n && bsum("ct") > 0 ? bsum("o") / bsum("ct") * 100 : null };
+  const tsum = k => days.reduce((a, d) => a + d[k], 0);
+  const period = { r: tsum("r"), ad: tsum("ad"), o: tsum("o"), profit: tsum("profit"),
+    op: tsum("op"), ct: tsum("ct"), bq: tsum("bq"), bs: tsum("bs"), mainRev: tsum("mainRev") };
+  period.drr = drrOf(period.ad, period.r);
+  period.marg = period.mainRev > 0 ? period.profit / period.mainRev * 100 : null;
+  period.cr1 = period.op > 0 ? period.ct / period.op * 100 : null;
+  period.cr2 = period.ct > 0 ? period.o / period.ct * 100 : null;
+  period.buyoutRate = period.o > 0 ? period.bq / period.o * 100 : null;
+  return VIEWS[cab] = { days, y, baseline, period };
+}
+
+/* ── свойства-хелперы UI ── */
+function chipHtml(cur, base, { up = "good", pp = false, thresh = 1 } = {}) {
+  if (base === null || base === undefined || (!pp && !base)) return "";
+  const d = pp ? cur - base : (cur - base) / Math.abs(base) * 100;
+  const txt = pp ? (d > 0 ? "+" : "") + d.toFixed(1).replace(".", ",") + " п.п."
+                 : (d > 0 ? "+" : "") + d.toFixed(0) + "%";
+  const goodDir = up === "good" ? d >= 0 : d <= 0;
+  const cls = Math.abs(d) < (pp ? 0.3 : thresh) ? "flat" : goodDir ? "up" : "down";
+  const arrow = d > 0.001 ? "▲" : d < -0.001 ? "▼" : "•";
+  return `<span class="chip ${cls}">${arrow} ${txt}</span>`;
+}
+function spark(values, { w = 260, h = 40, color = COL.dim, dot = "#38c6f4", fill = false } = {}) {
+  const vs = values.filter(v => v !== null && v !== undefined);
+  if (vs.length < 2) return "";
+  const min = Math.min(...vs), max = Math.max(...vs), rng = (max - min) || 1;
+  const px = i => 4 + (w - 12) * i / (values.length - 1);
+  const py = v => h - 6 - (h - 14) * ((v - min) / rng);
+  const pts = values.map((v, i) => `${px(i).toFixed(1)},${py(v ?? min).toFixed(1)}`);
+  const li = values.length - 1, lv = values[li] ?? min;
+  const area = fill ? `<polygon points="${px(0).toFixed(1)},${h - 4} ${pts.join(" ")} ${px(li).toFixed(1)},${h - 4}" fill="${color}" opacity="0.10"/>` : "";
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${area}
+    <polyline points="${pts.join(" ")}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${px(li).toFixed(1)}" cy="${py(lv).toFixed(1)}" r="4" fill="${dot}" stroke="${COL.panel}" stroke-width="2"/></svg>`;
+}
+const drrPill = v => { const c = v >= 35 ? "bad" : v >= 25 ? "warn" : "ok"; return `<span class="pill ${c}">${pct(v)}</span>`; };
+const margPill = v => { if (v === null) return "—"; const c = v >= 20 ? "ok" : v >= 5 ? "warn" : "bad"; return `<span class="pill ${c}">${pct(v)}</span>`; };
+const cabTag = c => `<span class="cabtag c${c}">${CAB_SHORT[c]}</span>`;
+const profitCell = v => `<span class="${v >= 0 ? "pos" : "neg"}">${fmtSigned(v)}</span>`;
+
+/* ── хитмап: divergent cyan↔red вокруг 0 ── */
+function hexMix(a, b, t) {
+  const pa = [1, 3, 5].map(i => parseInt(a.slice(i, i + 2), 16));
+  const pb = [1, 3, 5].map(i => parseInt(b.slice(i, i + 2), 16));
+  return "#" + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, "0")).join("");
+}
+function heatColor(v) {
+  if (v === null || v === undefined) return "rgba(255,255,255,.02)";
+  const mid = "#242f3a", cap = 25;
+  if (v < 0) return hexMix(mid, "#e0475c", Math.min(1, -v / cap) * 0.95);
+  return hexMix(mid, "#1691c4", Math.min(1, v / cap) * 0.95);
+}
+
+/* ── Chart.js дефолты ── */
+let charts = {};
+function makeChart(id, cfg) {
+  if (!HAS_CHARTS) return;
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), cfg);
+}
+if (HAS_CHARTS) {
+  Chart.defaults.color = COL.muted;
+  Chart.defaults.borderColor = "rgba(255,255,255,.06)";
+  Chart.defaults.font.family = '"Golos Text","Helvetica Neue",sans-serif';
+  Chart.defaults.font.size = 11;
+  Chart.defaults.plugins.legend.labels.usePointStyle = true;
+  Chart.defaults.plugins.legend.labels.pointStyle = "circle";
+  Chart.defaults.plugins.legend.labels.boxWidth = 7;
+  Chart.defaults.plugins.legend.labels.boxPadding = 5;
+  Chart.defaults.plugins.legend.labels.padding = 14;
+  Chart.defaults.plugins.tooltip.backgroundColor = "rgba(6,10,15,.96)";
+  Chart.defaults.plugins.tooltip.titleColor = COL.ink;
+  Chart.defaults.plugins.tooltip.bodyColor = "#dce4e9";
+  Chart.defaults.plugins.tooltip.borderColor = "rgba(255,255,255,.14)";
+  Chart.defaults.plugins.tooltip.borderWidth = 1;
+  Chart.defaults.plugins.tooltip.padding = 12;
+  Chart.defaults.plugins.tooltip.cornerRadius = 10;
+  Chart.defaults.interaction = { mode: "index", intersect: false };
+  Chart.defaults.elements.line.borderWidth = 2;
+  Chart.defaults.elements.line.tension = 0.3;
+  Chart.defaults.elements.point.radius = 0;
+  Chart.defaults.elements.point.hoverRadius = 5;
+  Chart.defaults.elements.point.hitRadius = 24;
+}
+const GRID = { color: "rgba(255,255,255,.05)" };
+
+/* ── активный период: день / 7 дней / 30 дней ── */
+const PERIOD_DAYS = { day: 1, week: 7, month: 30 };
+function resolveDateIndex(raw) {
+  const exact = ALL_DATES.indexOf(raw);
+  if (exact >= 0) return { index: exact, adjusted: false };
+  if (!raw || raw >= ALL_DATES[ALL_DATES.length - 1]) return { index: ALL_DATES.length - 1, adjusted: Boolean(raw) };
+  if (raw <= ALL_DATES[0]) return { index: 0, adjusted: Boolean(raw) };
+  let index = 0;
+  for (let i = 1; i < ALL_DATES.length; i++) {
+    if (ALL_DATES[i] > raw) break;
+    index = i;
+  }
+  return { index, adjusted: true };
+}
+function activePeriodHuman() { return periodHuman(DATES[0], DATES[DATES.length - 1]); }
+function isDefaultLatestWeek() {
+  return RANGE_MODE === "week" && N === 7 && SELECTED_INDEX === ALL_DATES.length - 1;
+}
+function syncUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.set("period", RANGE_MODE);
+  url.searchParams.set("date", ALL_DATES[SELECTED_INDEX]);
+  url.searchParams.set("cab", CAB);
+  window.history.replaceState(null, "", url);
+}
+function updateRangeControls(adjusted = false) {
+  document.querySelectorAll("#rangePresets button").forEach(btn => {
+    const active = btn.dataset.period === RANGE_MODE;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+  const input = document.getElementById("rangeDate");
+  input.min = ALL_DATES[0]; input.max = ALL_DATES[ALL_DATES.length - 1];
+  input.value = ALL_DATES[SELECTED_INDEX];
+  document.getElementById("datePrev").disabled = SELECTED_INDEX <= 0;
+  document.getElementById("dateNext").disabled = SELECTED_INDEX >= ALL_DATES.length - 1;
+
+  const wanted = PERIOD_DAYS[RANGE_MODE], status = document.getElementById("rangeStatus");
+  const shortage = N < wanted;
+  status.className = "range-status" + (shortage || adjusted ? " warn" : "");
+  if (shortage && RANGE_MODE === "month") {
+    status.textContent = `Доступно только ${N} из 30 дней · история пока накапливается · ${activePeriodHuman()}`;
+  } else if (shortage) {
+    status.textContent = `Доступно ${N} из ${wanted} дней · ${activePeriodHuman()}`;
+  } else if (adjusted) {
+    status.textContent = `Выбрана ближайшая доступная дата · ${activePeriodHuman()}`;
+  } else {
+    status.textContent = `${activePeriodHuman()} · ${N} ${N === 1 ? "день" : N < 5 ? "дня" : "дней"}`;
+  }
+  document.getElementById("brandPeriod").textContent = activePeriodHuman();
+  document.title = `РНП · ${activePeriodHuman()} · AquaBlast control room`;
+}
+function applyPeriod(mode, selectedDate, { updateUrl = true } = {}) {
+  if (!PERIOD_DAYS[mode]) mode = "week";
+  const resolved = resolveDateIndex(selectedDate);
+  RANGE_MODE = mode; SELECTED_INDEX = resolved.index;
+  ACTIVE_START_INDEX = Math.max(0, SELECTED_INDEX - PERIOD_DAYS[mode] + 1);
+  DATES = ALL_DATES.slice(ACTIVE_START_INDEX, SELECTED_INDEX + 1);
+  DAY_LABELS = ALL_LABELS.slice(ACTIVE_START_INDEX, SELECTED_INDEX + 1);
+  P.splice(0, P.length, ...ALL_P.map(p => ({ ...p, days: p.days.slice(ACTIVE_START_INDEX, SELECTED_INDEX + 1) })));
+  X.splice(0, X.length, ...ALL_X.map(p => ({ ...p, days: p.days.slice(ACTIVE_START_INDEX, SELECTED_INDEX + 1) })));
+  N = DATES.length; TI = N - 1;
+  Object.keys(VIEWS).forEach(key => delete VIEWS[key]);
+  updateRangeControls(resolved.adjusted);
+  const selectedSku = document.getElementById("skuSelect")?.value || null;
+  setCab(CAB, selectedSku, updateUrl);
+}
+
+/* ═══════════════ СЕКЦИИ ═══════════════ */
+
+function renderTabs(cab) {
+  const alertCabs = alertCount();
+  const tab = (key, label, dot) => {
+    const badge = alertCabs[key] ? `<span class="tab-badge">${alertCabs[key]}</span>` : "";
+    return `<button data-cab="${key}" class="${cab === key ? "active" : ""}">
+      ${dot ? `<span class="cdot" style="background:${dot}"></span>` : ""}${label}${badge}</button>`;
+  };
+  document.getElementById("cabs").innerHTML =
+    tab("all", "Сводно") + tab("1", CAB_SHORT[1], CAB_COLORS[1]) +
+    tab("2", CAB_SHORT[2], CAB_COLORS[2]) + tab("3", CAB_SHORT[3], CAB_COLORS[3]);
+}
+
+const skuCab = {}; // nmId -> cab
+[...ALL_P, ...ALL_X].forEach(p => skuCab[p.id] = String(p.cab));
+function alertsFor(cab) {
+  if (!isDefaultLatestWeek()) return [];
+  return (S.alerts || []).filter(a => {
+    if (a.scope === "всего") return cab === "all";
+    const m = a.scope.match(/\((\d{6,})\)/);
+    const c = m ? skuCab[m[1]] : null;
+    return cab === "all" || c === cab;
+  });
+}
+function alertCount() {
+  if (!isDefaultLatestWeek()) return { all: 0, 1: 0, 2: 0, 3: 0 };
+  const out = { all: (S.alerts || []).length, 1: 0, 2: 0, 3: 0 };
+  for (const a of S.alerts || []) {
+    const m = a.scope.match(/\((\d{6,})\)/);
+    if (m && skuCab[m[1]]) out[skuCab[m[1]]]++;
+  }
+  return out;
+}
+const ALERT_ICONS = { revenue: "🔻", drr: "📈", profit: "⛔", no_margin: "✳️", unmapped_ad: "❓" };
+function renderAlerts(cab) {
+  const el = document.getElementById("secAlerts");
+  if (!isDefaultLatestWeek()) {
+    el.className = "alerts info";
+    el.textContent = "Алерты рассчитаны только для последнего полного 7-дневного отчёта и скрыты для выбранного исторического периода.";
+    return;
+  }
+  const list = alertsFor(cab);
+  if (!list.length) {
+    el.className = "alerts calm";
+    el.innerHTML = `<span style="color:var(--good)">✓</span> Аномалий по порогам не найдено — выручка, DRR и прогноз прибыли в норме относительно среднего.`;
+    return;
+  }
+  el.className = "alerts hot";
+  el.innerHTML = `<div class="a-title">⚠ Алерты · выручка −20% · DRR +5 п.п. · минусовая прибыль</div>
+    <ul>${list.map(a => `<li><span class="ic">${ALERT_ICONS[a.metric] || "⚠️"}</span><span>${a.message}</span></li>`).join("")}</ul>`;
+}
+
+function renderHero(cab) {
+  const v = heroView(cab), y = v.y, b = v.baseline, hasBase = v.baseCount > 0;
+  document.getElementById("heroDate").textContent = ALL_LABELS[SELECTED_INDEX];
+  document.getElementById("heroBaseNote").textContent = hasBase
+    ? `к среднему за ${v.baseCount} предыдущих доступных дней`
+    : "нет предыдущих данных для сравнения";
+
+  const hp = document.getElementById("heroProfit");
+  hp.textContent = fmtSigned(y.profit);
+  hp.className = "hero-num " + (y.profit >= 0 ? "pos" : "neg");
+  document.getElementById("heroChip").innerHTML =
+    chipHtml(y.profit, b.profit, { up: "good" }) +
+    (hasBase ? `<span class="tbase" style="color:var(--dim);font-size:11px">обычно ${fmtCompact(b.profit)}/день</span>` : "");
+  document.getElementById("heroSpark").innerHTML =
+    spark(v.days.map(d => d.profit), { w: 280, h: 44, color: COL.dim, dot: y.profit >= 0 ? COL.good : COL.bad, fill: true });
+
+  const tile = (label, valHtml, chip, sparkVals, baseTxt) => `
+    <div class="tile">
+      <span class="mlabel">${label}</span>
+      <div class="trow"><span class="tv">${valHtml}</span>${chip}</div>
+      ${sparkVals ? `<div class="tspark">${spark(sparkVals, { w: 200, h: 26 })}</div>` : ""}
+      ${baseTxt ? `<span class="tbase">${baseTxt}</span>` : ""}
+    </div>`;
+  document.getElementById("heroTiles").innerHTML =
+    tile("Выручка", fmtCompact(y.r), chipHtml(y.r, b.r, { up: "good" }),
+      v.days.map(d => d.r), hasBase ? `обычно ${fmtCompact(b.r)}/день` : "") +
+    tile("Реклама", fmtCompact(y.ad), chipHtml(y.drr, b.drr, { up: "bad", pp: true }),
+      v.days.map(d => d.drr), hasBase ? `DRR ${pct(y.drr)} · обычно ${pct(b.drr)}` : `DRR ${pct(y.drr)}`) +
+    tile("Заказы", fmt(y.o) + " шт", chipHtml(y.o, b.o, { up: "good" }),
+      v.days.map(d => d.o), hasBase ? `обычно ${fmt(b.o)}/день` : "") +
+    tile("Маржинальность с ДРР", pct(y.marg), y.marg !== null && b.marg !== null ? chipHtml(y.marg, b.marg, { up: "good", pp: true }) : "",
+      v.days.map(d => d.marg), hasBase ? `обычно ${pct(b.marg)}` : "");
+
+  const stage = (name, val, base, crLabel, crVal, crBase) => `
+    <div class="hf-stage">
+      <div class="hf-top"><span class="mlabel">${name}</span><b>${fmt(val)}</b></div>
+      <div class="hf-cr">${crLabel ? `${crLabel} <b style="color:var(--ink)">${pct(crVal, 2)}</b>` : `${chipHtml(val, base, { up: "good" })}${hasBase ? ` <span>обычно ${fmt(base)}</span>` : ""}`}
+      ${crLabel && crVal !== null && crBase !== null ? chipHtml(crVal, crBase, { up: "good", pp: true }) : ""}</div>
+    </div>`;
+  document.getElementById("heroFunnel").innerHTML =
+    stage("Открытия карточки", y.op, b.op) +
+    stage("В корзину", y.ct, b.ct, "CR", y.cr1, b.cr1) +
+    stage("Заказы", y.o, b.o, "CR", y.cr2, b.cr2);
+}
+
+function renderStrip(cab) {
+  const t = view(cab).period;
+  document.getElementById("stripPeriod").textContent = activePeriodHuman();
+  const cell = (label, val, cls = "") => `<div class="s-cell"><div class="sv num ${cls}">${val}</div><span class="mlabel">${label}</span></div>`;
+  document.getElementById("strip").innerHTML =
+    cell("Выручка", fmtMln(t.r)) +
+    cell("Реклама", fmtMln(t.ad), "warn") +
+    cell("Прогноз прибыли", (t.profit >= 0 ? "+" : "") + fmtMln(t.profit), t.profit >= 0 ? "pos" : "neg") +
+    cell("Маржинальность", pct(t.marg), t.marg !== null && t.marg >= 5 ? "pos" : t.marg !== null && t.marg >= 0 ? "warn" : "neg") +
+    cell("DRR", pct(t.drr)) +
+    cell("Заказы", fmt(t.o) + " шт");
+}
+
+function renderMoney(cab) {
+  const cabsToShow = cab === "all" ? [1, 2, 3] : [Number(cab)];
+  const barCommon = { borderRadius: 4, borderSkipped: "start", maxBarThickness: 24, borderColor: COL.panel, borderWidth: 1.5 };
+  const revSets = cabsToShow.map(c => ({
+    label: `Выручка · ${CAB_SHORT[c]}`,
+    data: DATES.map((_, i) => Math.round(filt([...P, ...X], String(c)).reduce((a, p) => a + p.days[i].r, 0) / 1000)),
+    backgroundColor: CAB_COLORS[c], stack: "rev", ...barCommon,
+  }));
+  const adPerCab = c => DATES.map((_, i) => Math.round(filt([...P, ...X], String(c)).reduce((a, p) => a + p.days[i].ad, 0) / 1000));
+  const adTotals = DATES.map((_, i) => cabsToShow.reduce((a, c) => a + adPerCab(c)[i], 0));
+  const adBreak = Object.fromEntries(cabsToShow.map(c => [c, adPerCab(c)]));
+  makeChart("moneyChart", {
+    type: "bar",
+    data: { labels: DAY_LABELS, datasets: [...revSets,
+      { label: "Реклама (все)", data: adTotals, backgroundColor: COL.ad, stack: "ad", ...barCommon }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: c => `${c.dataset.label}: ${fmt(c.raw)} тыс ₽`,
+        afterBody: items => {
+          const it = items.find(i => i.dataset.stack === "ad");
+          if (!it || cab !== "all") return;
+          return cabsToShow.map(c => `   ${CAB_SHORT[c]}: ${fmt(adBreak[c][it.dataIndex])} тыс ₽`);
+        } } } },
+      scales: { x: { stacked: true, grid: { display: false } },
+                y: { stacked: true, grid: GRID, title: { display: true, text: "тыс ₽" } } } },
+  });
+  document.getElementById("moneyLegend").innerHTML =
+    cabsToShow.map(c => `<span class="lk"><i style="background:${CAB_COLORS[c]}"></i>Выручка · ${CAB_SHORT[c]}</span>`).join("") +
+    `<span class="lk"><i style="background:${COL.ad}"></i>Реклама (единый тон)</span>`;
+}
+
+function renderCabCards(cab) {
+  const sec = document.getElementById("secCabs");
+  if (cab !== "all") { sec.style.display = "none"; return; }
+  sec.style.display = "";
+  const views = [1, 2, 3].map(c => ({ c, v: view(String(c)) }));
+  const totalRev = views.reduce((a, x) => a + x.v.period.r, 0);
+  document.getElementById("cabCards").innerHTML = views.map(({ c, v }) => {
+    const t = v.period, share = totalRev > 0 ? t.r / totalRev * 100 : 0;
+    return `<button class="cab-card" data-goto="${c}" style="--cc:${CAB_COLORS[c]}">
+      <span class="cname"><span class="cname-dot"></span>${CAB_NAMES[c]}<span class="mlabel dim" style="margin-left:auto">${share.toFixed(0)}% выручки</span></span>
+      <span class="crow"><span>Выручка</span><b>${fmtMln(t.r)}</b></span>
+      <span class="crow"><span>Прогноз прибыли</span><b class="${t.profit >= 0 ? "pos" : "neg"}">${(t.profit >= 0 ? "+" : "") + fmtMln(t.profit)}</b></span>
+      <span class="crow"><span>DRR ${pct(t.drr)}</span><span>Марж ${margPill(t.marg)}</span></span>
+      <span class="cspark">${spark(v.days.map(d => d.profit), { w: 220, h: 30, color: COL.dim })}</span>
+      <span class="mlabel dim">прибыль по дням →</span>
+    </button>`;
+  }).join("") + `
+    <div class="share-bar" style="grid-column:1/-1">${views.map(({ c, v }) =>
+      `<i style="width:${totalRev > 0 ? v.period.r / totalRev * 100 : 0}%;background:${CAB_COLORS[c]}" title="${CAB_SHORT[c]}"></i>`).join("")}</div>`;
+  document.querySelectorAll(".cab-card").forEach(el => el.onclick = () => setCab(el.dataset.goto));
+}
+
+function renderProfitChart(cab) {
+  const v = view(cab);
+  makeChart("profitChart", {
+    type: "bar",
+    data: { labels: DAY_LABELS, datasets: [{
+      label: "Прогноз прибыли",
+      data: v.days.map(d => Math.round(d.profit / 1000)),
+      backgroundColor: v.days.map(d => d.profit >= 0 ? COL.good : COL.bad),
+      borderRadius: 4, borderSkipped: "start", maxBarThickness: 24,
+    }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Прибыль: ${fmt(c.raw)} тыс ₽` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, title: { display: true, text: "тыс ₽" } } } },
+  });
+}
+
+function renderPulse(cab) {
+  const grid = document.getElementById("heatGrid");
+  grid.style.setProperty("--day-count", String(N));
+  grid.style.minWidth = N > 7 ? `${96 + N * 45}px` : "100%";
+  const rows = cab === "all"
+    ? [["Сводно", "all", COL.ink], ...[1, 2, 3].map(c => [CAB_SHORT[c], String(c), CAB_COLORS[c]])]
+    : [[CAB_SHORT[Number(cab)], cab, CAB_COLORS[Number(cab)]]];
+  document.getElementById("heatmap").innerHTML = rows.map(([label, key, color]) => {
+    const v = view(key);
+    return `<div class="heat-row">
+      <span class="heat-label"><i style="background:${color}"></i><em>${label}</em></span>
+      ${v.days.map(d => {
+        const m = d.marg;
+        return `<span class="heat-cell ${m === null ? "null" : ""}" style="background:${heatColor(m)}" title="${label}: ${pct(m)}">${m === null ? "·" : pct(m, 1)}</span>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+  document.getElementById("heatDays").innerHTML =
+    `<span></span>` + DAY_LABELS.map(l => `<span>${l.split(" (")[0]}</span>`).join("");
+}
+
+function renderDrr(cab) {
+  const mkLine = (key, label, color, emphasized) => {
+    const v = view(key);
+    return { label, data: v.days.map(d => +d.drr.toFixed(1)),
+      borderColor: color, backgroundColor: "transparent",
+      borderWidth: emphasized ? 2.5 : 1.5,
+      pointBackgroundColor: color };
+  };
+  const sets = cab === "all"
+    ? [mkLine("all", "Сводно", COL.ink, true),
+       mkLine("1", CAB_SHORT[1], "rgba(143,161,179,.55)", false),
+       mkLine("2", CAB_SHORT[2], "rgba(143,161,179,.4)", false),
+       mkLine("3", CAB_SHORT[3], "rgba(143,161,179,.25)", false)]
+    : [mkLine(cab, "DRR", CAB_COLORS[Number(cab)], true)];
+  sets.push({ label: "Порог 25%", data: DATES.map(() => 25),
+    borderColor: COL.warn, borderDash: [6, 5], borderWidth: 1.2, pointRadius: 0, pointHitRadius: 0, backgroundColor: "transparent" });
+  makeChart("drrChart", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: sets },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, ticks: { callback: v => v + "%" } } } },
+  });
+  document.getElementById("drrNote").textContent = cab === "all"
+    ? "DRR = реклама / выручка. Сводно — акцентная линия, кабинеты — фоновые серые (значения в подсказке). Пунктир — порог 25%."
+    : "DRR = реклама / выручка по заказам. Пунктир — порог 25%.";
+}
+
+function renderDaysTable(cab) {
+  const v = view(cab);
+  document.getElementById("daysSummary").textContent = `выручка · реклама · DRR · заказы · прибыль · маржинальность`;
+  document.querySelector("#daysTable tbody").innerHTML = v.days.map((d, i) => `<tr>
+    <td>${DAY_LABELS[i]}</td><td>${fmtRub(d.r)}</td><td>${fmtRub(d.ad)}</td>
+    <td>${drrPill(d.drr)}</td><td>${fmt(d.o)}</td><td>${profitCell(d.profit)}</td><td>${margPill(d.marg)}</td></tr>`).join("");
+}
+
+function renderFunnel(cab) {
+  const t = view(cab).period;
+  const stages = [
+    { name: "Открытия карточки", v: t.op, color: COL.f1, fillPct: 100, conv: null },
+    { name: "Добавили в корзину", v: t.ct, color: COL.f2, fillPct: t.cr1 ?? 0, conv: { label: "в корзину", v: t.cr1 } },
+    { name: "Оформили заказ", v: t.o, color: COL.f3, fillPct: t.cr2 ?? 0, conv: { label: "в заказ", v: t.cr2 } },
+  ];
+  document.getElementById("fStages").innerHTML = stages.map((s, i) => `
+    ${s.conv ? `<div class="f-conv"><span class="arr">↓</span><b>${pct(s.conv.v, 2)}</b><span>конверсия ${s.conv.label} (от предыдущего шага)</span></div>` : ""}
+    <div class="f-stage">
+      <div class="f-top"><span class="fn">${s.name}</span><span class="fv num">${fmt(s.v)}</span></div>
+      <div class="f-track"><div class="f-fill" style="width:${Math.max(2, Math.min(100, s.fillPct))}%;background:${s.color}"></div></div>
+    </div>`).join("");
+  document.getElementById("fBuyout").innerHTML =
+    `Выкупы за период: <b>${fmt(t.bq)} шт</b> · <b>${fmtRub(t.bs)}</b> · выкупаемость ≈ <b>${pct(t.buyoutRate)}</b><br>
+     <span style="font-size:11px">выкупы считаются по дате выкупа и отстают от заказов на срок доставки — это не ступень дневной воронки</span>`;
+
+  const v = view(cab);
+  makeChart("crChart", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: [
+      { label: "CR в корзину", data: v.days.map(d => d.cr1 === null ? null : +d.cr1.toFixed(2)), borderColor: COL.f2, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.f2 },
+      { label: "CR в заказ", data: v.days.map(d => d.cr2 === null ? null : +d.cr2.toFixed(2)), borderColor: COL.f3line, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.f3line },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, ticks: { callback: x => x + "%" } } } },
+  });
+  makeChart("trafficChart", {
+    type: "bar",
+    data: { labels: DAY_LABELS, datasets: [{
+      label: "Открытия", data: v.days.map(d => d.op),
+      backgroundColor: COL.f1, borderRadius: 4, borderSkipped: "start", maxBarThickness: 24 }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `Открытия: ${fmt(c.raw)}` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID } } },
+  });
+  document.querySelector("#funnelTable tbody").innerHTML = v.days.map((d, i) => `<tr>
+    <td>${DAY_LABELS[i]}</td><td>${fmt(d.op)}</td><td>${fmt(d.ct)}</td><td>${pct(d.cr1, 2)}</td>
+    <td>${fmt(d.o)}</td><td>${pct(d.cr2, 2)}</td><td>${fmt(d.bq)}</td></tr>`).join("");
+}
+
+/* ── лидерборд ── */
+let sortState = { key: "r", dir: -1 };
+const LEAD_COLS = [
+  { key: "name", label: "Артикул", sortable: false },
+  { key: "r", label: "Выручка" },
+  { key: "trend", label: "Динамика", sortable: false },
+  { key: "o", label: "Заказы" },
+  { key: "ad", label: "Реклама" },
+  { key: "drr", label: "DRR" },
+  { key: "cr", label: "CR карточки" },
+  { key: "profit", label: "Прогноз прибыли" },
+  { key: "marg", label: "Марж. с ДРР" },
+];
+function renderLeaderboard(cab) {
+  const prods = filt(P, cab);
+  const rows = prods.map(p => {
+    const w = weekOf(p), profit = weekProfit(p);
+    return { p, ...w, profit,
+      drr: drrOf(w.ad, w.r),
+      cr: w.op > 0 ? w.o / w.op * 100 : null,
+      marg: w.r > 0 ? profit / w.r * 100 : null };
+  });
+  rows.sort((a, b) => {
+    const va = a[sortState.key], vb = b[sortState.key];
+    if (va === null) return 1; if (vb === null) return -1;
+    return (va - vb) * sortState.dir;
+  });
+  const maxRev = Math.max(...rows.map(r => r.r), 1);
+  const maxAbsProfit = Math.max(...rows.map(r => Math.abs(r.profit)), 1);
+
+  document.querySelector("#skuTable thead").innerHTML = "<tr>" + LEAD_COLS.map(c =>
+    `<th data-key="${c.key}" ${c.sortable === false ? "" : 'class="sortable"'}>${c.label}${sortState.key === c.key ? `<span class="sort">${sortState.dir < 0 ? "↓" : "↑"}</span>` : ""}</th>`).join("") + "</tr>";
+
+  document.querySelector("#skuTable tbody").innerHTML = rows.map(r => `<tr data-id="${r.p.id}">
+    <td><b>${r.p.name}</b><br><span class="nm">${r.p.id}</span>${cab === "all" ? cabTag(r.p.cab) : ""}</td>
+    <td><div class="cellbar"><span class="num">${fmtRub(r.r)}</span><span class="bt"><span class="bf" style="width:${(r.r / maxRev * 100).toFixed(1)}%;background:${CAB_COLORS[r.p.cab]};display:block"></span></span></div></td>
+    <td class="rowspark">${spark(r.p.days.map(d => d.r), { w: 96, h: 26, color: COL.dim })}</td>
+    <td>${fmt(r.o)}</td>
+    <td>${fmtRub(r.ad)}</td>
+    <td>${drrPill(r.drr)}</td>
+    <td>${r.cr === null ? "—" : pct(r.cr, 2)}</td>
+    <td><div class="cellbar">${profitCell(r.profit)}<span class="bt"><span class="bf" style="width:${(Math.abs(r.profit) / maxAbsProfit * 100).toFixed(1)}%;background:${r.profit >= 0 ? COL.good : COL.bad};display:block"></span></span></div></td>
+    <td>${margPill(r.marg)}</td></tr>`).join("");
+
+  document.getElementById("leaderHint").textContent =
+    `${rows.length} SKU с моделью расходов · CR карточки = заказы / открытия за период · прибыль является прогнозом по заказам`;
+
+  document.querySelectorAll("#skuTable th.sortable").forEach(th => th.onclick = () => {
+    const k = th.dataset.key;
+    if (sortState.key === k) sortState.dir *= -1; else sortState = { key: k, dir: -1 };
+    renderLeaderboard(cab);
+    bindRowClicks(cab);
+  });
+  bindRowClicks(cab);
+}
+function bindRowClicks(cab) {
+  document.querySelectorAll("#skuTable tbody tr").forEach(tr => tr.onclick = () => {
+    document.getElementById("skuSelect").value = tr.dataset.id;
+    renderSku(tr.dataset.id);
+    document.getElementById("skuPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
+/* ── drill-down ── */
+function renderSkuSelect(cab, preferredId = null) {
+  const prods = filt(P, cab).slice().sort((a, b) => weekOf(b).r - weekOf(a).r);
+  const sel = document.getElementById("skuSelect");
+  sel.innerHTML = prods.map(p => `<option value="${p.id}">${p.name} (${CAB_SHORT[p.cab]}) · ${p.id}</option>`).join("");
+  sel.onchange = e => renderSku(e.target.value);
+  const chosen = prods.find(p => String(p.id) === String(preferredId)) || prods[0];
+  if (chosen) { sel.value = chosen.id; renderSku(chosen.id); }
+}
+function renderSku(id) {
+  const p = [...P].find(x => String(x.id) === String(id)) || P[0];
+  if (!p) return;
+  const w = weekOf(p), profit = weekProfit(p);
+  const wd = drrOf(w.ad, w.r), marg = w.r > 0 ? profit / w.r * 100 : null;
+  const cr = w.op > 0 ? w.o / w.op * 100 : null;
+  const tile = (label, val, cls = "") => `<div class="tile"><span class="mlabel">${label}</span><div class="tv ${cls}">${val}</div></div>`;
+  document.getElementById("skuTiles").innerHTML =
+    tile("Выручка", fmtCompact(w.r)) +
+    tile("Реклама", fmtCompact(w.ad)) +
+    tile("DRR", pct(wd), wd >= 35 ? "neg" : "") +
+    tile("Прогноз прибыли", fmtSigned(profit), profit >= 0 ? "pos" : "neg") +
+    tile("Марж. с ДРР", pct(marg)) +
+    tile("CR карточки", cr === null ? "—" : pct(cr, 2));
+
+  makeChart("skuMoney", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: [
+      { label: "Выручка", data: p.days.map(d => Math.round(d.r / 1000)), borderColor: CAB_COLORS[p.cab], backgroundColor: "rgba(255,255,255,.03)", fill: true, pointBackgroundColor: CAB_COLORS[p.cab] },
+      { label: "Реклама", data: p.days.map(d => Math.round(d.ad / 1000)), borderColor: COL.ad, backgroundColor: "transparent", pointBackgroundColor: COL.ad },
+      { label: "Прибыль", data: p.days.map(d => Math.round(dprofit(p, d) / 1000)), borderColor: COL.good, backgroundColor: "transparent", pointBackgroundColor: COL.good,
+        segment: { borderColor: c => (c.p0.parsed.y < 0 || c.p1.parsed.y < 0) ? COL.bad : COL.good } },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmt(c.raw)} тыс ₽` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, title: { display: true, text: "тыс ₽" } } } },
+  });
+  makeChart("skuPct", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: [
+      { label: "ДРР", data: p.days.map(d => d.r > 0 ? +drrOf(d.ad, d.r).toFixed(1) : null), borderColor: COL.ad, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.ad },
+      { label: "Марж. с ДРР", data: p.days.map(d => d.r > 0 ? +(dprofit(p, d) / d.r * 100).toFixed(1) : null), borderColor: COL.good, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.good,
+        segment: { borderColor: c => (c.p0.parsed.y < 0 || c.p1.parsed.y < 0) ? COL.bad : COL.good } },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, ticks: { callback: v => v + "%" } } } },
+  });
+  makeChart("skuTraffic", {
+    type: "bar",
+    data: { labels: DAY_LABELS, datasets: [
+      { label: "Открытия", data: p.days.map(d => d.op), backgroundColor: COL.f1, borderRadius: 4, borderSkipped: "start", maxBarThickness: 18, borderColor: COL.panel, borderWidth: 1.5 },
+      { label: "Корзины", data: p.days.map(d => d.ct), backgroundColor: COL.f3, borderRadius: 4, borderSkipped: "start", maxBarThickness: 18, borderColor: COL.panel, borderWidth: 1.5 },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmt(c.raw)}` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID } } },
+  });
+  makeChart("skuCr", {
+    type: "line",
+    data: { labels: DAY_LABELS, datasets: [
+      { label: "CR в корзину", data: p.days.map(d => d.op > 0 ? +(d.ct / d.op * 100).toFixed(2) : null), borderColor: COL.f2, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.f2 },
+      { label: "CR в заказ", data: p.days.map(d => d.ct > 0 ? +(d.o / d.ct * 100).toFixed(2) : null), borderColor: COL.f3line, backgroundColor: "transparent", spanGaps: true, pointBackgroundColor: COL.f3line },
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true }, tooltip: { callbacks: { label: c => `${c.dataset.label}: ${c.raw}%` } } },
+      scales: { x: { grid: { display: false } }, y: { grid: GRID, ticks: { callback: v => v + "%" } } } },
+  });
+
+  document.querySelector("#skuDays tbody").innerHTML = p.days.map((d, i) => {
+    const pr = dprofit(p, d);
+    const m = d.r > 0 ? pr / d.r * 100 : null;
+    return `<tr><td>${DAY_LABELS[i]}</td>
+      <td>${fmt(d.op)}</td><td>${fmt(d.ct)}</td><td>${d.op > 0 ? pct(d.ct / d.op * 100, 2) : "—"}</td>
+      <td>${fmt(d.o)}</td><td>${d.ct > 0 ? pct(d.o / d.ct * 100, 2) : "—"}</td>
+      <td>${fmtRub(d.r)}</td><td>${fmtRub(d.ad)}</td>
+      <td>${d.r > 0 ? pct(drrOf(d.ad, d.r)) : "—"}</td>
+      <td>${profitCell(pr)}</td>
+      <td>${m !== null ? `<span class="${m >= 5 ? "pos" : "neg"}">${pct(m)}</span>` : "—"}</td></tr>`;
+  }).join("");
+  document.getElementById("skuCaption").textContent =
+    `${p.name} · артикул ${p.id} · ${CAB_NAMES[p.cab]} · вклад до рекламы рассчитан из расходов WB · WB Seller API · ${activePeriodHuman()}`;
+}
+
+function renderExtra(cab) {
+  const extra = filt(X, cab);
+  const rev = extra.reduce((a, p) => a + weekOf(p).r, 0);
+  document.getElementById("extraSummary").textContent = `${extra.length} SKU · ${fmtRub(rev)}`;
+  document.querySelector("#extraTable tbody").innerHTML = extra.map(p => {
+    const w = weekOf(p);
+    return `<tr><td>${p.name}${cab === "all" ? cabTag(p.cab) : ""} · <span class="nm">${p.id}</span></td>
+      <td>${fmt(w.o)}</td><td>${fmtRub(w.r)}</td><td>${fmt(w.op)}</td></tr>`;
+  }).join("");
+}
+
+/* ═══════════════ ПАЙПЛАЙН ═══════════════ */
+let CAB = "all";
+function setCab(cab, preferredSku = null, updateUrl = true) {
+  CAB = ["all", "1", "2", "3"].includes(String(cab)) ? String(cab) : "all";
+  renderTabs(CAB);
+  renderHero(CAB);
+  renderAlerts(CAB);
+  renderStrip(CAB);
+  renderMoney(CAB);
+  renderCabCards(CAB);
+  renderProfitChart(CAB);
+  renderPulse(CAB);
+  renderDrr(CAB);
+  renderDaysTable(CAB);
+  renderFunnel(CAB);
+  renderLeaderboard(CAB);
+  renderSkuSelect(CAB, preferredSku);
+  renderExtra(CAB);
+  if (updateUrl) syncUrl();
+}
+document.getElementById("cabs").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (btn) setCab(btn.dataset.cab);
+});
+document.getElementById("rangePresets").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-period]");
+  if (btn) applyPeriod(btn.dataset.period, ALL_DATES[SELECTED_INDEX]);
+});
+document.getElementById("rangeDate").addEventListener("change", e => {
+  applyPeriod(RANGE_MODE, e.target.value);
+});
+document.getElementById("datePrev").addEventListener("click", () => {
+  if (SELECTED_INDEX > 0) applyPeriod(RANGE_MODE, ALL_DATES[SELECTED_INDEX - 1]);
+});
+document.getElementById("dateNext").addEventListener("click", () => {
+  if (SELECTED_INDEX < ALL_DATES.length - 1) applyPeriod(RANGE_MODE, ALL_DATES[SELECTED_INDEX + 1]);
+});
+window.addEventListener("popstate", () => {
+  const params = new URLSearchParams(window.location.search);
+  CAB = ["all", "1", "2", "3"].includes(params.get("cab")) ? params.get("cab") : "all";
+  applyPeriod(params.get("period") || "week", params.get("date") || ALL_DATES[ALL_DATES.length - 1], { updateUrl: false });
+});
+
+const initialParams = new URLSearchParams(window.location.search);
+CAB = ["all", "1", "2", "3"].includes(initialParams.get("cab")) ? initialParams.get("cab") : "all";
+applyPeriod(initialParams.get("period") || "week", initialParams.get("date") || ALL_DATES[ALL_DATES.length - 1]);
+</script>
+</body>
+</html>
