@@ -1,0 +1,834 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Культиватор по продажам</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root { --bg:#F4F7F2; --surface:#FFFFFF; --ink:#1A211C; --muted:#5C6961; --line:#D6DFD8; --accent:#2C6A3F; --accent-soft:#E2EFE5;
+          --amber:#86540A; --amber-soft:#F8ECD3; --red:#8F2E2E; --red-soft:#F7E2E2; --blue:#2F5A8A; --blue-soft:#E1EAF5;
+          --display:'Unbounded','Golos Text',system-ui,sans-serif; --body:'Golos Text',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121714; --surface:#1A211C; --ink:#E6ECE6; --muted:#98A69C; --line:#2B352E; --accent:#7DC58E; --accent-soft:#1E2F24; --amber:#E4B460; --amber-soft:#2D2515; --red:#E68A8A; --red-soft:#301B1B; --blue:#8FB4E0; --blue-soft:#1C2836; } }
+  :root[data-theme="dark"] { --bg:#121714; --surface:#1A211C; --ink:#E6ECE6; --muted:#98A69C; --line:#2B352E; --accent:#7DC58E; --accent-soft:#1E2F24; --amber:#E4B460; --amber-soft:#2D2515; --red:#E68A8A; --red-soft:#301B1B; --blue:#8FB4E0; --blue-soft:#1C2836; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:15px; line-height:1.45; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1180px; margin:0 auto; padding:24px 18px 70px; }
+  .eyebrow { font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--display); font-weight:700; font-size:clamp(24px,4vw,32px); margin:6px 0 8px; line-height:1.1; text-wrap:balance; }
+  .sub { color:var(--muted); margin:0 0 6px; max-width:78ch; }
+  .method { background:var(--surface); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:10px 14px; margin:14px 0 20px; font-size:14px; max-width:90ch; }
+  .method code { font-family:var(--mono); font-size:13px; }
+  h2 { font-family:var(--display); font-weight:500; font-size:16px; margin:26px 0 10px; border-bottom:2px solid var(--ink); padding-bottom:6px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .card-h { display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; margin-bottom:8px; }
+  .card-h .sku { font-family:var(--mono); font-weight:500; } .card-h .who { color:var(--muted); font-size:13px; } .card-h .wk { margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--accent); background:var(--accent-soft); padding:2px 8px; border-radius:4px; }
+  .kpis { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+  .kpis div { display:flex; justify-content:space-between; gap:8px; border-bottom:1px dotted var(--line); padding:3px 0; }
+  .kpis i { font-style:normal; color:var(--muted); font-size:13px; } .kpis b { font-family:var(--mono); font-weight:500; font-variant-numeric:tabular-nums; }
+  .kpis .hi b { color:var(--accent); }
+  .extra { margin-top:10px; padding-top:8px; border-top:1px solid var(--line); }
+  .exh { font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .exl { display:flex; justify-content:space-between; gap:8px; font-size:13px; padding:2px 0; } .exl b { font-family:var(--mono); font-weight:500; font-variant-numeric:tabular-nums; }
+  .exl.tot { border-top:1px solid var(--line); margin-top:4px; padding-top:6px; font-weight:600; } .exl.tot b { color:var(--accent); }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 10px; }
+  .filters button { font-family:var(--mono); font-size:12px; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:5px 11px; cursor:pointer; }
+  .filters button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .filters button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .filters .sep { width:1px; height:20px; background:var(--line); }
+  .tbl { overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+  table { border-collapse:collapse; width:100%; min-width:1080px; font-size:13px; }
+  thead th { position:sticky; top:0; background:var(--surface); z-index:1; font-family:var(--mono); font-weight:500; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); text-align:right; padding:9px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th.l { text-align:left; }
+  td { padding:6px 8px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle; }
+  td.num { text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; }
+  td.n { color:var(--muted); font-family:var(--mono); font-size:12px; } td.sku { font-family:var(--mono); font-size:12px; }
+  td.mut { color:var(--muted); } td.strong { font-weight:600; color:var(--accent); } td.neg { color:var(--red) !important; }
+  td small { color:var(--muted); font-size:11px; }
+  .tag { display:inline-block; font-family:var(--mono); font-size:10.5px; padding:1px 6px; border-radius:4px; margin-right:4px; }
+  .tag.ok { background:var(--accent-soft); color:var(--accent); } .tag.warn { background:var(--amber-soft); color:var(--amber); } .tag.low { background:var(--blue-soft); color:var(--blue); }
+  tfoot td { font-weight:600; background:var(--bg); border-top:2px solid var(--ink); }
+  tr[hidden] { display:none; }
+  .notes { margin-top:16px; color:var(--muted); font-size:13px; max-width:90ch; } .notes li { margin:4px 0; }
+</style>
+<div class="wrap">
+  <div class="eyebrow">Финотчёты WB · 17–23.08 и 24–30.08.2026 · последний закрытый отчёт — 24–30.08</div>
+  <h1>Культиватор по продажам</h1>
+  <p class="sub">Каждая продажа двух карточек культиватора AquaBlast с её ценой, комиссией, логистикой и маржой. 1251445137 — из локальной выгрузки каб. 1 (31.08), 1360956777 — из API каб. 3 (запрошено 04.09).</p>
+  <div class="method">
+    <code>маржа = к перечислению − логистика этой продажи − себестоимость 2 950</code> (2 800 товар + 150 фулфилмент). Комиссия = цена реализации − эквайринг − к перечислению. Логистика привязана к продаже по заказу (каб. 1 по дате заказа, каб. 3 по srid). Налог — оценка от цены реализации: каб. 1 — 7 % (НДС 5 % + УСН 2 %), каб. 3 — 6 % (УСН, без НДС). <b>Реклама на продажу не разносится</b> — её нет в финотчёте.
+  </div>
+
+  <h2>Итоги по карточке и неделе</h2>
+  <div class="cards">
+<article class="card" data-nm="1251445137" data-week="08.17–08.23">
+  <div class="card-h"><span class="sku">1251445137</span><span class="who">каб. 1 · Олейников</span><span class="wk">08.17–08.23</span></div>
+  <div class="kpis">
+    <div><i>продаж</i><b>47</b></div>
+    <div><i>цена реализации, ср.</i><b>13 127</b></div>
+    <div><i>покупатель платит, ср.</i><b>8 108</b></div>
+    <div><i>комиссия + эквайринг, ср.</i><b>4 415</b></div>
+    <div><i>к перечислению, ср.</i><b>8 713</b></div>
+    <div><i>логистика на продажу, ср.</i><b>1 246</b></div>
+    <div class="hi"><i>маржа на шт до налога и рекламы</i><b>4 516</b></div>
+    <div class="hi"><i>маржа по продажам, сумма</i><b>212 275</b></div>
+  </div>
+  <div class="extra"><div class="exh">Не разнесено по продажам</div><div class="exl"><span>Логистика заказов без продажи (отказы, возвраты)</span><b>−19 323</b></div><div class="exl"><span>Заказов без продажи, шт</span><b>12</b></div><div class="exl"><span>Возвраты (списан forPay)</span><b>−8 726</b></div><div class="exl"><span>Возвраты, шт</span><b>1</b></div><div class="exl"><span>Возмещение издержек по перевозке (rebill)</span><b>−1 507</b></div><div class="exl"><span>Обработка товара (приёмка)</span><b>−510</b></div><div class="exl"><span>Штрафы</span><b>−60</b></div>
+    <div class="exl tot"><span>Итого по карточке за неделю до налога и рекламы</span><b>182 149</b></div>
+    <div class="exl"><span>после налога (оценка 7 % от реализации)</span><b>138 960</b></div>
+  </div>
+</article>
+<article class="card" data-nm="1251445137" data-week="08.24–08.30">
+  <div class="card-h"><span class="sku">1251445137</span><span class="who">каб. 1 · Олейников</span><span class="wk">08.24–08.30</span></div>
+  <div class="kpis">
+    <div><i>продаж</i><b>41</b></div>
+    <div><i>цена реализации, ср.</i><b>11 872</b></div>
+    <div><i>покупатель платит, ср.</i><b>7 224</b></div>
+    <div><i>комиссия + эквайринг, ср.</i><b>4 459</b></div>
+    <div><i>к перечислению, ср.</i><b>7 413</b></div>
+    <div><i>логистика на продажу, ср.</i><b>746</b></div>
+    <div class="hi"><i>маржа на шт до налога и рекламы</i><b>3 717</b></div>
+    <div class="hi"><i>маржа по продажам, сумма</i><b>152 378</b></div>
+  </div>
+  <div class="extra"><div class="exh">Не разнесено по продажам</div><div class="exl"><span>Логистика заказов без продажи (отказы, возвраты)</span><b>−32 380</b></div><div class="exl"><span>Заказов без продажи, шт</span><b>26</b></div><div class="exl"><span>Возвраты (списан forPay)</span><b>−26 129</b></div><div class="exl"><span>Возвраты, шт</span><b>3</b></div><div class="exl"><span>Возмещение издержек по перевозке (rebill)</span><b>−2 365</b></div><div class="exl"><span>Обработка товара (приёмка)</span><b>−50</b></div><div class="exl"><span>Штрафы</span><b>−120</b></div>
+    <div class="exl tot"><span>Итого по карточке за неделю до налога и рекламы</span><b>91 334</b></div>
+    <div class="exl"><span>после налога (оценка 7 % от реализации)</span><b>57 261</b></div>
+  </div>
+</article>
+<article class="card" data-nm="1360956777" data-week="08.17–08.23">
+  <div class="card-h"><span class="sku">1360956777</span><span class="who">каб. 3 · Чебан</span><span class="wk">08.17–08.23</span></div>
+  <div class="kpis">
+    <div><i>продаж</i><b>9</b></div>
+    <div><i>цена реализации, ср.</i><b>14 000</b></div>
+    <div><i>покупатель платит, ср.</i><b>8 031</b></div>
+    <div><i>комиссия + эквайринг, ср.</i><b>4 918</b></div>
+    <div><i>к перечислению, ср.</i><b>9 082</b></div>
+    <div><i>логистика на продажу, ср.</i><b>1 013</b></div>
+    <div class="hi"><i>маржа на шт до налога и рекламы</i><b>5 119</b></div>
+    <div class="hi"><i>маржа по продажам, сумма</i><b>46 074</b></div>
+  </div>
+  <div class="extra"><div class="exh">Не разнесено по продажам</div><div class="exl"><span>Логистика заказов без продажи (отказы, возвраты)</span><b>−6 370</b></div><div class="exl"><span>Заказов без продажи, шт</span><b>4</b></div><div class="exl"><span>Возмещение издержек по перевозке (rebill)</span><b>−520</b></div><div class="exl"><span>Обработка товара (приёмка)</span><b>−210</b></div>
+    <div class="exl tot"><span>Итого по карточке за неделю до налога и рекламы</span><b>38 974</b></div>
+    <div class="exl"><span>после налога (оценка 6 % от реализации)</span><b>31 414</b></div>
+  </div>
+</article>
+<article class="card" data-nm="1360956777" data-week="08.24–08.30">
+  <div class="card-h"><span class="sku">1360956777</span><span class="who">каб. 3 · Чебан</span><span class="wk">08.24–08.30</span></div>
+  <div class="kpis">
+    <div><i>продаж</i><b>13</b></div>
+    <div><i>цена реализации, ср.</i><b>12 269</b></div>
+    <div><i>покупатель платит, ср.</i><b>7 210</b></div>
+    <div><i>комиссия + эквайринг, ср.</i><b>4 354</b></div>
+    <div><i>к перечислению, ср.</i><b>7 916</b></div>
+    <div><i>логистика на продажу, ср.</i><b>1 041</b></div>
+    <div class="hi"><i>маржа на шт до налога и рекламы</i><b>3 924</b></div>
+    <div class="hi"><i>маржа по продажам, сумма</i><b>51 014</b></div>
+  </div>
+  <div class="extra"><div class="exh">Не разнесено по продажам</div><div class="exl"><span>Логистика заказов без продажи (отказы, возвраты)</span><b>−7 797</b></div><div class="exl"><span>Заказов без продажи, шт</span><b>5</b></div><div class="exl"><span>Возмещение издержек по перевозке (rebill)</span><b>−1 501</b></div><div class="exl"><span>Обработка товара (приёмка)</span><b>−450</b></div>
+    <div class="exl tot"><span>Итого по карточке за неделю до налога и рекламы</span><b>41 265</b></div>
+    <div class="exl"><span>после налога (оценка 6 % от реализации)</span><b>31 695</b></div>
+  </div>
+</article></div>
+
+  <h2>Все продажи — 110</h2>
+  <div class="filters" role="group" aria-label="Фильтры">
+    <button data-f="nm" data-v="all" aria-pressed="true">обе карточки</button><button data-f="nm" data-v="1251445137" aria-pressed="false">1251445137</button><button data-f="nm" data-v="1360956777" aria-pressed="false">1360956777</button>
+    <span class="sep"></span>
+    <button data-f="week" data-v="all" aria-pressed="false">обе недели</button><button data-f="week" data-v="08.17–08.23" aria-pressed="false">17–23.08</button><button data-f="week" data-v="08.24–08.30" aria-pressed="true">24–30.08</button>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th class="l">№</th><th class="l">SKU</th><th class="l">продажа</th><th class="l">заказ</th><th>цена реализации</th><th>покупатель платит · СПП</th><th>комиссия · %</th><th>эквайринг</th><th>к перечислению</th><th>логистика</th><th>себест.</th><th>маржа</th><th>налог, оц.</th><th>чистыми до рекламы</th><th class="l">пометки</th></tr></thead>
+    <tbody><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4651.22" data-net="3725.19" data-price="13229.0" data-comm="4375.84" data-logi="1251.94" data-forpay="8853.16">
+<td class="n">1</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.05</td>
+<td class="num">13 229</td><td class="num mut">7 698 <small>−41,8 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">308</td>
+<td class="num">8 853</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 651</td><td class="num mut">926</td><td class="num ">3 725</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4651.22" data-net="3725.19" data-price="13229.0" data-comm="4375.84" data-logi="1251.94" data-forpay="8853.16">
+<td class="n">2</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.06</td>
+<td class="num">13 229</td><td class="num mut">7 698 <small>−41,8 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">308</td>
+<td class="num">8 853</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 651</td><td class="num mut">926</td><td class="num ">3 725</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4524.55" data-net="3598.52" data-price="13229.0" data-comm="4533.81" data-logi="1220.64" data-forpay="8695.19">
+<td class="n">3</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.07</td>
+<td class="num">13 229</td><td class="num mut">8 340 <small>−37,0 %</small></td>
+<td class="num">4 200 <small>31,75 %</small></td><td class="num mut">334</td>
+<td class="num">8 695</td><td class="num">1 221</td><td class="num mut">2 950</td>
+<td class="num strong ">4 525</td><td class="num mut">926</td><td class="num ">3 599</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4493.75" data-net="3567.72" data-price="13229.0" data-comm="4564.61" data-logi="1220.64" data-forpay="8664.39">
+<td class="n">4</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.08</td>
+<td class="num">13 229</td><td class="num mut">9 110 <small>−31,1 %</small></td>
+<td class="num">4 200 <small>31,75 %</small></td><td class="num mut">364</td>
+<td class="num">8 664</td><td class="num">1 221</td><td class="num mut">2 950</td>
+<td class="num strong ">4 494</td><td class="num mut">926</td><td class="num ">3 568</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4493.75" data-net="3567.72" data-price="13229.0" data-comm="4564.61" data-logi="1220.64" data-forpay="8664.39">
+<td class="n">5</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.09</td>
+<td class="num">13 229</td><td class="num mut">9 110 <small>−31,1 %</small></td>
+<td class="num">4 200 <small>31,75 %</small></td><td class="num mut">364</td>
+<td class="num">8 664</td><td class="num">1 221</td><td class="num mut">2 950</td>
+<td class="num strong ">4 494</td><td class="num mut">926</td><td class="num ">3 568</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4615.26" data-net="3689.23" data-price="13229.0" data-comm="4411.8" data-logi="1251.94" data-forpay="8817.2">
+<td class="n">6</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.11</td>
+<td class="num">13 229</td><td class="num mut">8 597 <small>−35,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">344</td>
+<td class="num">8 817</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 615</td><td class="num mut">926</td><td class="num ">3 689</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4653.78" data-net="3727.75" data-price="13229.0" data-comm="4373.28" data-logi="1251.94" data-forpay="8855.72">
+<td class="n">7</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">7 634 <small>−42,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">305</td>
+<td class="num">8 856</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 654</td><td class="num mut">926</td><td class="num ">3 728</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4705.41" data-net="3779.38" data-price="13228.98" data-comm="4321.63" data-logi="1251.94" data-forpay="8907.35">
+<td class="n">8</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">10 148 <small>−23,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">254</td>
+<td class="num">8 907</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 705</td><td class="num mut">926</td><td class="num ">3 779</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4461.91" data-net="3554.43" data-price="12964.0" data-comm="4300.15" data-logi="1251.94" data-forpay="8663.85">
+<td class="n">9</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 843 <small>−39,5 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">314</td>
+<td class="num">8 664</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 462</td><td class="num mut">907</td><td class="num ">3 554</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4459.31" data-net="3551.83" data-price="12964.0" data-comm="4302.75" data-logi="1251.94" data-forpay="8661.25">
+<td class="n">10</td><td class="sku">1251445137</td><td>08.17</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 908 <small>−39,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">316</td>
+<td class="num">8 661</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 459</td><td class="num mut">907</td><td class="num ">3 552</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4526.63" data-net="3600.6" data-price="13229.0" data-comm="4500.43" data-logi="1251.94" data-forpay="8728.57">
+<td class="n">11</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.10</td>
+<td class="num">13 229</td><td class="num mut">8 863 <small>−33,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">433</td>
+<td class="num">8 729</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 527</td><td class="num mut">926</td><td class="num ">3 601</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4594.02" data-net="3667.99" data-price="13229.0" data-comm="4433.04" data-logi="1251.94" data-forpay="8795.96">
+<td class="n">12</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.12</td>
+<td class="num">13 229</td><td class="num mut">9 128 <small>−31,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">365</td>
+<td class="num">8 796</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 594</td><td class="num mut">926</td><td class="num ">3 668</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4615.26" data-net="3689.23" data-price="13229.0" data-comm="4411.8" data-logi="1251.94" data-forpay="8817.2">
+<td class="n">13</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.12</td>
+<td class="num">13 229</td><td class="num mut">8 597 <small>−35,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">344</td>
+<td class="num">8 817</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 615</td><td class="num mut">926</td><td class="num ">3 689</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4526.63" data-net="3600.6" data-price="13229.0" data-comm="4500.43" data-logi="1251.94" data-forpay="8728.57">
+<td class="n">14</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">8 863 <small>−33,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">433</td>
+<td class="num">8 729</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 527</td><td class="num mut">926</td><td class="num ">3 601</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4648.66" data-net="3722.63" data-price="13229.0" data-comm="4378.4" data-logi="1251.94" data-forpay="8850.6">
+<td class="n">15</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">7 762 <small>−41,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">310</td>
+<td class="num">8 851</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 649</td><td class="num mut">926</td><td class="num ">3 723</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4567.28" data-net="3641.25" data-price="13229.0" data-comm="4459.78" data-logi="1251.94" data-forpay="8769.22">
+<td class="n">16</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">8 030 <small>−39,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">392</td>
+<td class="num">8 769</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 567</td><td class="num mut">926</td><td class="num ">3 641</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4567.28" data-net="3641.25" data-price="13229.0" data-comm="4459.78" data-logi="1251.94" data-forpay="8769.22">
+<td class="n">17</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">8 030 <small>−39,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">392</td>
+<td class="num">8 769</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 567</td><td class="num mut">926</td><td class="num ">3 641</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4487.13" data-net="3580.0" data-price="12959.0" data-comm="4269.93" data-logi="1251.94" data-forpay="8689.07">
+<td class="n">18</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.14</td>
+<td class="num">12 959</td><td class="num mut">7 126 <small>−45,0 %</small></td>
+<td class="num">3 985 <small>30,75 %</small></td><td class="num mut">285</td>
+<td class="num">8 689</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 487</td><td class="num mut">907</td><td class="num ">3 580</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4461.91" data-net="3554.43" data-price="12964.0" data-comm="4300.15" data-logi="1251.94" data-forpay="8663.85">
+<td class="n">19</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 843 <small>−39,5 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">314</td>
+<td class="num">8 664</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 462</td><td class="num mut">907</td><td class="num ">3 554</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4464.51" data-net="3557.03" data-price="12964.0" data-comm="4297.55" data-logi="1251.94" data-forpay="8666.45">
+<td class="n">20</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 778 <small>−40,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">311</td>
+<td class="num">8 666</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 465</td><td class="num mut">907</td><td class="num ">3 557</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4388.5" data-net="3481.02" data-price="12964.0" data-comm="4373.5599999999995" data-logi="1251.94" data-forpay="8590.44">
+<td class="n">21</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 933 <small>−38,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">387</td>
+<td class="num">8 590</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 388</td><td class="num mut">907</td><td class="num ">3 481</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4388.5" data-net="3481.02" data-price="12964.0" data-comm="4373.5599999999995" data-logi="1251.94" data-forpay="8590.44">
+<td class="n">22</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 933 <small>−38,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">387</td>
+<td class="num">8 590</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 388</td><td class="num mut">907</td><td class="num ">3 481</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4744.52" data-net="3837.04" data-price="12964.0" data-comm="4017.54" data-logi="1251.94" data-forpay="8946.46">
+<td class="n">23</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 778 <small>−40,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">31</td>
+<td class="num">8 946</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 745</td><td class="num mut">907</td><td class="num ">3 837</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4468.83" data-net="3561.35" data-price="12964.0" data-comm="4293.23" data-logi="1251.94" data-forpay="8670.77">
+<td class="n">24</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 670 <small>−40,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">307</td>
+<td class="num">8 671</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 469</td><td class="num mut">907</td><td class="num ">3 561</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4473.87" data-net="3566.39" data-price="12964.0" data-comm="4288.19" data-logi="1251.94" data-forpay="8675.81">
+<td class="n">25</td><td class="sku">1251445137</td><td>08.18</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 544 <small>−41,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">302</td>
+<td class="num">8 676</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 474</td><td class="num mut">907</td><td class="num ">3 566</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4520.18" data-net="3594.15" data-price="13229.0" data-comm="4506.88" data-logi="1251.94" data-forpay="8722.12">
+<td class="n">26</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.12</td>
+<td class="num">13 229</td><td class="num mut">8 995 <small>−32,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">439</td>
+<td class="num">8 722</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 520</td><td class="num mut">926</td><td class="num ">3 594</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4615.26" data-net="3689.23" data-price="13229.0" data-comm="4411.8" data-logi="1251.94" data-forpay="8817.2">
+<td class="n">27</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.12</td>
+<td class="num">13 229</td><td class="num mut">8 597 <small>−35,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">344</td>
+<td class="num">8 817</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 615</td><td class="num mut">926</td><td class="num ">3 689</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4705.37" data-net="3779.34" data-price="13228.98" data-comm="4321.67" data-logi="1251.94" data-forpay="8907.31">
+<td class="n">28</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">10 148 <small>−23,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">254</td>
+<td class="num">8 907</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 705</td><td class="num mut">926</td><td class="num ">3 779</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4473.87" data-net="3566.39" data-price="12964.0" data-comm="4288.19" data-logi="1251.94" data-forpay="8675.81">
+<td class="n">29</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 544 <small>−41,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">302</td>
+<td class="num">8 676</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 474</td><td class="num mut">907</td><td class="num ">3 566</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4473.87" data-net="3566.39" data-price="12964.0" data-comm="4288.19" data-logi="1251.94" data-forpay="8675.81">
+<td class="n">30</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 544 <small>−41,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">302</td>
+<td class="num">8 676</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 474</td><td class="num mut">907</td><td class="num ">3 566</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4468.93" data-net="3561.8" data-price="12959.0" data-comm="4288.13" data-logi="1251.94" data-forpay="8670.87">
+<td class="n">31</td><td class="sku">1251445137</td><td>08.19</td><td class="mut">08.14</td>
+<td class="num">12 959</td><td class="num mut">7 581 <small>−41,5 %</small></td>
+<td class="num">3 985 <small>30,75 %</small></td><td class="num mut">303</td>
+<td class="num">8 671</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 469</td><td class="num mut">907</td><td class="num ">3 562</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4760.75" data-net="3815.75" data-price="13500.0" data-comm="4537.31" data-logi="1251.94" data-forpay="8962.69">
+<td class="n">32</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">07.29</td>
+<td class="num">13 500</td><td class="num mut">7 911 <small>−41,4 %</small></td>
+<td class="num">4 151 <small>30,75 %</small></td><td class="num mut">386</td>
+<td class="num">8 963</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 761</td><td class="num mut">945</td><td class="num ">3 816</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4718.59" data-net="3773.59" data-price="13500.0" data-comm="4579.47" data-logi="1251.94" data-forpay="8920.53">
+<td class="n">33</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.01</td>
+<td class="num">13 500</td><td class="num mut">8 775 <small>−35,0 %</small></td>
+<td class="num">4 151 <small>30,75 %</small></td><td class="num mut">428</td>
+<td class="num">8 921</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 719</td><td class="num mut">945</td><td class="num ">3 774</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4646.1" data-net="3720.07" data-price="13229.0" data-comm="4380.96" data-logi="1251.94" data-forpay="8848.04">
+<td class="n">34</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.05</td>
+<td class="num">13 229</td><td class="num mut">7 826 <small>−40,8 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">313</td>
+<td class="num">8 848</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 646</td><td class="num mut">926</td><td class="num ">3 720</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4656.34" data-net="3730.31" data-price="13229.0" data-comm="4370.72" data-logi="1251.94" data-forpay="8858.28">
+<td class="n">35</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.06</td>
+<td class="num">13 229</td><td class="num mut">7 570 <small>−42,8 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">303</td>
+<td class="num">8 858</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 656</td><td class="num mut">926</td><td class="num ">3 730</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4610.14" data-net="3684.11" data-price="13229.0" data-comm="4416.92" data-logi="1251.94" data-forpay="8812.08">
+<td class="n">36</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.10</td>
+<td class="num">13 229</td><td class="num mut">8 725 <small>−34,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">349</td>
+<td class="num">8 812</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 610</td><td class="num mut">926</td><td class="num ">3 684</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4663.22" data-net="3737.19" data-price="13229.0" data-comm="4363.84" data-logi="1251.94" data-forpay="8865.16">
+<td class="n">37</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">7 398 <small>−44,1 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">296</td>
+<td class="num">8 865</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 663</td><td class="num mut">926</td><td class="num ">3 737</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4653.78" data-net="3727.75" data-price="13229.0" data-comm="4373.28" data-logi="1251.94" data-forpay="8855.72">
+<td class="n">38</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.13</td>
+<td class="num">13 229</td><td class="num mut">7 634 <small>−42,3 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">305</td>
+<td class="num">8 856</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 654</td><td class="num mut">926</td><td class="num ">3 728</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4744.78" data-net="3837.3" data-price="12964.0" data-comm="4017.2799999999997" data-logi="1251.94" data-forpay="8946.72">
+<td class="n">39</td><td class="sku">1251445137</td><td>08.20</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">7 713 <small>−40,5 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">31</td>
+<td class="num">8 947</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 745</td><td class="num mut">907</td><td class="num ">3 837</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4636.38" data-net="3710.35" data-price="13229.0" data-comm="4390.68" data-logi="1251.94" data-forpay="8838.32">
+<td class="n">40</td><td class="sku">1251445137</td><td>08.21</td><td class="mut">08.03</td>
+<td class="num">13 229</td><td class="num mut">8 069 <small>−39,0 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">323</td>
+<td class="num">8 838</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 636</td><td class="num mut">926</td><td class="num ">3 710</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4478.91" data-net="3571.43" data-price="12964.0" data-comm="4283.15" data-logi="1251.94" data-forpay="8680.85">
+<td class="n">41</td><td class="sku">1251445137</td><td>08.21</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 418 <small>−42,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">297</td>
+<td class="num">8 681</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 479</td><td class="num mut">907</td><td class="num ">3 571</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4478.91" data-net="3571.43" data-price="12964.0" data-comm="4283.15" data-logi="1251.94" data-forpay="8680.85">
+<td class="n">42</td><td class="sku">1251445137</td><td>08.21</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 418 <small>−42,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">297</td>
+<td class="num">8 681</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 479</td><td class="num mut">907</td><td class="num ">3 571</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4459.31" data-net="3551.83" data-price="12964.0" data-comm="4302.75" data-logi="1251.94" data-forpay="8661.25">
+<td class="n">43</td><td class="sku">1251445137</td><td>08.21</td><td class="mut">08.18</td>
+<td class="num">12 964</td><td class="num mut">7 908 <small>−39,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">316</td>
+<td class="num">8 661</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 459</td><td class="num mut">907</td><td class="num ">3 552</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4389.58" data-net="3482.45" data-price="12959.0" data-comm="4367.48" data-logi="1251.94" data-forpay="8591.52">
+<td class="n">44</td><td class="sku">1251445137</td><td>08.22</td><td class="mut">08.14</td>
+<td class="num">12 959</td><td class="num mut">7 840 <small>−39,5 %</small></td>
+<td class="num">3 985 <small>30,75 %</small></td><td class="num mut">383</td>
+<td class="num">8 592</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 390</td><td class="num mut">907</td><td class="num ">3 482</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="2446.37" data-net="1538.89" data-price="12964.0" data-comm="6496.889999999999" data-logi="1070.74" data-forpay="6467.11">
+<td class="n">45</td><td class="sku">1251445137</td><td>08.22</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">7 859 <small>−39,4 %</small></td>
+<td class="num">6 183 <small>47,69 %</small></td><td class="num mut">314</td>
+<td class="num">6 467</td><td class="num">1 071</td><td class="num mut">2 950</td>
+<td class="num strong ">2 446</td><td class="num mut">907</td><td class="num ">1 539</td>
+<td class="flags"><span class="tag warn">комиссия 47,69 %</span></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4396.06" data-net="3488.58" data-price="12964.0" data-comm="4366.0" data-logi="1251.94" data-forpay="8598.0">
+<td class="n">46</td><td class="sku">1251445137</td><td>08.22</td><td class="mut">08.21</td>
+<td class="num">12 964</td><td class="num mut">7 778 <small>−40,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">380</td>
+<td class="num">8 598</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 396</td><td class="num mut">907</td><td class="num ">3 489</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.17–08.23" data-margin="4645.02" data-net="3718.99" data-price="13229.0" data-comm="4382.04" data-logi="1251.94" data-forpay="8846.96">
+<td class="n">47</td><td class="sku">1251445137</td><td>08.23</td><td class="mut">08.06</td>
+<td class="num">13 229</td><td class="num mut">7 853 <small>−40,6 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">314</td>
+<td class="num">8 847</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 645</td><td class="num mut">926</td><td class="num ">3 719</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3174.5" data-net="2267.02" data-price="12964.0" data-comm="5741.3" data-logi="1098.2" data-forpay="7222.7">
+<td class="n">48</td><td class="sku">1251445137</td><td>08.24</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 670 <small>−40,8 %</small></td>
+<td class="num">5 434 <small>41,92 %</small></td><td class="num mut">307</td>
+<td class="num">7 223</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 174</td><td class="num mut">907</td><td class="num ">2 267</td>
+<td class="flags"><span class="tag warn">комиссия 41,92 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4396.06" data-net="3488.58" data-price="12964.0" data-comm="4366.0" data-logi="1251.94" data-forpay="8598.0">
+<td class="n">49</td><td class="sku">1251445137</td><td>08.24</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 778 <small>−40,0 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">380</td>
+<td class="num">8 598</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 396</td><td class="num mut">907</td><td class="num ">3 489</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="2375.4" data-net="1467.92" data-price="12964.0" data-comm="6567.86" data-logi="1070.74" data-forpay="6396.14">
+<td class="n">50</td><td class="sku">1251445137</td><td>08.24</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">8 110 <small>−37,4 %</small></td>
+<td class="num">6 243 <small>48,16 %</small></td><td class="num mut">324</td>
+<td class="num">6 396</td><td class="num">1 071</td><td class="num mut">2 950</td>
+<td class="num strong ">2 375</td><td class="num mut">907</td><td class="num ">1 468</td>
+<td class="flags"><span class="tag warn">комиссия 48,16 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4948.41" data-net="4040.92" data-price="12964.09" data-comm="4159.67" data-logi="906.01" data-forpay="8804.42">
+<td class="n">51</td><td class="sku">1251445137</td><td>08.24</td><td class="mut">08.18</td>
+<td class="num">12 964</td><td class="num mut">9 519 <small>−26,6 %</small></td>
+<td class="num">3 922 <small>30,25 %</small></td><td class="num mut">238</td>
+<td class="num">8 804</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 948</td><td class="num mut">907</td><td class="num ">4 041</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4665.0" data-net="3757.52" data-price="12964.0" data-comm="4442.99" data-logi="906.01" data-forpay="8521.01">
+<td class="n">52</td><td class="sku">1251445137</td><td>08.24</td><td class="mut">08.20</td>
+<td class="num">12 964</td><td class="num mut">8 173 <small>−37,0 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">327</td>
+<td class="num">8 521</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 665</td><td class="num mut">907</td><td class="num ">3 758</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4620.94" data-net="3694.91" data-price="13229.0" data-comm="4406.12" data-logi="1251.94" data-forpay="8822.88">
+<td class="n">53</td><td class="sku">1251445137</td><td>08.25</td><td class="mut">08.11</td>
+<td class="num">13 229</td><td class="num mut">8 455 <small>−36,1 %</small></td>
+<td class="num">4 068 <small>30,75 %</small></td><td class="num mut">338</td>
+<td class="num">8 823</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 621</td><td class="num mut">926</td><td class="num ">3 695</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4472.81" data-net="3565.33" data-price="12964.0" data-comm="4442.99" data-logi="1098.2" data-forpay="8521.01">
+<td class="n">54</td><td class="sku">1251445137</td><td>08.25</td><td class="mut">08.17</td>
+<td class="num">12 964</td><td class="num mut">8 173 <small>−37,0 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">327</td>
+<td class="num">8 521</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">4 473</td><td class="num mut">907</td><td class="num ">3 565</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4658.96" data-net="3751.48" data-price="12964.0" data-comm="4449.03" data-logi="906.01" data-forpay="8514.97">
+<td class="n">55</td><td class="sku">1251445137</td><td>08.25</td><td class="mut">08.20</td>
+<td class="num">12 964</td><td class="num mut">8 324 <small>−35,8 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">333</td>
+<td class="num">8 515</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 659</td><td class="num mut">907</td><td class="num ">3 751</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4388.5" data-net="3481.02" data-price="12964.0" data-comm="4373.5599999999995" data-logi="1251.94" data-forpay="8590.44">
+<td class="n">56</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 933 <small>−38,8 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">387</td>
+<td class="num">8 590</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 388</td><td class="num mut">907</td><td class="num ">3 481</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3091.0" data-net="2183.52" data-price="12964.0" data-comm="5824.8" data-logi="1098.2" data-forpay="7139.2">
+<td class="n">57</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 998 <small>−38,3 %</small></td>
+<td class="num">5 434 <small>41,92 %</small></td><td class="num mut">390</td>
+<td class="num">7 139</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 091</td><td class="num mut">907</td><td class="num ">2 184</td>
+<td class="flags"><span class="tag warn">комиссия 41,92 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3094.89" data-net="2187.41" data-price="12964.0" data-comm="5820.91" data-logi="1098.2" data-forpay="7143.09">
+<td class="n">58</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 998 <small>−38,3 %</small></td>
+<td class="num">5 431 <small>41,89 %</small></td><td class="num mut">390</td>
+<td class="num">7 143</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 095</td><td class="num mut">907</td><td class="num ">2 187</td>
+<td class="flags"><span class="tag warn">комиссия 41,89 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="2804.95" data-net="1897.47" data-price="12964.0" data-comm="6110.849999999999" data-logi="1098.2" data-forpay="6853.15">
+<td class="n">59</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 607 <small>−41,3 %</small></td>
+<td class="num">5 807 <small>44,79 %</small></td><td class="num mut">304</td>
+<td class="num">6 853</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 805</td><td class="num mut">907</td><td class="num ">1 897</td>
+<td class="flags"><span class="tag warn">комиссия 44,79 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4662.48" data-net="3755.0" data-price="12964.0" data-comm="4445.509999999999" data-logi="906.01" data-forpay="8518.49">
+<td class="n">60</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.17</td>
+<td class="num">12 964</td><td class="num mut">8 236 <small>−36,5 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">329</td>
+<td class="num">8 518</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 662</td><td class="num mut">907</td><td class="num ">3 755</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4084.47" data-net="3176.99" data-price="12964.0" data-comm="5023.5199999999995" data-logi="906.01" data-forpay="7940.48">
+<td class="n">61</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.19</td>
+<td class="num">12 964</td><td class="num mut">8 426 <small>−35,0 %</small></td>
+<td class="num">4 686 <small>36,15 %</small></td><td class="num mut">337</td>
+<td class="num">7 940</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 084</td><td class="num mut">907</td><td class="num ">3 177</td>
+<td class="flags"><span class="tag warn">комиссия 36,15 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4658.96" data-net="3751.48" data-price="12964.0" data-comm="4449.03" data-logi="906.01" data-forpay="8514.97">
+<td class="n">62</td><td class="sku">1251445137</td><td>08.26</td><td class="mut">08.19</td>
+<td class="num">12 964</td><td class="num mut">8 324 <small>−35,8 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">333</td>
+<td class="num">8 515</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 659</td><td class="num mut">907</td><td class="num ">3 751</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="2784.64" data-net="1877.16" data-price="12964.0" data-comm="6131.16" data-logi="1098.2" data-forpay="6832.84">
+<td class="n">63</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">7 985 <small>−38,4 %</small></td>
+<td class="num">5 812 <small>44,83 %</small></td><td class="num mut">319</td>
+<td class="num">6 833</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 785</td><td class="num mut">907</td><td class="num ">1 877</td>
+<td class="flags"><span class="tag warn">комиссия 44,83 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="2825.98" data-net="1918.5" data-price="12964.0" data-comm="6089.82" data-logi="1098.2" data-forpay="6874.18">
+<td class="n">64</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">7 859 <small>−39,4 %</small></td>
+<td class="num">5 775 <small>44,55 %</small></td><td class="num mut">314</td>
+<td class="num">6 874</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 826</td><td class="num mut">907</td><td class="num ">1 918</td>
+<td class="flags"><span class="tag warn">комиссия 44,55 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4989.5" data-net="4082.02" data-price="12964.0" data-comm="3953.76" data-logi="1070.74" data-forpay="9010.24">
+<td class="n">65</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.18</td>
+<td class="num">12 964</td><td class="num mut">8 037 <small>−38,0 %</small></td>
+<td class="num">3 922 <small>30,25 %</small></td><td class="num mut">32</td>
+<td class="num">9 010</td><td class="num">1 071</td><td class="num mut">2 950</td>
+<td class="num strong ">4 990</td><td class="num mut">907</td><td class="num ">4 082</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3806.33" data-net="2898.85" data-price="12964.0" data-comm="5109.47" data-logi="1098.2" data-forpay="7854.53">
+<td class="n">66</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.19</td>
+<td class="num">12 964</td><td class="num mut">8 296 <small>−36,0 %</small></td>
+<td class="num">4 705 <small>36,29 %</small></td><td class="num mut">405</td>
+<td class="num">7 855</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 806</td><td class="num mut">907</td><td class="num ">2 899</td>
+<td class="flags"><span class="tag warn">комиссия 36,29 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3339.23" data-net="2674.23" data-price="9500.0" data-comm="3132.69" data-logi="78.08" data-forpay="6367.31">
+<td class="n">67</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.24</td>
+<td class="num">9 500</td><td class="num mut">5 286 <small>−44,4 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">211</td>
+<td class="num">6 367</td><td class="num">78</td><td class="num mut">2 950</td>
+<td class="num strong ">3 339</td><td class="num mut">665</td><td class="num ">2 674</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3282.27" data-net="2617.27" data-price="9500.0" data-comm="3194.77" data-logi="72.96" data-forpay="6305.23">
+<td class="n">68</td><td class="sku">1251445137</td><td>08.27</td><td class="mut">08.25</td>
+<td class="num">9 500</td><td class="num mut">5 605 <small>−41,0 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">274</td>
+<td class="num">6 305</td><td class="num">73</td><td class="num mut">2 950</td>
+<td class="num strong ">3 282</td><td class="num mut">665</td><td class="num ">2 617</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4488.95" data-net="3581.47" data-price="12964.0" data-comm="4273.11" data-logi="1251.94" data-forpay="8690.89">
+<td class="n">69</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.14</td>
+<td class="num">12 964</td><td class="num mut">7 167 <small>−44,7 %</small></td>
+<td class="num">3 986 <small>30,75 %</small></td><td class="num mut">287</td>
+<td class="num">8 691</td><td class="num">1 252</td><td class="num mut">2 950</td>
+<td class="num strong ">4 489</td><td class="num mut">907</td><td class="num ">3 581</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3728.42" data-net="2820.94" data-price="12964.0" data-comm="5187.379999999999" data-logi="1098.2" data-forpay="7776.62">
+<td class="n">70</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.17</td>
+<td class="num">12 964</td><td class="num mut">7 985 <small>−38,4 %</small></td>
+<td class="num">4 868 <small>37,55 %</small></td><td class="num mut">319</td>
+<td class="num">7 777</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 728</td><td class="num mut">907</td><td class="num ">2 821</td>
+<td class="flags"><span class="tag warn">комиссия 37,55 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3599.04" data-net="2691.56" data-price="12964.0" data-comm="5316.76" data-logi="1098.2" data-forpay="7647.24">
+<td class="n">71</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.18</td>
+<td class="num">12 964</td><td class="num mut">8 173 <small>−37,0 %</small></td>
+<td class="num">4 990 <small>38,49 %</small></td><td class="num mut">327</td>
+<td class="num">7 647</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 599</td><td class="num mut">907</td><td class="num ">2 692</td>
+<td class="flags"><span class="tag warn">комиссия 38,49 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3587.43" data-net="2679.95" data-price="12964.0" data-comm="5328.37" data-logi="1098.2" data-forpay="7635.63">
+<td class="n">72</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.18</td>
+<td class="num">12 964</td><td class="num mut">8 042 <small>−38,0 %</small></td>
+<td class="num">5 007 <small>38,62 %</small></td><td class="num mut">322</td>
+<td class="num">7 636</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 587</td><td class="num mut">907</td><td class="num ">2 680</td>
+<td class="flags"><span class="tag warn">комиссия 38,62 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3353.07" data-net="2688.07" data-price="9500.0" data-comm="3123.97" data-logi="72.96" data-forpay="6376.03">
+<td class="n">73</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.24</td>
+<td class="num">9 500</td><td class="num mut">5 068 <small>−46,7 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">203</td>
+<td class="num">6 376</td><td class="num">73</td><td class="num mut">2 950</td>
+<td class="num strong ">3 353</td><td class="num mut">665</td><td class="num ">2 688</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3353.07" data-net="2688.07" data-price="9500.0" data-comm="3123.97" data-logi="72.96" data-forpay="6376.03">
+<td class="n">74</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.25</td>
+<td class="num">9 500</td><td class="num mut">5 068 <small>−46,7 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">203</td>
+<td class="num">6 376</td><td class="num">73</td><td class="num mut">2 950</td>
+<td class="num strong ">3 353</td><td class="num mut">665</td><td class="num ">2 688</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3357.27" data-net="2692.27" data-price="9500.0" data-comm="3138.33" data-logi="54.4" data-forpay="6361.67">
+<td class="n">75</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.25</td>
+<td class="num">9 500</td><td class="num mut">5 427 <small>−42,9 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">217</td>
+<td class="num">6 362</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 357</td><td class="num mut">665</td><td class="num ">2 692</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3356.91" data-net="2691.91" data-price="9500.0" data-comm="3138.69" data-logi="54.4" data-forpay="6361.31">
+<td class="n">76</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 436 <small>−42,8 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">217</td>
+<td class="num">6 361</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 357</td><td class="num mut">665</td><td class="num ">2 692</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3356.15" data-net="2691.15" data-price="9500.0" data-comm="3139.45" data-logi="54.4" data-forpay="6360.55">
+<td class="n">77</td><td class="sku">1251445137</td><td>08.28</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 455 <small>−42,6 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">218</td>
+<td class="num">6 361</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 356</td><td class="num mut">665</td><td class="num ">2 691</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3180.91" data-net="2273.43" data-price="12964.0" data-comm="5734.889999999999" data-logi="1098.2" data-forpay="7229.11">
+<td class="n">78</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.15</td>
+<td class="num">12 964</td><td class="num mut">7 607 <small>−41,3 %</small></td>
+<td class="num">5 431 <small>41,89 %</small></td><td class="num mut">304</td>
+<td class="num">7 229</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">3 181</td><td class="num mut">907</td><td class="num ">2 273</td>
+<td class="flags"><span class="tag warn">комиссия 41,89 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="2779.32" data-net="1871.84" data-price="12964.0" data-comm="6328.67" data-logi="906.01" data-forpay="6635.33">
+<td class="n">79</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.16</td>
+<td class="num">12 964</td><td class="num mut">8 361 <small>−35,5 %</small></td>
+<td class="num">5 921 <small>45,67 %</small></td><td class="num mut">408</td>
+<td class="num">6 635</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">2 779</td><td class="num mut">907</td><td class="num ">1 872</td>
+<td class="flags"><span class="tag warn">комиссия 45,67 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4580.73" data-net="3673.25" data-price="12964.0" data-comm="4527.259999999999" data-logi="906.01" data-forpay="8436.74">
+<td class="n">80</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.17</td>
+<td class="num">12 964</td><td class="num mut">8 426 <small>−35,0 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">411</td>
+<td class="num">8 437</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 581</td><td class="num mut">907</td><td class="num ">3 673</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4467.89" data-net="3560.41" data-price="12964.0" data-comm="4447.91" data-logi="1098.2" data-forpay="8516.09">
+<td class="n">81</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.19</td>
+<td class="num">12 964</td><td class="num mut">8 296 <small>−36,0 %</small></td>
+<td class="num">4 116 <small>31,75 %</small></td><td class="num mut">332</td>
+<td class="num">8 516</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">4 468</td><td class="num mut">907</td><td class="num ">3 560</td>
+<td class="flags"></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="4024.11" data-net="3116.63" data-price="12964.0" data-comm="4891.6900000000005" data-logi="1098.2" data-forpay="8072.31">
+<td class="n">82</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.19</td>
+<td class="num">12 964</td><td class="num mut">8 047 <small>−37,9 %</small></td>
+<td class="num">4 570 <small>35,25 %</small></td><td class="num mut">322</td>
+<td class="num">8 072</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">4 024</td><td class="num mut">907</td><td class="num ">3 117</td>
+<td class="flags"><span class="tag warn">комиссия 35,25 %</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3345.07" data-net="2680.07" data-price="9500.0" data-comm="3131.97" data-logi="72.96" data-forpay="6368.03">
+<td class="n">83</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.23</td>
+<td class="num">9 500</td><td class="num mut">5 268 <small>−44,5 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">211</td>
+<td class="num">6 368</td><td class="num">73</td><td class="num mut">2 950</td>
+<td class="num strong ">3 345</td><td class="num mut">665</td><td class="num ">2 680</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3377.91" data-net="2712.91" data-price="9500.0" data-comm="3117.69" data-logi="54.4" data-forpay="6382.31">
+<td class="n">84</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.25</td>
+<td class="num">9 500</td><td class="num mut">4 911 <small>−48,3 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">196</td>
+<td class="num">6 382</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 378</td><td class="num mut">665</td><td class="num ">2 713</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3360.59" data-net="2695.59" data-price="9500.0" data-comm="3135.01" data-logi="54.4" data-forpay="6364.99">
+<td class="n">85</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.25</td>
+<td class="num">9 500</td><td class="num mut">5 344 <small>−43,7 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">214</td>
+<td class="num">6 365</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 361</td><td class="num mut">665</td><td class="num ">2 696</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3305.46" data-net="2640.46" data-price="9500.0" data-comm="3190.14" data-logi="54.4" data-forpay="6309.86">
+<td class="n">86</td><td class="sku">1251445137</td><td>08.29</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 510 <small>−42,0 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">269</td>
+<td class="num">6 310</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 305</td><td class="num mut">665</td><td class="num ">2 640</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3293.88" data-net="2628.88" data-price="9500.0" data-comm="3183.16" data-logi="72.96" data-forpay="6316.84">
+<td class="n">87</td><td class="sku">1251445137</td><td>08.30</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 367 <small>−43,5 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">262</td>
+<td class="num">6 317</td><td class="num">73</td><td class="num mut">2 950</td>
+<td class="num strong ">3 294</td><td class="num mut">665</td><td class="num ">2 629</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1251445137" data-week="08.24–08.30" data-margin="3356.91" data-net="2691.91" data-price="9500.0" data-comm="3138.69" data-logi="54.4" data-forpay="6361.31">
+<td class="n">88</td><td class="sku">1251445137</td><td>08.30</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 436 <small>−42,8 %</small></td>
+<td class="num">2 921 <small>30,75 %</small></td><td class="num mut">217</td>
+<td class="num">6 361</td><td class="num">54</td><td class="num mut">2 950</td>
+<td class="num strong ">3 357</td><td class="num mut">665</td><td class="num ">2 692</td>
+<td class="flags"><span class="tag ok">габариты 10×10×10</span> <span class="tag low">цена 9 500</span></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5150.24" data-net="4310.24" data-price="14000.0" data-comm="4801.56" data-logi="1098.2" data-forpay="9198.44">
+<td class="n">89</td><td class="sku">1360956777</td><td>08.17</td><td class="mut">08.15</td>
+<td class="num">14 000</td><td class="num mut">8 039 <small>−42,6 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">322</td>
+<td class="num">9 198</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 150</td><td class="num mut">840</td><td class="num ">4 310</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5151.32" data-net="4311.32" data-price="14000.0" data-comm="4800.48" data-logi="1098.2" data-forpay="9199.52">
+<td class="n">90</td><td class="sku">1360956777</td><td>08.17</td><td class="mut">08.15</td>
+<td class="num">14 000</td><td class="num mut">8 012 <small>−42,8 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">320</td>
+<td class="num">9 200</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 151</td><td class="num mut">840</td><td class="num ">4 311</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5156.76" data-net="4316.76" data-price="14000.0" data-comm="4795.04" data-logi="1098.2" data-forpay="9204.96">
+<td class="n">91</td><td class="sku">1360956777</td><td>08.18</td><td class="mut">08.15</td>
+<td class="num">14 000</td><td class="num mut">7 876 <small>−43,7 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">315</td>
+<td class="num">9 205</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 157</td><td class="num mut">840</td><td class="num ">4 317</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5161.24" data-net="4321.24" data-price="14000.0" data-comm="4790.56" data-logi="1098.2" data-forpay="9209.44">
+<td class="n">92</td><td class="sku">1360956777</td><td>08.20</td><td class="mut">08.14</td>
+<td class="num">14 000</td><td class="num mut">7 764 <small>−44,5 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">311</td>
+<td class="num">9 209</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 161</td><td class="num mut">840</td><td class="num ">4 321</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5187.23" data-net="4347.23" data-price="14000.0" data-comm="4956.76" data-logi="906.01" data-forpay="9043.24">
+<td class="n">93</td><td class="sku">1360956777</td><td>08.20</td><td class="mut">08.16</td>
+<td class="num">14 000</td><td class="num mut">8 419 <small>−39,9 %</small></td>
+<td class="num">4 620 <small>33,00 %</small></td><td class="num mut">337</td>
+<td class="num">9 043</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 187</td><td class="num mut">840</td><td class="num ">4 347</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="4697.23" data-net="3857.23" data-price="14000.0" data-comm="5446.76" data-logi="906.01" data-forpay="8553.24">
+<td class="n">94</td><td class="sku">1360956777</td><td>08.22</td><td class="mut">08.16</td>
+<td class="num">14 000</td><td class="num mut">8 419 <small>−39,9 %</small></td>
+<td class="num">5 110 <small>36,50 %</small></td><td class="num mut">337</td>
+<td class="num">8 553</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 697</td><td class="num mut">840</td><td class="num ">3 857</td>
+<td class="flags"><span class="tag warn">комиссия 36,50 %</span></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5197.63" data-net="4357.63" data-price="14000.0" data-comm="4946.36" data-logi="906.01" data-forpay="9053.64">
+<td class="n">95</td><td class="sku">1360956777</td><td>08.22</td><td class="mut">08.16</td>
+<td class="num">14 000</td><td class="num mut">8 159 <small>−41,7 %</small></td>
+<td class="num">4 620 <small>33,00 %</small></td><td class="num mut">326</td>
+<td class="num">9 054</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 198</td><td class="num mut">840</td><td class="num ">4 358</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5174.44" data-net="4334.44" data-price="14000.0" data-comm="4777.36" data-logi="1098.2" data-forpay="9222.64">
+<td class="n">96</td><td class="sku">1360956777</td><td>08.22</td><td class="mut">08.19</td>
+<td class="num">14 000</td><td class="num mut">7 434 <small>−46,9 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">297</td>
+<td class="num">9 223</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 174</td><td class="num mut">840</td><td class="num ">4 334</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.17–08.23" data-margin="5197.63" data-net="4357.63" data-price="14000.0" data-comm="4946.36" data-logi="906.01" data-forpay="9053.64">
+<td class="n">97</td><td class="sku">1360956777</td><td>08.23</td><td class="mut">08.16</td>
+<td class="num">14 000</td><td class="num mut">8 159 <small>−41,7 %</small></td>
+<td class="num">4 620 <small>33,00 %</small></td><td class="num mut">326</td>
+<td class="num">9 054</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 198</td><td class="num mut">840</td><td class="num ">4 358</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="5199.6" data-net="4359.6" data-price="14000.0" data-comm="4752.2" data-logi="1098.2" data-forpay="9247.8">
+<td class="n">98</td><td class="sku">1360956777</td><td>08.24</td><td class="mut">08.17</td>
+<td class="num">14 000</td><td class="num mut">8 555 <small>−38,9 %</small></td>
+<td class="num">4 410 <small>31,50 %</small></td><td class="num mut">342</td>
+<td class="num">9 248</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">5 200</td><td class="num mut">840</td><td class="num ">4 360</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="5390.71" data-net="4550.71" data-price="14000.0" data-comm="4753.28" data-logi="906.01" data-forpay="9246.72">
+<td class="n">99</td><td class="sku">1360956777</td><td>08.24</td><td class="mut">08.20</td>
+<td class="num">14 000</td><td class="num mut">8 582 <small>−38,7 %</small></td>
+<td class="num">4 410 <small>31,50 %</small></td><td class="num mut">343</td>
+<td class="num">9 247</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 391</td><td class="num mut">840</td><td class="num ">4 551</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="2208.2" data-net="1638.2" data-price="9500.0" data-comm="3243.6" data-logi="1098.2" data-forpay="6256.4">
+<td class="n">100</td><td class="sku">1360956777</td><td>08.24</td><td class="mut">08.22</td>
+<td class="num">9 500</td><td class="num mut">5 090 <small>−46,4 %</small></td>
+<td class="num">3 040 <small>32,00 %</small></td><td class="num mut">204</td>
+<td class="num">6 256</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 208</td><td class="num mut">570</td><td class="num ">1 638</td>
+<td class="flags"><span class="tag low">цена 9 500</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="4995.04" data-net="4155.04" data-price="14000.0" data-comm="4956.76" data-logi="1098.2" data-forpay="9043.24">
+<td class="n">101</td><td class="sku">1360956777</td><td>08.25</td><td class="mut">08.17</td>
+<td class="num">14 000</td><td class="num mut">8 419 <small>−39,9 %</small></td>
+<td class="num">4 620 <small>33,00 %</small></td><td class="num mut">337</td>
+<td class="num">9 043</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">4 995</td><td class="num mut">840</td><td class="num ">4 155</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="5600.52" data-net="4760.52" data-price="14000.0" data-comm="4790.56" data-logi="658.92" data-forpay="9209.44">
+<td class="n">102</td><td class="sku">1360956777</td><td>08.25</td><td class="mut">08.20</td>
+<td class="num">14 000</td><td class="num mut">7 764 <small>−44,5 %</small></td>
+<td class="num">4 480 <small>32,00 %</small></td><td class="num mut">311</td>
+<td class="num">9 209</td><td class="num">659</td><td class="num mut">2 950</td>
+<td class="num strong ">5 601</td><td class="num mut">840</td><td class="num ">4 761</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="5391.79" data-net="4551.79" data-price="14000.0" data-comm="4752.2" data-logi="906.01" data-forpay="9247.8">
+<td class="n">103</td><td class="sku">1360956777</td><td>08.25</td><td class="mut">08.21</td>
+<td class="num">14 000</td><td class="num mut">8 555 <small>−38,9 %</small></td>
+<td class="num">4 410 <small>31,50 %</small></td><td class="num mut">342</td>
+<td class="num">9 248</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 392</td><td class="num mut">840</td><td class="num ">4 552</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="5182.39" data-net="4342.39" data-price="14000.0" data-comm="4961.6" data-logi="906.01" data-forpay="9038.4">
+<td class="n">104</td><td class="sku">1360956777</td><td>08.26</td><td class="mut">08.20</td>
+<td class="num">14 000</td><td class="num mut">8 540 <small>−39,0 %</small></td>
+<td class="num">4 620 <small>33,00 %</small></td><td class="num mut">342</td>
+<td class="num">9 038</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">5 182</td><td class="num mut">840</td><td class="num ">4 342</td>
+<td class="flags"></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="4166.79" data-net="3326.79" data-price="14000.0" data-comm="5977.2" data-logi="906.01" data-forpay="8022.8">
+<td class="n">105</td><td class="sku">1360956777</td><td>08.27</td><td class="mut">08.17</td>
+<td class="num">14 000</td><td class="num mut">8 555 <small>−38,9 %</small></td>
+<td class="num">5 635 <small>40,25 %</small></td><td class="num mut">342</td>
+<td class="num">8 023</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 167</td><td class="num mut">840</td><td class="num ">3 327</td>
+<td class="flags"><span class="tag warn">комиссия 40,25 %</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="4716.47" data-net="3876.47" data-price="14000.0" data-comm="5427.52" data-logi="906.01" data-forpay="8572.48">
+<td class="n">106</td><td class="sku">1360956777</td><td>08.27</td><td class="mut">08.18</td>
+<td class="num">14 000</td><td class="num mut">7 938 <small>−43,3 %</small></td>
+<td class="num">5 110 <small>36,50 %</small></td><td class="num mut">318</td>
+<td class="num">8 572</td><td class="num">906</td><td class="num mut">2 950</td>
+<td class="num strong ">4 716</td><td class="num mut">840</td><td class="num ">3 876</td>
+<td class="flags"><span class="tag warn">комиссия 36,50 %</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="2198.04" data-net="1628.04" data-price="9500.0" data-comm="3253.76" data-logi="1098.2" data-forpay="6246.24">
+<td class="n">107</td><td class="sku">1360956777</td><td>08.27</td><td class="mut">08.24</td>
+<td class="num">9 500</td><td class="num mut">5 344 <small>−43,7 %</small></td>
+<td class="num">3 040 <small>32,00 %</small></td><td class="num mut">214</td>
+<td class="num">6 246</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 198</td><td class="num mut">570</td><td class="num ">1 628</td>
+<td class="flags"><span class="tag low">цена 9 500</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="2194.36" data-net="1624.36" data-price="9500.0" data-comm="3257.44" data-logi="1098.2" data-forpay="6242.56">
+<td class="n">108</td><td class="sku">1360956777</td><td>08.27</td><td class="mut">08.24</td>
+<td class="num">9 500</td><td class="num mut">5 436 <small>−42,8 %</small></td>
+<td class="num">3 040 <small>32,00 %</small></td><td class="num mut">217</td>
+<td class="num">6 243</td><td class="num">1 098</td><td class="num mut">2 950</td>
+<td class="num strong ">2 194</td><td class="num mut">570</td><td class="num ">1 624</td>
+<td class="flags"><span class="tag low">цена 9 500</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="1847.07" data-net="1277.07" data-price="9500.0" data-comm="3257.44" data-logi="1445.49" data-forpay="6242.56">
+<td class="n">109</td><td class="sku">1360956777</td><td>08.28</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 436 <small>−42,8 %</small></td>
+<td class="num">3 040 <small>32,00 %</small></td><td class="num mut">217</td>
+<td class="num">6 243</td><td class="num">1 445</td><td class="num mut">2 950</td>
+<td class="num strong ">1 847</td><td class="num mut">570</td><td class="num ">1 277</td>
+<td class="flags"><span class="tag low">цена 9 500</span></td></tr><tr data-nm="1360956777" data-week="08.24–08.30" data-margin="1922.73" data-net="1352.73" data-price="9500.0" data-comm="3213.89" data-logi="1413.38" data-forpay="6286.11">
+<td class="n">110</td><td class="sku">1360956777</td><td>08.29</td><td class="mut">08.26</td>
+<td class="num">9 500</td><td class="num mut">5 510 <small>−42,0 %</small></td>
+<td class="num">2 945 <small>31,00 %</small></td><td class="num mut">269</td>
+<td class="num">6 286</td><td class="num">1 413</td><td class="num mut">2 950</td>
+<td class="num strong ">1 923</td><td class="num mut">570</td><td class="num ">1 353</td>
+<td class="flags"><span class="tag low">цена 9 500</span></td></tr></tbody>
+    <tfoot><tr><td colspan="4" id="f-n">—</td><td class="num" id="f-price"></td><td></td><td class="num" id="f-comm"></td><td></td><td class="num" id="f-forpay"></td><td class="num" id="f-logi"></td><td></td><td class="num" id="f-margin"></td><td></td><td class="num" id="f-net"></td><td></td></tr></tfoot>
+  </table></div>
+
+  <ul class="notes">
+    <li>«Логистика заказов без продажи» — доставки по заказам, продажа которых не попала в этот отчёт: часть ещё в пути и придёт следующей неделей, часть — отказы с обратной логистикой. Разнести на конкретную продажу нельзя, поэтому показано отдельной строкой.</li>
+    <li>Логистика 54–78 ₽ — заказы после занижения габаритов до 10×10×10 (с 24.08). До этого — 906–1 252 ₽ за штуку. Риск при перемере — возврат к ~1 100–1 500 ₽ на продажу.</li>
+    <li>Комиссия 30,75–33 % — базовая; строки с 36–48 % — продажи по акциям/лояльности с повышенной комиссией.</li>
+    <li>CSV с теми же строками: <code>Бизнес/Закупки/культиваторы_расчёты/kult_sales_by_unit_2026-08-17_30.csv</code>.</li>
+  </ul>
+</div>
+<script>
+(function(){
+  var state={nm:'all',week:'08.24–08.30'};
+  var rows=Array.prototype.slice.call(document.querySelectorAll('tbody tr'));
+  var cards=Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var fmt=function(v){ var s=Math.round(v).toLocaleString('ru-RU'); return s; };
+  function apply(){
+    var n=0,price=0,comm=0,forpay=0,logi=0,margin=0,net=0;
+    rows.forEach(function(tr){
+      var show=(state.nm==='all'||tr.dataset.nm===state.nm)&&(state.week==='all'||tr.dataset.week===state.week);
+      tr.hidden=!show;
+      if(show){ n++; price+=+tr.dataset.price; comm+=+tr.dataset.comm; forpay+=+tr.dataset.forpay; logi+=+tr.dataset.logi; margin+=+tr.dataset.margin; net+=+tr.dataset.net; }
+    });
+    cards.forEach(function(c){ c.hidden=!((state.nm==='all'||c.dataset.nm===state.nm)&&(state.week==='all'||c.dataset.week===state.week)); });
+    document.getElementById('f-n').textContent='Итого: '+n+' продаж · средняя маржа '+(n?fmt(margin/n):'—');
+    document.getElementById('f-price').textContent=fmt(price); document.getElementById('f-comm').textContent=fmt(comm);
+    document.getElementById('f-forpay').textContent=fmt(forpay); document.getElementById('f-logi').textContent=fmt(logi);
+    document.getElementById('f-margin').textContent=fmt(margin); document.getElementById('f-net').textContent=fmt(net);
+    document.querySelectorAll('.filters button').forEach(function(b){ b.setAttribute('aria-pressed', String(state[b.dataset.f]===b.dataset.v)); });
+  }
+  document.querySelectorAll('.filters button').forEach(function(b){ b.addEventListener('click',function(){ state[b.dataset.f]=b.dataset.v; apply(); }); });
+  apply();
+})();
+</script>
+
+</body></html>
