@@ -1,0 +1,258 @@
+<title>P&L AquaBlast май–август 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --paper:#f7f7f4; --card:#ffffff; --line:#d9dbd6; --line-soft:#e9eae6;
+  --ink:#141a24; --ink-2:#4a5262; --ink-3:#7a8190;
+  --pos:#2a78d6; --pos-soft:#d7e6f8; --neg:#e34948; --neg-soft:#fadcdb; --sub:#8fa3bd;
+  --font-display:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#15181e; --card:#1c2028; --line:#333944; --line-soft:#262b34;
+    --ink:#f2f3f5; --ink-2:#c1c6cf; --ink-3:#8b919d;
+    --pos:#3987e5; --pos-soft:#22364f; --neg:#e66767; --neg-soft:#4a2626; --sub:#6c7f98;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#15181e; --card:#1c2028; --line:#333944; --line-soft:#262b34;
+  --ink:#f2f3f5; --ink-2:#c1c6cf; --ink-3:#8b919d;
+  --pos:#3987e5; --pos-soft:#22364f; --neg:#e66767; --neg-soft:#4a2626; --sub:#6c7f98;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.page{max-width:1080px;margin:0 auto;padding:36px 28px 56px;display:flex;flex-direction:column;gap:32px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;border-bottom:1px solid var(--line);padding-bottom:18px}
+h1{font-family:var(--font-display);font-weight:800;font-size:30px;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 6px}
+.meta{color:var(--ink-2);font-size:14px;text-align:right}
+.meta b{color:var(--ink);font-weight:600}
+h2{font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.01em;margin:0 0 4px}
+.sub{color:var(--ink-2);font-size:14px;margin:0 0 14px;max-width:66ch}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px}
+.tile .l{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-family:var(--font-display);font-weight:600}
+.tile .v{font-family:var(--font-display);font-weight:800;font-size:30px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.05}
+.tile .v small{font-size:15px;font-weight:600;color:var(--ink-2);letter-spacing:0;margin-left:3px}
+.tile .n{font-size:13px;color:var(--ink-2)}
+.tile.hero{border-color:var(--pos);box-shadow:inset 0 0 0 1px var(--pos)}
+.tile.hero .v{color:var(--pos)}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 18px 10px;position:relative}
+.chart svg{width:100%;height:auto;display:block;font-family:var(--font-body)}
+.chart text{fill:var(--ink-2);font-size:12px}
+.chart text.val{fill:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;font-size:13px}
+.chart text.cat{font-size:12px}
+.chart .grid{stroke:var(--line-soft);stroke-width:1}
+.chart .base{stroke:var(--line);stroke-width:1}
+.chart .conn{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
+.bar{transition:opacity .12s}
+.bar.pos{fill:var(--pos)} .bar.neg{fill:var(--neg)} .bar.sub{fill:var(--sub)}
+.hit{fill:transparent;cursor:default}
+.hit:hover + .bar, .hit:focus + .bar{opacity:.8}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font-size:12.5px;line-height:1.35;padding:8px 10px;border-radius:4px;white-space:nowrap;opacity:0;transform:translate(-50%,-110%);transition:opacity .1s}
+.tip b{display:block;font-weight:600;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 14px;text-align:right;border-bottom:1px solid var(--line-soft);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:260px}
+thead th{font-family:var(--font-display);font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0}
+thead th:last-child, td:last-child{border-left:1px solid var(--line);font-weight:600}
+tr.group td{font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-top:14px;border-bottom:none}
+tr.total td{font-weight:700;background:color-mix(in srgb,var(--pos-soft) 45%,transparent);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+tr.total.net td{background:var(--pos-soft);font-family:var(--font-display);font-size:15.5px}
+tr.pct td{color:var(--ink-3);font-size:13px;padding-top:2px;padding-bottom:6px}
+tr.neg-row td.neg{color:var(--neg)}
+td.dim{color:var(--ink-3)}
+.cabs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cab{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
+.cab .t{font-family:var(--font-display);font-weight:700;grid-column:1/-1;margin-bottom:6px}
+.cab .t span{color:var(--ink-3);font-weight:500;font-size:13px;margin-left:6px}
+.cab .k{color:var(--ink-2);font-size:13.5px}
+.cab .v{font-variant-numeric:tabular-nums;font-weight:600;text-align:right}
+.cab .v.neg{color:var(--neg)}
+.cab .v.big{font-family:var(--font-display);font-size:20px;font-weight:800}
+.notes{color:var(--ink-2);font-size:13px;max-width:78ch;display:flex;flex-direction:column;gap:6px}
+.notes p{margin:0}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}.cabs{grid-template-columns:1fr}.tile .v{font-size:26px}h1{font-size:24px}.meta{text-align:left}}
+@media print{body{background:#fff;color:#000}.page{padding:0;gap:18px}.chart,.tile,.tablewrap,.cab{border-color:#bbb;box-shadow:none;break-inside:avoid}thead th{position:static}.tip{display:none}}
+@media (prefers-reduced-motion:reduce){.bar,.tip{transition:none}}
+</style>
+
+<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Wildberries · три кабинета · AquaBlast</p>
+      <h1>Прибыли и убытки, май–август 2026</h1>
+    </div>
+    <div class="meta">
+      ИП Олейников · ИП Олейникова · ИП Чебан<br>
+      По закрытым финотчётам WB и кассе косвенных · <b>до личных расходов</b>
+    </div>
+  </header>
+
+  <section class="tiles" aria-label="Итоги за четыре месяца">
+    <div class="tile"><div class="l">Выручка до СПП</div><div class="v">158,0<small>млн</small></div><div class="n">25 240 продаж нетто · средний чек 6 432 ₽</div></div>
+    <div class="tile"><div class="l">Маржинальная прибыль</div><div class="v">29,4<small>млн</small></div><div class="n">18,6 % от выручки · ДРР 24,6 %</div></div>
+    <div class="tile"><div class="l">Косвенные расходы</div><div class="v">6,0<small>млн</small></div><div class="n">3,8 % от выручки · коммерческие 2,8 + опекс 3,2</div></div>
+    <div class="tile hero"><div class="l">Чистая прибыль</div><div class="v">20,2<small>млн</small></div><div class="n">12,8 % от выручки · после УСН и процентов</div></div>
+  </section>
+
+  <section>
+    <h2>От выручки к чистой прибыли</h2>
+    <p class="sub">Четыре месяца, три кабинета, млн ₽. Синее — то, что остаётся, красное — что уходит. Наведи на столбец, чтобы увидеть точную сумму.</p>
+    <div class="chart" id="wf">
+      <svg viewBox="0 0 1040 360" role="img" aria-label="Водопад: выручка 158,0, прямые расходы минус 128,6, маржинальная прибыль 29,4, косвенные минус 6,0, налоги и прочее минус 3,1, чистая прибыль 20,2 млн рублей"></svg>
+      <div class="tip" id="tip"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>По месяцам</h2>
+    <p class="sub">Формат отчёта БК. Выручка за вычетом самовыкупов по чекам, комиссия с эквайрингом, реклама с Джемом. Косвенные разнесены по кабинетам пропорционально выручке.</p>
+    <div class="tablewrap">
+    <table>
+      <thead><tr><th>Показатель, ₽</th><th>Май</th><th>Июнь</th><th>Июль</th><th>Август</th><th>4 месяца</th></tr></thead>
+      <tbody>
+        <tr class="group"><td colspan="6">Объём</td></tr>
+        <tr><td>Заказов, шт</td><td>9 640</td><td>8 497</td><td>5 984</td><td>2 798</td><td>26 919</td></tr>
+        <tr><td>Продаж нетто, шт</td><td>7 828</td><td>9 189</td><td>5 332</td><td>2 891</td><td>25 240</td></tr>
+        <tr><td>Возвратов, шт</td><td>264</td><td>510</td><td>183</td><td>142</td><td>1 099</td></tr>
+        <tr><td>Средняя цена продажи до СПП</td><td>7 048</td><td>6 367</td><td>6 476</td><td>4 886</td><td>6 432</td></tr>
+
+        <tr class="group"><td colspan="6">Выручка</td></tr>
+        <tr class="total"><td>Выручка до СПП, без самовыкупов</td><td>52 963 198</td><td>57 680 308</td><td>33 527 305</td><td>13 825 386</td><td>157 996 198</td></tr>
+        <tr><td class="dim">в т.ч. вычтены самовыкупы по чекам</td><td class="dim">2 205 612</td><td class="dim">830 192</td><td class="dim">1 002 630</td><td class="dim">299 724</td><td class="dim">4 338 158</td></tr>
+        <tr><td>Оплачено покупателем (после СПП)</td><td>32 772 697</td><td>33 330 358</td><td>19 298 507</td><td>8 835 272</td><td>94 236 835</td></tr>
+
+        <tr class="group"><td colspan="6">Прямые расходы</td></tr>
+        <tr><td>Себестоимость продаж</td><td>7 723 200</td><td>8 822 350</td><td>4 919 850</td><td>2 610 950</td><td>24 076 350</td></tr>
+        <tr><td>Комиссия WB с эквайрингом</td><td>13 482 929</td><td>14 797 135</td><td>11 181 580</td><td>5 278 863</td><td>44 740 508</td></tr>
+        <tr class="pct"><td>доля комиссии от выручки</td><td>25,5 %</td><td>25,7 %</td><td>33,4 %</td><td>38,2 %</td><td>28,3 %</td></tr>
+        <tr><td>Логистика</td><td>5 100 609</td><td>5 344 968</td><td>2 748 168</td><td>1 573 950</td><td>14 767 695</td></tr>
+        <tr><td>Платные возвраты и перемещения</td><td>315 287</td><td>365 051</td><td>185 184</td><td>114 630</td><td>980 153</td></tr>
+        <tr><td>Реклама WB, открутка + Джем</td><td>14 077 871</td><td>13 589 129</td><td>8 756 798</td><td>2 372 244</td><td>38 796 042</td></tr>
+        <tr class="pct"><td>ДРР</td><td>26,6 %</td><td>23,6 %</td><td>26,1 %</td><td>17,2 %</td><td>24,6 %</td></tr>
+        <tr><td>Хранение</td><td>315 434</td><td>155 479</td><td>163 126</td><td>44 149</td><td>678 188</td></tr>
+        <tr><td>Платная приёмка</td><td>705</td><td>4 490</td><td>6 645</td><td>3 305</td><td>15 145</td></tr>
+        <tr><td>Штрафы и прочие удержания</td><td>317 155</td><td>−21 243</td><td>−8 676</td><td>5 098</td><td>292 335</td></tr>
+        <tr><td>НДС в прямых</td><td>1 638 635</td><td>1 666 518</td><td>831 967</td><td>276 167</td><td>4 413 287</td></tr>
+        <tr class="total"><td>Итого прямые</td><td>42 971 826</td><td>44 723 878</td><td>28 784 642</td><td>12 164 726</td><td>128 645 073</td></tr>
+
+        <tr class="total"><td>Маржинальная прибыль</td><td>9 991 372</td><td>12 956 431</td><td>4 742 663</td><td>1 660 660</td><td>29 351 125</td></tr>
+        <tr class="pct"><td>маржинальность</td><td>18,9 %</td><td>22,5 %</td><td>14,1 %</td><td>12,0 %</td><td>18,6 %</td></tr>
+
+        <tr class="group"><td colspan="6">Косвенные расходы</td></tr>
+        <tr><td>Коммерческие: раздачи, выкупы, внешний трафик</td><td>434 800</td><td>547 431</td><td>1 274 566</td><td>587 831</td><td>2 844 628</td></tr>
+        <tr><td>Операционные и административные</td><td>1 452 445</td><td>360 655</td><td>728 088</td><td>633 663</td><td>3 174 851</td></tr>
+        <tr class="total"><td>Итого косвенные</td><td>1 887 245</td><td>908 086</td><td>2 002 654</td><td>1 221 494</td><td>6 019 479</td></tr>
+        <tr class="pct"><td>доля косвенных от выручки</td><td>3,6 %</td><td>1,6 %</td><td>6,0 %</td><td>8,8 %</td><td>3,8 %</td></tr>
+
+        <tr class="total"><td>EBITDA</td><td>8 104 127</td><td>12 048 345</td><td>2 740 009</td><td>439 166</td><td>23 331 646</td></tr>
+
+        <tr class="group"><td colspan="6">Ниже EBITDA</td></tr>
+        <tr><td>+ Компенсации WB при возвратах</td><td>11 631</td><td>50 607</td><td>101 103</td><td>79 931</td><td>243 271</td></tr>
+        <tr><td>− УСН</td><td>782 856</td><td>1 176 411</td><td>722 926</td><td>377 803</td><td>3 059 997</td></tr>
+        <tr><td>− Проценты по кредиту</td><td>134 088</td><td>133 132</td><td>0</td><td>0</td><td>267 220</td></tr>
+        <tr><td>− Прочие выплаты / поступления</td><td>65 186</td><td>−10 437</td><td>0</td><td>0</td><td>54 749</td></tr>
+
+        <tr class="total net"><td>Чистая прибыль до личных расходов</td><td>7 133 627</td><td>10 799 846</td><td>2 118 185</td><td>141 293</td><td>20 192 952</td></tr>
+        <tr class="pct"><td>рентабельность по чистой прибыли</td><td>13,5 %</td><td>18,7 %</td><td>6,3 %</td><td>1,0 %</td><td>12,8 %</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>По кабинетам</h2>
+    <p class="sub">Чистая прибыль до личных расходов за четыре месяца. Косвенные разнесены пропорционально выручке до СПП.</p>
+    <div class="cabs">
+      <div class="cab">
+        <div class="t">WB 1 · ИП Олейников<span>триммеры, культиваторы</span></div>
+        <div class="k">Выручка до СПП</div><div class="v">101,1 млн</div>
+        <div class="k">Маржинальная прибыль</div><div class="v">18,1 млн · 17,9 %</div>
+        <div class="k">Реклама · ДРР</div><div class="v">25,3 млн · 25,0 %</div>
+        <div class="k">Косвенные</div><div class="v">3,7 млн</div>
+        <div class="k">Чистая прибыль</div><div class="v big">13,2 млн</div>
+        <div class="k">Август</div><div class="v neg">−120 тыс.</div>
+      </div>
+      <div class="cab">
+        <div class="t">WB 2 · ИП Олейникова<span>триммеры</span></div>
+        <div class="k">Выручка до СПП</div><div class="v">47,3 млн</div>
+        <div class="k">Маржинальная прибыль</div><div class="v">10,2 млн · 21,5 %</div>
+        <div class="k">Реклама · ДРР</div><div class="v">10,9 млн · 23,1 %</div>
+        <div class="k">Косвенные</div><div class="v">1,6 млн</div>
+        <div class="k">Чистая прибыль</div><div class="v big">7,0 млн</div>
+        <div class="k">Август</div><div class="v">+254 тыс.</div>
+      </div>
+      <div class="cab">
+        <div class="t">WB 3 · ИП Чебан<span>«Эспада», с июля</span></div>
+        <div class="k">Выручка до СПП</div><div class="v">9,6 млн</div>
+        <div class="k">Маржинальная прибыль</div><div class="v">1,0 млн · 10,8 %</div>
+        <div class="k">Реклама · ДРР</div><div class="v">2,6 млн · 26,6 %</div>
+        <div class="k">Косвенные</div><div class="v">0,7 млн</div>
+        <div class="k">Чистая прибыль</div><div class="v big neg">−39 тыс.</div>
+        <div class="k">Август</div><div class="v">+7 тыс.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="notes">
+    <p><b>Как считано.</b> Выручка, комиссия, логистика, хранение и компенсации — из закрытых недельных финотчётов WB (reportDetailByPeriod). Реклама — открутка по кампаниям плюс подписка Джем. Себестоимость — по проданным штукам. Косвенные — по банковским выпискам (касса), ЗП и аренда включены. Самовыкупы вычтены из выручки по чекам, максимальный сценарий.</p>
+    <p><b>Что не входит.</b> Личные расходы владельца, платежи поставщику по товарному кредиту, налоги каб. 1 отсрочены по ПП-1074. Rebill в мае–июле вычтен из прямых, в августе справочно. Август по 30.08, неделя 31.08–06.09 не покрыта.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  var svg=document.querySelector('#wf svg'), tip=document.getElementById('tip'), box=document.getElementById('wf');
+  var steps=[
+    {l:'Выручка до СПП', v:158.0, type:'total'},
+    {l:'Прямые расходы', v:-128.6, type:'neg', d:'себес 24,1 · комиссия 44,7 · логистика 14,8 · реклама 38,8 · НДС 4,4 · прочее 1,9'},
+    {l:'Маржинальная прибыль', v:29.4, type:'sub'},
+    {l:'Косвенные', v:-6.0, type:'neg', d:'коммерческие 2,8 · опекс 3,2'},
+    {l:'УСН, проценты, прочее', v:-3.1, type:'neg', d:'УСН 3,06 · проценты 0,27 · прочее 0,05 · компенсации +0,24'},
+    {l:'Чистая прибыль', v:20.2, type:'total'}
+  ];
+  var W=1040,H=360,pl=56,pr=16,pt=28,pb=52, iw=W-pl-pr, ih=H-pt-pb, max=160;
+  var y=function(v){return pt+ih-(v/max)*ih;};
+  var n=steps.length, slot=iw/n, bw=Math.min(112,slot*0.62);
+  var s='';
+  [0,40,80,120,160].forEach(function(g){s+='<line class="grid" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(g)+'" y2="'+y(g)+'"/>';s+='<text x="'+(pl-8)+'" y="'+(y(g)+4)+'" text-anchor="end">'+g+'</text>';});
+  var run=0, prevTop=null;
+  steps.forEach(function(st,i){
+    var x=pl+slot*i+(slot-bw)/2, top,bot;
+    if(st.type==='total'||st.type==='sub'){top=st.v;bot=0;run=st.v;}
+    else{top=run;bot=run+st.v;run=bot;}
+    var y1=y(Math.max(top,bot)), y2=y(Math.min(top,bot)), h=Math.max(2,y2-y1);
+    var cls=st.type==='neg'?'neg':(st.type==='sub'?'sub':'pos');
+    if(i>0){ var px=pl+slot*(i-1)+(slot-bw)/2+bw; var cy=y(st.type==='neg'?top:st.v); s+='<line class="conn" x1="'+px+'" x2="'+x+'" y1="'+cy+'" y2="'+cy+'"/>'; }
+    var r=4, pathTop='M'+x+' '+(y1+r)+' a'+r+' '+r+' 0 0 1 '+r+' -'+r+' h'+(bw-2*r)+' a'+r+' '+r+' 0 0 1 '+r+' '+r+' v'+(h-r)+' h-'+bw+' z';
+    var pathBot='M'+x+' '+y1+' h'+bw+' v'+(h-r)+' a'+r+' '+r+' 0 0 1 -'+r+' '+r+' h-'+(bw-2*r)+' a'+r+' '+r+' 0 0 1 -'+r+' -'+r+' z';
+    var path=(st.type==='neg')?pathBot:pathTop;
+    s+='<rect class="hit" x="'+(x-10)+'" y="'+pt+'" width="'+(bw+20)+'" height="'+ih+'" data-i="'+i+'" tabindex="0"/>';
+    s+='<path class="bar '+cls+'" d="'+path+'"/>';
+    var lab=(st.v>0?'':'−')+Math.abs(st.v).toFixed(1).replace('.',',');
+    s+='<text class="val" x="'+(x+bw/2)+'" y="'+(y1-7)+'" text-anchor="middle">'+lab+'</text>';
+    var words=st.l.split(' '), l1=words.length>2?words.slice(0,2).join(' '):words[0], l2=words.length>2?words.slice(2).join(' '):(words[1]||'');
+    s+='<text class="cat" x="'+(x+bw/2)+'" y="'+(H-pb+18)+'" text-anchor="middle">'+l1+'</text>';
+    if(l2) s+='<text class="cat" x="'+(x+bw/2)+'" y="'+(H-pb+33)+'" text-anchor="middle">'+l2+'</text>';
+    prevTop=Math.max(top,bot);
+  });
+  s+='<line class="base" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(0)+'" y2="'+y(0)+'"/>';
+  svg.innerHTML=s;
+  function show(e){var i=+e.target.getAttribute('data-i'), st=steps[i]; if(!st)return;
+    tip.innerHTML='<b>'+st.l+': '+(st.v>0?'':'−')+Math.abs(st.v).toFixed(1).replace('.',',')+' млн ₽</b>'+(st.d?st.d:'');
+    var r=e.target.getBoundingClientRect(), b=box.getBoundingClientRect();
+    tip.style.left=(r.left-b.left+r.width/2)+'px'; tip.style.top=(r.top-b.top+r.height*0.35)+'px'; tip.style.opacity=1;}
+  function hide(){tip.style.opacity=0;}
+  svg.addEventListener('mouseover',function(e){if(e.target.classList.contains('hit'))show(e);});
+  svg.addEventListener('mouseout',function(e){if(e.target.classList.contains('hit'))hide();});
+  svg.addEventListener('focusin',function(e){if(e.target.classList.contains('hit'))show(e);});
+  svg.addEventListener('focusout',hide);
+})();
+</script>
