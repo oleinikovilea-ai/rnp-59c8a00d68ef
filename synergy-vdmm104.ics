@@ -1,0 +1,962 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Ilya//Synergy VDMM-104//RU
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Синергия VДММ-104усб
+X-WR-TIMEZONE:Europe/Moscow
+BEGIN:VTIMEZONE
+TZID:Europe/Moscow
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0300
+TZOFFSETTO:+0300
+TZNAME:MSK
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:synergy-10309630@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260917T190000
+DTEND;TZID=Europe/Moscow:20260917T203000
+SUMMARY:История развития предпринимательства — Лекция
+DESCRIPTION:Лекция\, Моржеедов В.Г.\nВойти: https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=sca8f6506-8256-49cf-b314-7ca1b8de14da\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=sca8f6506-8256-49cf-b314-7ca1b8de14da
+URL:https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=sca8f6506-8256-49cf-b314-7ca1b8de14da
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:История развития предпринимательства через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309921@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260917T204000
+DTEND;TZID=Europe/Moscow:20260917T221000
+SUMMARY:История развития предпринимательства — Лекция
+DESCRIPTION:Лекция\, Моржеедов В.Г.\nВойти: https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=s90526956-12e4-44d7-b23d-97ae552cede5\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=s90526956-12e4-44d7-b23d-97ae552cede5
+URL:https://edu.iva360.ru/v2/join?sid=022f1c60-d7b6-4c48-aa7b-b8e89ca1a399&token=s90526956-12e4-44d7-b23d-97ae552cede5
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:История развития предпринимательства через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309978@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260919T101000
+DTEND;TZID=Europe/Moscow:20260919T114000
+SUMMARY:Прикладная микроэкономика организации — Лекция
+DESCRIPTION:Лекция\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309996@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260919T115000
+DTEND;TZID=Europe/Moscow:20260919T132000
+SUMMARY:Прикладная микроэкономика организации — Лекция
+DESCRIPTION:Лекция\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310084@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260922T190000
+DTEND;TZID=Europe/Moscow:20260922T203000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310116@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260922T204000
+DTEND;TZID=Europe/Moscow:20260922T221000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309502@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260924T190000
+DTEND;TZID=Europe/Moscow:20260924T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309557@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260924T204000
+DTEND;TZID=Europe/Moscow:20260924T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310167@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260926T101000
+DTEND;TZID=Europe/Moscow:20260926T114000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310211@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260926T115000
+DTEND;TZID=Europe/Moscow:20260926T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310090@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260929T190000
+DTEND;TZID=Europe/Moscow:20260929T203000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310122@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20260929T204000
+DTEND;TZID=Europe/Moscow:20260929T221000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310273@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261001T190000
+DTEND;TZID=Europe/Moscow:20261001T203000
+SUMMARY:Цифровая компетентность и онлайн-риски в бизнесе — Лабораторный практикум
+DESCRIPTION:Лабораторный практикум\, Дорофеев О.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Цифровая компетентность и онлайн-риски в бизнесе через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310281@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261001T204000
+DTEND;TZID=Europe/Moscow:20261001T221000
+SUMMARY:Цифровая компетентность и онлайн-риски в бизнесе — Лаб.практикум+зачет
+DESCRIPTION:Лаб.практикум+зачет\, Дорофеев О.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Цифровая компетентность и онлайн-риски в бизнесе через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309984@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261003T101000
+DTEND;TZID=Europe/Moscow:20261003T114000
+SUMMARY:Прикладная микроэкономика организации — Лекция
+DESCRIPTION:Лекция\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310002@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261003T115000
+DTEND;TZID=Europe/Moscow:20261003T132000
+SUMMARY:Прикладная микроэкономика организации — Лекция
+DESCRIPTION:Лекция\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310096@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261006T190000
+DTEND;TZID=Europe/Moscow:20261006T203000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310128@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261006T204000
+DTEND;TZID=Europe/Moscow:20261006T221000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309515@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261008T190000
+DTEND;TZID=Europe/Moscow:20261008T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309569@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261008T204000
+DTEND;TZID=Europe/Moscow:20261008T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310173@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261010T101000
+DTEND;TZID=Europe/Moscow:20261010T114000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310217@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261010T115000
+DTEND;TZID=Europe/Moscow:20261010T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310102@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261013T190000
+DTEND;TZID=Europe/Moscow:20261013T203000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310134@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261013T204000
+DTEND;TZID=Europe/Moscow:20261013T221000
+SUMMARY:Современные концепции менеджмента: мировые практики — Лекция
+DESCRIPTION:Лекция\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309521@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261015T190000
+DTEND;TZID=Europe/Moscow:20261015T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309575@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261015T204000
+DTEND;TZID=Europe/Moscow:20261015T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310020@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261017T101000
+DTEND;TZID=Europe/Moscow:20261017T114000
+SUMMARY:Профессиональный английский язык — Лекция
+DESCRIPTION:Лекция\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310040@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261017T115000
+DTEND;TZID=Europe/Moscow:20261017T132000
+SUMMARY:Профессиональный английский язык — Лекция
+DESCRIPTION:Лекция\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309527@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261022T190000
+DTEND;TZID=Europe/Moscow:20261022T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309581@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261022T204000
+DTEND;TZID=Europe/Moscow:20261022T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310179@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261024T101000
+DTEND;TZID=Europe/Moscow:20261024T114000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310223@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261024T115000
+DTEND;TZID=Europe/Moscow:20261024T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309936@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261027T190000
+DTEND;TZID=Europe/Moscow:20261027T203000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309954@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261027T204000
+DTEND;TZID=Europe/Moscow:20261027T221000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309533@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261029T190000
+DTEND;TZID=Europe/Moscow:20261029T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309587@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261029T204000
+DTEND;TZID=Europe/Moscow:20261029T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310026@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261031T101000
+DTEND;TZID=Europe/Moscow:20261031T114000
+SUMMARY:Профессиональный английский язык — Лекция
+DESCRIPTION:Лекция\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310046@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261031T115000
+DTEND;TZID=Europe/Moscow:20261031T132000
+SUMMARY:Профессиональный английский язык — Лекция
+DESCRIPTION:Лекция\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309539@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261105T190000
+DTEND;TZID=Europe/Moscow:20261105T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309593@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261105T204000
+DTEND;TZID=Europe/Moscow:20261105T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310185@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261107T101000
+DTEND;TZID=Europe/Moscow:20261107T114000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310229@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261107T115000
+DTEND;TZID=Europe/Moscow:20261107T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309942@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261110T190000
+DTEND;TZID=Europe/Moscow:20261110T203000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309960@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261110T204000
+DTEND;TZID=Europe/Moscow:20261110T221000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309545@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261112T190000
+DTEND;TZID=Europe/Moscow:20261112T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309551@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261112T204000
+DTEND;TZID=Europe/Moscow:20261112T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310032@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261114T101000
+DTEND;TZID=Europe/Moscow:20261114T114000
+SUMMARY:Профессиональный английский язык — Лекция
+DESCRIPTION:Лекция\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310052@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261114T115000
+DTEND;TZID=Europe/Moscow:20261114T132000
+SUMMARY:Профессиональный английский язык — Семинар+зачет
+DESCRIPTION:Семинар+зачет\, Шакирова Р.Д.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Профессиональный английский язык через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310251@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261117T190000
+DTEND;TZID=Europe/Moscow:20261117T203000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310245@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261117T204000
+DTEND;TZID=Europe/Moscow:20261117T221000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309509@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261119T190000
+DTEND;TZID=Europe/Moscow:20261119T203000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309563@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261119T204000
+DTEND;TZID=Europe/Moscow:20261119T221000
+SUMMARY:Дизайн бизнес-идей — Лекция
+DESCRIPTION:Лекция\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310191@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261121T101000
+DTEND;TZID=Europe/Moscow:20261121T114000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Лекция
+DESCRIPTION:Лекция\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310235@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261121T115000
+DTEND;TZID=Europe/Moscow:20261121T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Семинар
+DESCRIPTION:Семинар\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309948@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261124T190000
+DTEND;TZID=Europe/Moscow:20261124T203000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309966@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261124T204000
+DTEND;TZID=Europe/Moscow:20261124T221000
+SUMMARY:Командообразование и лидерство — Лекция
+DESCRIPTION:Лекция\, Филиппова Д.А.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Командообразование и лидерство через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309638@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261126T190000
+DTEND;TZID=Europe/Moscow:20261126T203000
+SUMMARY:История развития предпринимательства — Лекция
+DESCRIPTION:Лекция\, Моржеедов В.Г.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:История развития предпринимательства через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309930@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261126T204000
+DTEND;TZID=Europe/Moscow:20261126T221000
+SUMMARY:История развития предпринимательства — Семинар+зачет
+DESCRIPTION:Семинар+зачет\, Моржеедов В.Г.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:История развития предпринимательства через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310008@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261128T101000
+DTEND;TZID=Europe/Moscow:20261128T114000
+SUMMARY:Прикладная микроэкономика организации — Лекция
+DESCRIPTION:Лекция\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310014@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261128T115000
+DTEND;TZID=Europe/Moscow:20261128T132000
+SUMMARY:Прикладная микроэкономика организации — Семинар+зачет
+DESCRIPTION:Семинар+зачет\, Мазур Л.В.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Прикладная микроэкономика организации через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10309608@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261203T190000
+DTEND;TZID=Europe/Moscow:20261203T203000
+SUMMARY:Дизайн бизнес-идей — Экзамен
+DESCRIPTION:Экзамен\, Шемирзова А.Ш.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Дизайн бизнес-идей через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310140@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261208T190000
+DTEND;TZID=Europe/Moscow:20261208T203000
+SUMMARY:Современные концепции менеджмента: мировые практики — Экзамен
+DESCRIPTION:Экзамен\, Трубина И.О.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Современные концепции менеджмента: мировые практики через 15 минут
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:synergy-10310148@lms.synergy.ru
+DTSTAMP:20260916T154304Z
+DTSTART;TZID=Europe/Moscow:20261212T115000
+DTEND;TZID=Europe/Moscow:20261212T132000
+SUMMARY:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве — Экзамен
+DESCRIPTION:Экзамен\, Убушаева О.М.\nВойти: https://lms.synergy.ru/schedule/webinar\nВход открывается за 10 минут до начала. Chrome\, звук включён.
+LOCATION:https://lms.synergy.ru/schedule/webinar
+URL:https://lms.synergy.ru/schedule/webinar
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Управление бизнес-процессами и бизнес-коммуникациями в современном предпринимательстве через 15 минут
+END:VALARM
+END:VEVENT
+END:VCALENDAR
