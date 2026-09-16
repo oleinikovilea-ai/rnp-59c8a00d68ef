@@ -1,0 +1,110 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}img{max-width:100%}</style></head><body><title>Эспада: партия 22.08–01.09</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#F5F7F3;--panel:#FFFFFF;--ink:#1C211C;--muted:#66705F;--rule:#D8DED3;--accent:#2F6B3F;--accent-soft:#E4EFE5;--neg:#B3401F;--neg-soft:#F7E6DF;--key:#EEF3EC;--warn:#8A6328;--warn-soft:#F4ECE2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#141714;--panel:#1C201B;--ink:#E7EBE3;--muted:#98A291;--rule:#2F352D;--accent:#8CC697;--accent-soft:#1F2E22;--neg:#F0906F;--neg-soft:#3A241B;--key:#222822;--warn:#D9A55E;--warn-soft:#2A241B}}
+:root[data-theme="dark"]{--bg:#141714;--panel:#1C201B;--ink:#E7EBE3;--muted:#98A291;--rule:#2F352D;--accent:#8CC697;--accent-soft:#1F2E22;--neg:#F0906F;--neg-soft:#3A241B;--key:#222822;--warn:#D9A55E;--warn-soft:#2A241B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.55}
+.wrap{max-width:860px;margin:0 auto;padding:40px 24px 72px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
+h1{font-size:clamp(28px,4vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 6px;line-height:1.1;text-wrap:balance}
+.lead{font-size:18px;color:var(--ink);margin:14px 0 0;max-width:60ch}
+.lead b{color:var(--neg)}
+h2{font-size:21px;font-weight:800;margin:44px 0 6px;letter-spacing:-.01em}
+p{margin:8px 0;max-width:66ch}
+.muted{color:var(--muted);font-size:14px}
+.num{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+.kpi{background:var(--panel);padding:16px 18px}
+.kpi .l{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi .v{font-family:"IBM Plex Mono",monospace;font-size:28px;margin-top:4px;letter-spacing:-.02em}
+.kpi .s{font-size:13px;color:var(--muted)}
+.neg{color:var(--neg)} .pos{color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--rule)}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:12px 14px 10px;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left}
+td{padding:11px 14px;text-align:right;border-bottom:1px solid var(--rule);font-family:"IBM Plex Mono",monospace;font-size:15px}
+td:first-child{font-family:Manrope,sans-serif}
+tr.total td{font-weight:600;border-top:2px solid var(--ink);border-bottom:none;background:var(--key)}
+td.bad{background:var(--neg-soft);color:var(--neg);font-weight:500}
+td.good{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.tw{overflow-x:auto}
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0 0}
+.steps li{position:relative;padding:10px 0 10px 44px;border-bottom:1px solid var(--rule)}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:10px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+.callout{background:var(--warn-soft);border-left:4px solid var(--warn);padding:12px 16px;margin:18px 0;max-width:70ch}
+.callout.red{background:var(--neg-soft);border-left-color:var(--neg)}
+.timeline{display:grid;grid-template-columns:120px 1fr;gap:6px 16px;margin:12px 0;max-width:70ch}
+.timeline .d{font-family:"IBM Plex Mono",monospace;color:var(--muted);font-size:14px;padding-top:2px}
+footer{margin-top:48px;font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px;max-width:70ch}
+</style>
+<div class="wrap">
+<div class="eyebrow">ИП Чебан · культиватор «Эспада» 1360956777 · разбор по отчётам реализации WB</div>
+<h1>Партия заказов 22.08–01.09 ушла в минус 82 тысячи</h1>
+<p class="lead">С 22 августа цену снизили с 14 000 до 9 500, а габариты в карточке поменяли только 1 сентября. Одиннадцать дней товар продавался по низкой цене, но WB считал доставку по старым габаритам: <b>933 ₽ за поездку вместо 54 ₽</b>. Плюс на этих же заказах комиссия оказалась 45 % вместо 34 %.</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="l">Заказов в партии</div><div class="v">126</div><div class="s">105 без отмен, 93 уже проданы</div></div>
+  <div class="kpi"><div class="l">Итог партии</div><div class="v neg">−82 206 ₽</div><div class="s">после себеса, налога, ФФ и рекламы</div></div>
+  <div class="kpi"><div class="l">На одну штуку</div><div class="v neg">−884 ₽</div><div class="s">на новых заказах: около +2 000 ₽</div></div>
+  <div class="kpi"><div class="l">Цена вопроса</div><div class="v neg">≈190 000 ₽</div><div class="s">разница с продажей тех же 93 шт на условиях после 01.09</div></div>
+</div>
+
+<h2>Что произошло по датам</h2>
+<div class="timeline">
+  <div class="d">13.08</div><div>Старт карточки 1360956777, цена 14 000 до СПП.</div>
+  <div class="d">22.08 10:34</div><div>Цена снижена до 9 500. Габариты в карточке ещё старые, реальная коробка ≈ 39 литров.</div>
+  <div class="d">22.08–01.09</div><div>126 заказов по 9 500. Каждая доставка по 906–933 ₽ (коэффициент склада 1,65–1,7), отмены по 549 ₽ обратно.</div>
+  <div class="d">01.09 ~15:00</div><div>Габариты в карточке изменены. Заказ в 14:30 ещё по 933 ₽, заказ в 17:55 уже по 54 ₽.</div>
+  <div class="d">01.09–13.09</div><div>135 новых заказов, все поездки 37–84 ₽. Ни одной дорогой.</div>
+</div>
+<div class="callout">Замеров склада по культиватору не было ни разу, ни у Чебана, ни на первом кабинете (проверено в разделе «Удержания → Замеры склада» за март–сентябрь). Дорогая логистика — это не штраф и не перемер, а просто габариты, которые стояли в карточке на момент заказа.</div>
+
+<h2>Сколько стоила одна продажа</h2>
+<p class="muted">Средние по фактическим строкам отчётов. Цена до СПП 9 500, себес 2 800, ФФ 120, УСН 6 % от чека покупателя.</p>
+<div class="tw"><table>
+<thead><tr><th>На одну продажу</th><th>Заказы 22.08–01.09<br>(старые габариты)</th><th>Заказы после 01.09<br>(новые габариты)</th><th>Разница</th></tr></thead>
+<tbody>
+<tr><td>Цена до СПП</td><td class="num">9 500</td><td class="num">9 212</td><td class="num">−288</td></tr>
+<tr><td>Комиссия WB</td><td class="bad">4 393 (46 %)</td><td class="good">3 150 (34 %)</td><td class="num">1 243</td></tr>
+<tr><td>К перечислению</td><td class="num">5 107</td><td class="num">6 062</td><td class="num">955</td></tr>
+<tr><td>Логистика</td><td class="bad">932</td><td class="good">55</td><td class="num">877</td></tr>
+<tr><td>Штрафы, хранение</td><td class="num">28</td><td class="num">7</td><td class="num">21</td></tr>
+<tr><td>УСН 6 %</td><td class="num">340</td><td class="num">321</td><td class="num">19</td></tr>
+<tr><td>Себес + ФФ</td><td class="num">2 920</td><td class="num">2 920</td><td class="num">0</td></tr>
+<tr class="total"><td>Маржа до рекламы</td><td class="num neg">887</td><td class="num pos">2 759</td><td class="num">1 872</td></tr>
+<tr><td>Реклама на заказ (CPO)</td><td class="num">1 061–1 260</td><td class="num">765</td><td class="num">≈400</td></tr>
+<tr class="total"><td>Прибыль на штуку</td><td class="num neg">≈ −300</td><td class="num pos">≈ +2 000</td><td class="num">≈2 300</td></tr>
+</tbody></table></div>
+<p class="muted">Комиссия 45 % против 34 %: у 35 из 84 продаж старой партии комиссия 52,5 %, ещё у 20 — 41–48 %. У новых заказов 78 из 113 идут по 31 %. Что именно давало 52,5 %, из отчёта не видно; общее у этих продаж одно — заказ до 01.09.</p>
+
+<h2>Итог по партии целиком</h2>
+<div class="tw"><table>
+<thead><tr><th>93 проданные штуки из заказов 22.08–01.09</th><th>₽</th></tr></thead>
+<tbody>
+<tr><td>Выручка до СПП</td><td class="num">883 500</td></tr>
+<tr><td>К перечислению после комиссии</td><td class="num">485 342</td></tr>
+<tr><td>Логистика: 94 поездки к клиенту + 21 отмена туда-обратно</td><td class="num bad">−122 772</td></tr>
+<tr><td>Хранение</td><td class="num">−550</td></tr>
+<tr class="total"><td>Выплата WB по этим заказам</td><td class="num">362 021</td></tr>
+<tr><td>Себес 93 × 2 800</td><td class="num">−260 400</td></tr>
+<tr><td>УСН 6 % от чеков 525 509</td><td class="num">−31 531</td></tr>
+<tr><td>ФФ 93 × 120</td><td class="num">−11 160</td></tr>
+<tr><td>До рекламы</td><td class="num pos">+58 930</td></tr>
+<tr><td>Реклама 22.08–01.09, кампания 39178552 (ДРР 11,1 % к заказам)</td><td class="num">−141 136</td></tr>
+<tr class="total"><td>Итог</td><td class="num neg">−82 206</td></tr>
+</tbody></table></div>
+<p class="muted">Ещё 12 заказов из партии едут или лежат на ПВЗ. Если их выкупят, минус уменьшится примерно до −71 тыс. Реклама взята за все 11 дней целиком, часть заказов от неё пришла уже после 01.09, так что это верхняя оценка убытка.</p>
+
+<h2>Что делать</h2>
+<ol class="steps">
+<li><b>Цена и габариты меняются в один день.</b> Снижение цены без смены габаритов — минус 1 872 ₽ на каждой штуке. Перед любым снижением цены проверять, что в карточке стоят актуальные габариты, и только потом менять цену.</li>
+<li><b>Не трогать габариты через поддержку.</b> Обращение по логистике вызовет перемер культиватора на складе. Сейчас замеров по нему нет, это и держит логистику на 54 ₽.</li>
+<li><b>Проверить, кто менял цену 06.09 и 08.09.</b> В ночь на 06.09 цена падала до 6 650 (15 заказов), в ночь на 08.09 до 6 840, потом 9 405. При себесе 2 800 и комиссии треть 6 650 — это ноль или минус. Если это автоакция WB или репрайсер, отключить.</li>
+<li><b>Реклама.</b> С 01.09 ДРР 8,2 %, CPO 765 ₽ при марже 2 759 ₽ — нормально. В августе ДРР доходил до 20 % на неделе 17–23.08. Потолок CPO для Эспады — 1 000 ₽ (по плану сентября), выше него партия снова уйдёт в минус.</li>
+</ol>
+
+<footer>Источник: отчёты реализации WB (еженедельные) № 819761898, 827192780, 834509397, 835965678, 841527554 и их довески, построчная детализация; заказы — statistics-api orders; реклама — списания adv/v1/upd и статистика кампании 39178552. Замеры — ЛК → Отчёты → Удержания. Собрано 16.09.2026. Полный реестр каждой продажи с логистикой и комиссией: <a href="kult_sales_registry.html">Продажи культиваторов построчно</a>.</footer>
+</div>
+</body></html>
